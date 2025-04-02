@@ -8,7 +8,7 @@ game.StarterGui:SetCore("SendNotification", {
 })
 
 
-wait(2) -- Dừng lại 3 giây
+wait(1) -- Dừng lại 3 giây
 
 
 
@@ -44,20 +44,65 @@ loadstring(game:HttpGet(("https://raw.githubusercontent.com/TDDuym500/UiHack/ref
       })
       
 ------ Tab
-     local Tab1o = MakeTab({Name = "Main"})
-	 local Tab2o = MakeTab({Name = "Join server, game"})
-     local Tab3o = MakeTab({Name = "Hack BF"})
-     local Tab4o = MakeTab({Name = "KaitunBF"})
-     local Tab5o = MakeTab({Name = "Hack Blue Lock"})
-     local Tab6o = MakeTab({Name = "Fisching"})
-     local Tab7o = MakeTab({Name = "Pet Go"})
-     local Tab8o = MakeTab({Name = "Deed Rails"})
+     local Tab1o = MakeTab({Name = "Infor"})
+     local Tab2o = MakeTab({Name = "Main"})
+     local Tab3o = MakeTab({Name = "Local Player"})
+	 local Tab4o = MakeTab({Name = "Join server, game"})
+     local Tab5o = MakeTab({Name = "Hack BF"})
+     local Tab6o = MakeTab({Name = "KaitunBF"})
+     local Tab7o = MakeTab({Name = "Hack Blue Lock"})
+     local Tab8o = MakeTab({Name = "Fisching"})
+     local Tab9o = MakeTab({Name = "Pet Go"})
+     local Tab10o = MakeTab({Name = "Deed Rails"})
 
 
 
 ---------------------button main
 
-----------Button tab1 
+  AddTextBox(Tab1o, {
+    Name = "Creator",
+    Default = "Script By Duy",  -- Hiển thị thông tin trong TextBox
+    PlaceholderText = "",
+    Callback = function(text)
+        -- Bạn có thể xử lý thêm ở đây nếu cần
+    end
+})
+
+
+AddButton(Tab1o, {
+    Name = "My Discord",
+    Callback = function()
+        setclipboard("https://discord.gg/Ehst9eee") -- 📋 Sao chép vào clipboard
+        print("Đã copy vào clipboard!")
+
+        -- Hiển thị thông báo
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Copied",
+            Text = "Pls Join My Disocrd",
+            Duration = 3
+        })
+    end
+})
+AddButton(Tab1o, {
+    Name = "Link with my information",
+    Callback = function()
+        setclipboard("https://linktr.ee/NomDom") -- 📋 Sao chép vào clipboard
+        print("Đã copy vào clipboard!")
+
+        -- Hiển thị thông báo
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Copied",
+            Text = "Please paste into web",
+            Duration = 3
+        })
+    end
+})
+
+
+
+
+
+----------Button tab2
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
@@ -115,7 +160,7 @@ Players.PlayerAdded:Connect(CreateESP)
 
 
 -- 🔘 Toggle ESP bằng nút
-Toggle = AddToggle(Tab1o, {
+Toggle = AddToggle(Tab2o, {
     Name = "Esp Player",
     Default = false,
     Callback = function(state)
@@ -167,7 +212,7 @@ LocalPlayer.CharacterAdded:Connect(function(newCharacter)
 end)
 
 -- 🔘 Toggle Nhảy Vô Hạn trong UI
-AddToggle(Tab1o, {
+AddToggle(Tab3o, {
     Name = "Infinite Jump",
     Default = false,
     Callback = function(state)
@@ -226,7 +271,7 @@ LocalPlayer.CharacterAdded:Connect(function(newCharacter)
 end)
 
 -- 🔘 Toggle NoClip trong UI
-AddToggle(Tab1o, {
+AddToggle(Tab3o, {
     Name = "NoClip",
     Default = false,
     Callback = function(state)
@@ -234,35 +279,35 @@ AddToggle(Tab1o, {
     end
 })
 
-AddButton(Tab1o, {
+AddButton(Tab2o, {
     Name = "Test UNC",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/UncTest"))()
     end
 })  
 
-AddButton(Tab1o, {
+AddButton(Tab2o, {
     Name = "Script Fly",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/NomDomFly"))()
     end
 })
 
-AddButton(Tab1o, {
+AddButton(Tab2o, {
     Name = "Fix Lag",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/FixLag"))()
     end
 })
 
-AddButton(Tab1o, {
+AddButton(Tab2o, {
     Name = "Super Fix Lag",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/SuperFixLag"))()
     end
 })
 
-AddButton(Tab1o, {
+AddButton(Tab2o, {
     Name = "Anti Band",
     Callback = function()
         local VirtualUser = game:GetService("VirtualUser")
@@ -279,7 +324,7 @@ end
     end
 })
 
-AddButton(Tab1o, {
+AddButton(Tab3o, {
     Name = "Zoom infiniti",
     Callback = function()
         local Players = game:GetService("Players")
@@ -297,7 +342,7 @@ end
 		return nil
 	  end
 	  
-	  local TextBox = AddTextBox(Tab2o, {
+	  local TextBox = AddTextBox(Tab4o, {
 		Name = "Enter id to server",
 		Default = "",
 		PlaceholderText = "Enter here.....",
@@ -344,27 +389,27 @@ end
 			end
 		end
 	  })
-	        AddButton(Tab2o, {
+	        AddButton(Tab4o, {
 		Name = "Blox Fruit",
 	   Callback = function()
 		 game:GetService("TeleportService"):Teleport(2753915549, game.Players.LocalPlayer)
 	 end
-	 })     AddButton(Tab2o, {
+	 })     AddButton(Tab4o, {
 		Name = "Deed Rails",
 	   Callback = function()
 		 game:GetService("TeleportService"):Teleport(116495829188952, game.Players.LocalPlayer)
 	 end
-	 })     AddButton(Tab2o, {
+	 })     AddButton(Tab4o, {
 		Name = "Fisch",
 	   Callback = function()
 		 game:GetService("TeleportService"):Teleport(16732694052, game.Players.LocalPlayer)
 	 end
-	 })     AddButton(Tab2o, {
+	 })     AddButton(Tab4o, {
 		Name = "Blue Lock",
 	   Callback = function()
 		 game:GetService("TeleportService"):Teleport(18668065416, game.Players.LocalPlayer)
 	 end
-	 })     AddButton(Tab2o, {
+	 })     AddButton(Tab4o, {
 		Name = "Pets Go",
 	   Callback = function()
 		 game:GetService("TeleportService"):Teleport(18901165922, game.Players.LocalPlayer)
@@ -372,7 +417,7 @@ end
 	 })
     -------------------------Add button tab 3 
 
-    AddButton(Tab3o, {
+    AddButton(Tab5o, {
      Name = "W azure",
     Callback = function()
 	  getgenv().Team = "Marines" --Marines Pirates
@@ -383,7 +428,7 @@ getgenv().ForceUseWalkSpeedModifier = true --Force turn on Walk Speed Modifier ,
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104dabe8e19562e5cc2.lua"))()
   end
   })
-     AddButton(Tab3o, {
+     AddButton(Tab5o, {
     Name = "Redz Hub",
     Callback = function()
         local Settings = {
@@ -393,7 +438,7 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
         loadstring(game:HttpGet("https://raw.githubusercontent.com/newredz/BloxFruits/refs/heads/main/Source.luau"))()
     end -- Đóng function
 }) -- Đóng bảng {} đúng cách
-   AddButton(Tab3o, {
+   AddButton(Tab5o, {
      Name = "Xero Hub",
     Callback = function()
 	  getgenv().Team = "Marines"
@@ -401,51 +446,72 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
     getgenv().Auto_Execute = false
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Xero2409/XeroHub/refs/heads/main/main.lua"))()
   end
-  })   AddButton(Tab3o, {
+  })   AddButton(Tab5o, {
      Name = "Teddy hub",
     Callback = function()
-	  loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletgojo/Haidepzai/refs/heads/main/Teddy-Premium"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletgojo/Haidepzai/refs/heads/main/Teddy-FREMIUM"))()
   end
-  })   AddButton(Tab3o, {
+  })     AddButton(Tab5o, {
+    Name = "CutTay Hub Auto Pull Lever",
+   Callback = function()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a1498369f289af2671cca90085f23fb8.lua"))()
+ end
+ })     AddButton(Tab5o, {
+    Name = "Zenith Hub",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()
+ end
+ })     AddButton(Tab5o, {
+    Name = "Alchemy Hub(Need key)",
+   Callback = function()
+     loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+ end
+ })   AddButton(Tab5o, {
      Name = "Bapred Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/BapRed/main/BapRedHub"))()
   end
-  })   AddButton(Tab3o, {
+  })   AddButton(Tab5o, {
      Name = "Astral hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/Overgustx2/Main/refs/heads/main/BloxFruits_%E2%80%8B25.html"))() 
   end
-  })   AddButton(Tab5o, {
+  })   AddButton(Tab7o, {
      Name = "Legend HandlesYT(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/IAmJamal10/Scripts/refs/heads/main/BlueLocksNew"))()
   end
-  })   AddButton(Tab3o, {
+  })   AddButton(Tab5, {
      Name = "Omg Hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua"))()
   end
-  })   AddButton(Tab3o, {
+  })   AddButton(Tab5o, {
      Name = "Teddy Hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletgojo/Haidepzai/refs/heads/main/Teddy-Premium"))()
   end
-  })   AddButton(Tab3o, {
+  })   AddButton(Tab5o, {
      Name = "Volcano Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/wpisstestfprg/Volcano/refs/heads/main/VolcanoLocal.lua", true))()
   end
-  })     AddButton(Tab3o, {
-     Name = "Alchemy Hub(Need key)",
+  })     AddButton(Tab5o, {
+     Name = "Kncrypt Hub(Need key)",
     Callback = function()
-	  loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/3345-c-a-t-s-u-s/Kncrypt/refs/heads/main/sources/BloxFruit.lua"))()
   end
-  })
+  })     AddButton(Tab5o, {
+    Name = "Hiru Hub(Need key)",
+   Callback = function()
+    getgenv().Team = "Pirates"
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NGUYENVUDUY1/Source/main/HiruHub.lua"))()
+ end
+ })
 
  -------------------Add button tab 4 
 
-  AddButton(Tab4o, {
+  AddButton(Tab6o, {
      Name = "Kaitun Xero Hub(Need key)",
     Callback = function()
 	  -- Max level, godhuman, cdk, sgt
@@ -505,150 +571,150 @@ getgenv().Configs = {
 }
 repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Xero2409/XeroHub/refs/heads/main/kaitun.lua"))() end) until getgenv().Check_Execute
   end
-  })    AddButton(Tab4o, {
+  })    AddButton(Tab6o, {
      Name = "Kaitun RoyX Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/RoyX%20Kaitun"))()
   end
-  })    AddButton(Tab4o, {
+  })    AddButton(Tab6o, {
      Name = "Kaitun Simple Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/RoyX%20Kaitun"))()
   end
-  })    AddButton(Tab3o, {
-     Name = "HoHo Hub(cần key)",
+  })    AddButton(Tab5o, {
+     Name = "HoHo Hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
   })
-   AddButton(Tab3o, {
+   AddButton(Tab5o, {
      Name = "Speed Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
-  })   AddButton(Tab3o, {
-     Name = "Zenith Hub",
-    Callback = function()
-	  loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()
-  end
-  })   AddButton(Tab3o, {
-     Name = "Alchemy Hub(cần key)",
+  })  AddButton(Tab7o, {
+     Name = "Alchemy Hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
   end
-  })   AddButton(Tab3o, {
+  })   AddButton(Tab5o, {
      Name = "BlueX Hub",
     Callback = function()
 	  _G.Team = "Pirates" 
 _G.FixLag = false
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()
   end
-  })   AddButton(Tab6o, {
+  })   AddButton(Tab8o, {
      Name = "Speed hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
-  })   AddButton(Tab6o, {
-     Name = "Alchemy hub(cần key)",
+  })   AddButton(Tab7o, {
+     Name = "Alchemy hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
   end
-  })   AddButton(Tab6o, {
+  })   AddButton(Tab8o, {
      Name = "Ronix Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/e4d72046eb884e9c01333d3e704fc2d7.lua"))()
   end
-  })   AddButton(Tab7o, {
+  })   AddButton(Tab9o, {
      Name = "Zenith Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()
   end
-  })   AddButton(Tab5o, {
+  })   AddButton(Tab7o, {
      Name = "NS Hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/fo/refs/heads/main/ot"))()
   end
-  })   AddButton(Tab7o, {
+  })   AddButton(Tab9o, {
      Name = "NS Hub(Need Key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/go/refs/heads/main/is"))()
   end
-  })   AddButton(Tab7o, {
+  })   AddButton(Tab9o, {
      Name = "Zap Hub(need key)",
     Callback = function()
 	  loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
   end
-  })   AddButton(Tab7o, {
+  })   AddButton(Tab9o, {
      Name = "Speed Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
-  })
+  })AddButton(Tab10o, {
+    Name = "Krcrypt Hub(need key)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/3345-c-a-t-s-u-s/Kncrypt/refs/heads/main/sources/Fisch.lua"))()
+    end
+})
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Increase hitbox + aim lock",
     Callback = function()
         loadstring(game:HttpGet("https://pastefy.app/o4SV2jjx/raw"))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "No clip + esp",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", true))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Auto fram bond(Need key)",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Marco8642/science/refs/heads/ok/dead%20rails"))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Skull Hub",
     Callback = function()
         loadstring(game:HttpGet('https://skullhub.xyz/loader.lua'))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Deed rail",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/thiennrb7/Script/refs/heads/main/Bringall"))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Speed Hub",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Solix Hub(Need key)",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/debunked69/Solixreworkkeysystem/refs/heads/main/solix%20new%20keyui.lua"))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Neox Hub",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/loader", true))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Spider Hub",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/SpiderScriptRB/Dead-Rails-SpiderXHub-Script/refs/heads/main/SpiderXHub%202.0.txt"))()
     end
 })
 
-AddButton(Tab8o, {
+AddButton(Tab10o, {
     Name = "Auto bond fake",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Emplic/deathrails/refs/heads/main/bond"))()
@@ -658,7 +724,7 @@ AddButton(Tab8o, {
 -- Dropdown
 Dropdown = AddDropdown(Tab1o, {
     Name = "",
-    Options = {"ZubaTN lồn", "Đat thg lồn", "Ak gamming lồn", "NomDom đẹp zai"},
+    Options = {"Wait", "Wait", "Wait", "NomDom đẹp zai"},
     Default = "Melee",
     Callback = function(selected)
         print("Selected option: " .. selected)
@@ -679,6 +745,15 @@ game.StarterGui:SetCore("SendNotification", {
     Text = "Done",
     Icon = "rbxassetid://138569547227924",  -- Thay ID_HINH_ANH bằng ID của ảnh
     Duration = 3  -- Thời gian hiển thị (giảm lại cho hợp lý)
+})
+
+
+-- Hiển thị thông báo
+game.StarterGui:SetCore("SendNotification", {
+    Title = "My discord",
+    Text = "https://discord.gg/Ehst9eee",
+    Icon = "rbxassetid://138569547227924",  -- Thay ID_HINH_ANH bằng ID của ảnh
+    Duration = 10000  -- Thời gian hiển thị (giảm lại cho hợp lý)
 })
 
 ----Wedbook
