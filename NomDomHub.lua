@@ -4,7 +4,7 @@ game.StarterGui:SetCore("SendNotification", {
     Title = "Script By NomDom",
     Text = "Loading......",
     Icon = "rbxassetid://138569547227924",  -- Thay ID_HINH_ANH bằng ID của ảnh
-    Duration = 3  -- Thời gian hiển thị (giảm lại cho hợp lý)
+    Duration = 2  -- Thời gian hiển thị (giảm lại cho hợp lý)
 })
 
 
