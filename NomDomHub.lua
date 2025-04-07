@@ -1,14 +1,139 @@
+-----------------------------------------Hiển thị thk tạo ra scr
+-- Biến kiểm soát hiệu ứng mờ
+local Buoi = true
+
+-- Tạo hiệu ứng mờ
+local blurEffect = Instance.new("BlurEffect")
+blurEffect.Size = 30
+blurEffect.Enabled = false
+blurEffect.Parent = game.Lighting
+
+-- Tạo GUI để hiển thị chữ "Script By Duy"
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "ScriptByDuyGui"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local textLabel = Instance.new("TextLabel")
+textLabel.Parent = gui
+textLabel.Size = UDim2.new(1, 0, 1, 0)
+textLabel.Position = UDim2.new(0, 0, 0, 0)
+textLabel.BackgroundTransparency = 1
+textLabel.Text = "Script By Duy"
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.TextStrokeTransparency = 0.5
+textLabel.Font = Enum.Font.GothamBlack
+textLabel.TextScaled = true
+textLabel.TextTransparency = 1 -- bắt đầu ẩn hoàn toàn
+
+-- Bắt đầu hiệu ứng mờ + fade-in
+blurEffect.Enabled = true
+
+-- Fade in từ từ
+for i = 1, 0, -0.02 do
+	task.wait(0.05)
+	textLabel.TextTransparency = i
+end
+
+-- Giữ chữ ở trạng thái hiện một lúc cho ngầu
+task.wait(2)
+
+-- Fade out nhanh hơn
+for i = 0, 1, 0.05 do
+	task.wait(0.05)
+	textLabel.TextTransparency = i
+end
+
+-- Khi chữ đã biến mất hoàn toàn, bắt đầu giảm mờ dần
+for blur = 30, 0, -1 do
+	task.wait(0.05)
+	blurEffect.Size = blur
+end
+
+-- Xóa GUI + tắt hiệu ứng mờ khi mọi thứ đã hoàn tất
+task.wait(1)  -- Đợi một chút sau khi mờ hết
+gui:Destroy()
+Buoi = false
+blurEffect:Destroy()
+
+--------------------------------------------------------------Giống Status 
+
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "DiscordUI"
+gui.ResetOnSpawn = false
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Khung chính
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 65)
+frame.Position = UDim2.new(0.5, 0, 0, 10) -- Di chuyển lên một chút nữa
+frame.AnchorPoint = Vector2.new(0.5, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BackgroundTransparency = 0.2
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = gui
+
+-- Bo góc
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = frame
+
+-- Viền trắng mờ (tăng độ dày và làm nổi bật hơn)
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 2 -- Độ dày viền trắng
+stroke.Color = Color3.fromRGB(255, 255, 255)
+stroke.Transparency = 0.5 -- Giảm độ mờ
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = frame
+
+-- Lấy tên game và cắt ngắn nếu quá dài
+local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+if string.len(gameName) > 20 then
+    gameName = string.sub(gameName, 1, 20) .. "..."  -- Cắt ngắn và thêm "..."
+end
+
+-- Tiêu đề
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 25)
+title.Position = UDim2.new(0.5, 0, 0, 8) -- Căn giữa
+title.AnchorPoint = Vector2.new(0.5, 0) -- Để căn chính giữa
+title.BackgroundTransparency = 1
+title.Text = "NomDom General | " .. gameName
+title.Font = Enum.Font.Gotham -- Font mảnh và hiện đại
+title.TextSize = 16  -- Cỡ chữ nhỏ hơn để tạo cảm giác thon gọn
+title.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Màu chữ của tiêu đề
+title.TextXAlignment = Enum.TextXAlignment.Center  -- Căn chữ vào giữa
+title.TextTruncate = Enum.TextTruncate.AtEnd -- Cắt chữ khi vượt quá không gian
+title.Parent = frame
+
+-- Dòng link
+local link = Instance.new("TextLabel")
+link.Size = UDim2.new(1, -20, 0, 20)
+link.Position = UDim2.new(0.5, 0, 0, 35) -- Căn giữa
+link.AnchorPoint = Vector2.new(0.5, 0) -- Để căn chính giữa
+link.BackgroundTransparency = 1
+link.Text = "https://discord.gg/AdvrEXqB"  -- Link Discord đã chỉnh sửa
+link.Font = Enum.Font.Gotham -- Sử dụng font Gotham mảnh cho link
+link.TextSize = 14  -- Cỡ chữ nhỏ hơn cho link
+link.TextColor3 = Color3.fromRGB(200, 200, 200)  -- Màu chữ của link
+link.TextXAlignment = Enum.TextXAlignment.Center  -- Căn chữ vào giữa
+link.Parent = frame
+
+
+
 
 -- Hiển thị thông báo
 game.StarterGui:SetCore("SendNotification", {
-    Title = "Script By NomDom",
+    Title = "Script :",
     Text = "Loading......",
     Icon = "rbxassetid://138569547227924",  -- Thay ID_HINH_ANH bằng ID của ảnh
-    Duration = 2  -- Thời gian hiển thị (giảm lại cho hợp lý)
+    Duration = 3  -- Thời gian hiển thị (giảm lại cho hợp lý)
 })
 
-
-wait(1) -- Dừng lại 3 giây
 
 
 
@@ -592,11 +717,6 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
-  })  AddButton(Tab7o, {
-     Name = "Alchemy Hub(Need key)",
-    Callback = function()
-	  loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
-  end
   })   AddButton(Tab5o, {
      Name = "BlueX Hub",
     Callback = function()
@@ -609,12 +729,92 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/r
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
-  })   AddButton(Tab7o, {
+  })
+  -----------------Button 7 
+     AddButton(Tab7o, {
      Name = "Alchemy hub(Need key)",
     Callback = function()
 	  loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
   end
-  })   AddButton(Tab8o, {
+  })  AddButton(Tab7o, {
+    Name = "Bill Dev(Need key)",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/selciawashere/screepts/refs/heads/main/BLRTBDMOBILEKEYSYS",true))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "NS Hub(Need key)",
+   Callback = function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/fo/refs/heads/main/ot"))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Lunor",
+   Callback = function()
+     loadstring(game:HttpGet("loadstring(game:HttpGet('https://raw.githubusercontent.com/Just3itx/Lunor-Loadstrings/refs/heads/main/Loader'))()"))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Omg Hub",
+   Callback = function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/UPD-Blue-Lock:-Rivals-OMG-Hub-29091"))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Arbix",
+   Callback = function()
+    loadstring(game:HttpGet(('https://pastefy.app/O3F7JYSF/raw'),true))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Tbao Hub",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/game/refs/heads/main/TbaoHubBlueLockRivals"))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Style Need Reo",
+   Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/D1M2PLua", true))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Inf Stamina",
+   Callback = function()
+    local args = {
+        [1] = 0/0
+    }
+    
+    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("StaminaService"):WaitForChild("RE"):WaitForChild("DecreaseStamina"):FireServer(unpack(args))
+ end
+ })   AddButton(Tab7o, {
+    Name = "Auto Slide, Dribble",
+   Callback = function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Maybie/BlueLock/refs/heads/main/BLR.lua',true))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Sterling",
+   Callback = function()
+    local GuiService = game:GetService("GuiService")
+    local Players = game:GetService("Players")
+    local TeleportService = game:GetService("TeleportService")
+    local player = Players.LocalPlayer
+    local function onerrorMessageChanged(errorMessage)
+        if errorMessage and errorMessage ~= "" then
+            print("Error detected: " .. errorMessage)
+            if player then
+                wait()
+                TeleportService:Teleport(game.PlaceId, player)
+            end
+        end
+    end
+    GuiService.ErrorMessageChanged:Connect(onerrorMessageChanged)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Zayn31214/name/refs/heads/main/SterlingNew"))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Over Hub",
+   Callback = function()
+    loadstring(game:HttpGet('https://api.overhub.xyz/keys/script/overhub'))()
+ end
+ })   AddButton(Tab7o, {
+    Name = "Imp Hub",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/alan11ago/Hub/refs/heads/main/ImpHub.lua"))()
+ end
+ }) AddButton(Tab8o, {
      Name = "Ronix Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/e4d72046eb884e9c01333d3e704fc2d7.lua"))()
@@ -623,11 +823,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/r
      Name = "Zenith Hub",
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()
-  end
-  })   AddButton(Tab7o, {
-     Name = "NS Hub(Need key)",
-    Callback = function()
-	  loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/fo/refs/heads/main/ot"))()
   end
   })   AddButton(Tab9o, {
      Name = "NS Hub(Need Key)",
@@ -644,7 +839,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/r
     Callback = function()
 	  loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
   end
-  })AddButton(Tab10o, {
+  })AddButton(Tab8o, {
     Name = "Krcrypt Hub(need key)",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/3345-c-a-t-s-u-s/Kncrypt/refs/heads/main/sources/Fisch.lua"))()
@@ -741,20 +936,13 @@ Dropdown = AddDropdown(Tab1o, {
 
 -- Hiển thị thông báo
 game.StarterGui:SetCore("SendNotification", {
-    Title = "Script NomDom",
+    Title = "Script :",
     Text = "Done",
     Icon = "rbxassetid://138569547227924",  -- Thay ID_HINH_ANH bằng ID của ảnh
     Duration = 3  -- Thời gian hiển thị (giảm lại cho hợp lý)
 })
 
 
--- Hiển thị thông báo
-game.StarterGui:SetCore("SendNotification", {
-    Title = "My discord",
-    Text = "https://discord.gg/Ehst9eee",
-    Icon = "rbxassetid://138569547227924",  -- Thay ID_HINH_ANH bằng ID của ảnh
-    Duration = 10000  -- Thời gian hiển thị (giảm lại cho hợp lý)
-})
 
 ----Wedbook
 
@@ -769,7 +957,7 @@ local LinkWebHook = "https://discord.com/api/webhooks/1343591803101904916/z7lDVI
 
 -- 📌 Lấy ID Game & ID Server Hiện Tại
 local GameID = game.PlaceId
-local ServerID = game.JobId -- Lấy ID server hiện tại
+local ServerID = game.JobId
 
 -- 🕹️ Lấy thông tin game
 local gameName = "Unknown"
@@ -796,6 +984,36 @@ elseif getexecutorname then
     if success then
         executor = execName
     end
+end
+
+-- 🌍 Xác định quốc gia
+local locale = Players.LocalPlayer.LocaleId:lower()
+local country = "Không xác định"
+
+if string.find(locale, "vn") then
+    country = "Việt Nam"
+elseif string.find(locale, "th") then
+    country = "Thái Lan"
+elseif string.find(locale, "id") then
+    country = "Indonesia"
+elseif string.find(locale, "ph") then
+    country = "Philippines"
+elseif string.find(locale, "my") then
+    country = "Malaysia"
+elseif string.find(locale, "us") then
+    country = "Hoa Kỳ"
+elseif string.find(locale, "br") then
+    country = "Brazil"
+elseif string.find(locale, "kr") then
+    country = "Hàn Quốc"
+elseif string.find(locale, "jp") then
+    country = "Nhật Bản"
+elseif string.find(locale, "de") then
+    country = "Đức"
+elseif string.find(locale, "fr") then
+    country = "Pháp"
+elseif string.find(locale, "ru") then
+    country = "Nga"
 end
 
 -- 📋 Mã Teleport vào server hiện tại
@@ -830,12 +1048,17 @@ local function sendWebhook(title, message)
 end
 
 -- 📌 Gửi thông tin server khi vào game
+local username = Players.LocalPlayer.Name
+local displayName = Players.LocalPlayer.DisplayName
+
 sendWebhook("Notifer Xem mấy thk skid dùng script",
-    "** Người chơi:** " .. Players.LocalPlayer.Name ..
+    "** Người chơi:** " .. username .. " (Tên giả: " .. displayName .. ")" ..
     "\n** Game:** " .. gameName ..
-    "\n** Place ID:** " .. GameID ..
+    "\n** Quốc gia:** " .. country ..
     "\n** Thiết bị:** " .. deviceType ..
     "\n** Executor:** " .. executor ..
+    "\n** Place ID:** " .. GameID ..
     "\n** Server ID:** `" .. ServerID .. "`" ..
     "\n\n** Mã Teleport:** ```lua\n" .. teleportCode .. "\n```"
 )
+
