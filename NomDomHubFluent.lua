@@ -173,11 +173,6 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
         loadstring(game:HttpGet("https://raw.githubusercontent.com/newredz/BloxFruits/refs/heads/main/Source.luau"))()
     end
 })    tabs.Bloxfruit:AddButton({
-    Title = "Redz Hub",
-    Description = "",
-    Callback = function()  
-    end
-})    tabs.Bloxfruit:AddButton({
     Title = "Xero Hub",
     Description = "",
     Callback = function()
