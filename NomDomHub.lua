@@ -57,71 +57,7 @@ gui:Destroy()
 Buoi = false
 blurEffect:Destroy()
 
---------------------------------------------------------------Giống Status 
 
-local player = game.Players.LocalPlayer
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "DiscordUI"
-gui.ResetOnSpawn = false
-gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
--- Khung chính
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 65)
-frame.Position = UDim2.new(0.5, 0, 0, 10) -- Di chuyển lên một chút nữa
-frame.AnchorPoint = Vector2.new(0.5, 0)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.BackgroundTransparency = 0.2
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-frame.Parent = gui
-
--- Bo góc
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = frame
-
--- Viền trắng mờ (tăng độ dày và làm nổi bật hơn)
-local stroke = Instance.new("UIStroke")
-stroke.Thickness = 2 -- Độ dày viền trắng
-stroke.Color = Color3.fromRGB(255, 255, 255)
-stroke.Transparency = 0.5 -- Giảm độ mờ
-stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-stroke.Parent = frame
-
--- Lấy tên game và cắt ngắn nếu quá dài
-local gameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
-if string.len(gameName) > 20 then
-    gameName = string.sub(gameName, 1, 20) .. "..."  -- Cắt ngắn và thêm "..."
-end
-
--- Tiêu đề
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -20, 0, 25)
-title.Position = UDim2.new(0.5, 0, 0, 8) -- Căn giữa
-title.AnchorPoint = Vector2.new(0.5, 0) -- Để căn chính giữa
-title.BackgroundTransparency = 1
-title.Text = "NomDom Hub | General"
-title.Font = Enum.Font.Gotham -- Font mảnh và hiện đại
-title.TextSize = 16  -- Cỡ chữ nhỏ hơn để tạo cảm giác thon gọn
-title.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Màu chữ của tiêu đề
-title.TextXAlignment = Enum.TextXAlignment.Center  -- Căn chữ vào giữa
-title.TextTruncate = Enum.TextTruncate.AtEnd -- Cắt chữ khi vượt quá không gian
-title.Parent = frame
-
--- Dòng link
-local link = Instance.new("TextLabel")
-link.Size = UDim2.new(1, -20, 0, 20)
-link.Position = UDim2.new(0.5, 0, 0, 35) -- Căn giữa
-link.AnchorPoint = Vector2.new(0.5, 0) -- Để căn chính giữa
-link.BackgroundTransparency = 1
-link.Text = "https://discord.gg/AdvrEXqB"  -- Link Discord đã chỉnh sửa
-link.Font = Enum.Font.Gotham -- Sử dụng font Gotham mảnh cho link
-link.TextSize = 14  -- Cỡ chữ nhỏ hơn cho link
-link.TextColor3 = Color3.fromRGB(200, 200, 200)  -- Màu chữ của link
-link.TextXAlignment = Enum.TextXAlignment.Center  -- Căn chữ vào giữa
-link.Parent = frame
 
 
 
