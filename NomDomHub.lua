@@ -19,7 +19,7 @@ mainText.Parent = gui
 mainText.Size = UDim2.new(1, 0, 1, 0)
 mainText.Position = UDim2.new(0, 0, 0, 0)
 mainText.BackgroundTransparency = 1
-mainText.Text = "Script By Duy"
+mainText.Text = "T sẽ không update đến 8/5"
 mainText.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainText.TextStrokeTransparency = 0.5
 mainText.Font = Enum.Font.GothamBlack
@@ -102,14 +102,14 @@ gui:Destroy()
 blurEffect:Destroy()
 
 -- Load thư viện Fluent
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/UiHack/refs/heads/main/Fluent"))()
 local window = Fluent:CreateWindow({
-    Title = "NomDom General",
+    Title = "NomDom | General",
     SubTitle = "by Duy",
     TabWidth = 160,
     Theme = "Dark",
     Acrylic = false,
-    Size = UDim2.fromOffset(500, 320),
+    Size = UDim2.fromOffset(600, 420),
     MinimizeKey = Enum.KeyCode.End
 })
 
@@ -118,40 +118,202 @@ local tabs = {
     Infor = window:AddTab({ Title = "Infor" }),
     Main = window:AddTab({ Title = "Main" }),
     Localplayer = window:AddTab({ Title = "Local Player" }),
-    Joinid = window:AddTab({ Title = "Join server, game" }),
+    Joinid = window:AddTab({ Title = "Join server" }),
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
-    Kaitunbf = window:AddTab({ Title = "Kaitun Blox Fruit" }),
     Bluelock = window:AddTab({ Title = "Blue Lock" }),
     Fisch = window:AddTab({ Title = "Fisching" }),
     Petgo = window:AddTab({ Title = "Pet Go" }),
     Deedrails = window:AddTab({ Title = "Deed Rails" }),
+    Arisecrossover = window:AddTab({ Title = "Arise Crossover" }),
 }
+
+local Options = Fluent.Options
 
 -- Nút Discord
     tabs.Infor:AddButton({
-    Title = "Discord",
+    Title = "My Discord",
     Description = "Giao Lưu",
     Callback = function()
         setclipboard("https://discord.gg/AdvrEXqB")
     end
-})    tabs.Main:AddButton({
-    Title = "Wait Update",
-    Description = "Wait",
+})tabs.Infor:AddButton({
+    Title="My Youtube",
+    Description="Youtube",
+    Callback=function()
+        setclipboard(tostring("https://www.youtube.com/channel/NomDomDZ"))
+    end
+})tabs.Infor:AddParagraph({
+    Title="Duy",
+    Content="Code ra cái script lồn này"
+})tabs.Infor:AddParagraph({
+    Title="KhangG",
+    Content="Cung cấp script"
+})
+   tabs.Main:AddButton({
+    Title = "Comming soon...",
+    Description = "",
     Callback = function()
         
     end
 })    tabs.Localplayer:AddButton({
-    Title = "Wait Update",
-    Description = "Wait",
+    Title = "Wait Update...",
+    Description = "",
     Callback = function()
         
     end
-})    tabs.Joinid:AddButton({
-    Title = "Wait Update",
-    Description = "Wait",
-    Callback = function()  
+})tabs.Joinid:AddInput("Input", {
+    Title = "Job ID",
+    Default = "",
+    Placeholder = "Paste Job ID Here",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        _G.Job = Value
     end
-})    tabs.Bloxfruit:AddButton({
+})
+tabs.Joinid:AddButton({
+    Title="Join",
+    Description="",
+    Callback=function()
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId,_G.Job, game.Players.LocalPlayer)
+    end
+})
+tabs.Joinid:AddButton({
+    Title="Copy Job ID",
+    Description="",
+    Callback=function()
+        setclipboard(tostring(game.JobId))
+    end
+})
+local Toggle = tabs.Joinid:AddToggle("MyToggle", {Title="Spam Tham Gia Job ID", Default=false })
+Toggle:OnChanged(function(Value)
+_G.Join=Value
+    end)
+    spawn(function()
+while wait() do
+if _G.Join then
+game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId,_G.Job, game.Players.LocalPlayer)
+end
+end
+end)
+
+
+tabs.Joinid:AddButton({
+Title = "Rejoin Server",
+Description = "",
+Callback = function()
+    game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+end
+})
+
+tabs.Joinid:AddButton({
+Title = "Hop Low Server",
+Description = "",
+Callback = function()
+    getgenv().AutoTeleport = true
+    getgenv().DontTeleportTheSameNumber = true 
+    getgenv().CopytoClipboard = false
+    if not game:IsLoaded() then
+        print("Game is loading waiting...")
+    end
+    local maxplayers = math.huge
+    local serversmaxplayer;
+    local goodserver;
+    local gamelink = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100" 
+    function serversearch()
+        for _, v in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(gamelink)).data) do
+            if type(v) == "table" and v.playing ~= nil and maxplayers > v.playing then
+                serversmaxplayer = v.maxPlayers
+                maxplayers = v.playing
+                goodserver = v.id
+            end
+        end       
+    end
+    function getservers()
+        serversearch()
+        for i,v in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(gamelink))) do
+            if i == "nextPageCursor" then
+                if gamelink:find("&cursor=") then
+                    local a = gamelink:find("&cursor=")
+                    local b = gamelink:sub(a)
+                    gamelink = gamelink:gsub(b, "")
+                end
+                gamelink = gamelink .. "&cursor=" ..v
+                getservers()
+            end
+        end
+    end 
+    getservers()
+    if AutoTeleport then
+        if DontTeleportTheSameNumber then 
+            if #game:GetService("Players"):GetPlayers() - 4  == maxplayers then
+                return warn("It has same number of players (except you)")
+            elseif goodserver == game.JobId then
+                return warn("Your current server is the most empty server atm") 
+            end
+        end
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, goodserver)
+    end
+end
+})
+
+tabs.Joinid:AddButton({
+Title = "Hop Server",
+Description = "",
+Callback = function()
+    local HttpService = game:GetService("HttpService")
+    local TPS = game:GetService("TeleportService")
+    
+    -- Kiểm tra nếu game có thể gửi request HTTP
+    local success, response = pcall(function()
+        return game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100")
+    end)
+
+    if not success then
+        print("Không thể lấy danh sách server! Hãy kiểm tra HTTP Requests trong cài đặt game.")
+        return
+    end
+    
+    local Servers = HttpService:JSONDecode(response).data
+    local AvailableServers = {}
+
+    for _, v in pairs(Servers) do
+        if v.playing < v.maxPlayers and v.id ~= game.JobId then
+            table.insert(AvailableServers, v.id)
+        end
+    end
+
+    if #AvailableServers > 0 then
+        local RandomServer = AvailableServers[math.random(1, #AvailableServers)]
+        
+        -- Kiểm tra nếu TPS có thể teleport
+        local teleportSuccess, teleportError = pcall(function()
+            TPS:TeleportToPlaceInstance(game.PlaceId, RandomServer)
+        end)
+
+        if not teleportSuccess then
+            print("Lỗi Teleport: " .. teleportError)
+        end
+    else
+        print("Không tìm thấy server phù hợp!")
+    end
+end
+})
+
+
+tabs.Joinid:AddButton({
+Title = "Id Sever",
+Description = "",
+Callback = function()
+    Hop()
+end
+}) 
+
+tabs.Bloxfruit:AddParagraph({
+    Title="Main",
+    Content=""
+})
+    tabs.Bloxfruit:AddButton({
     Title = "W azure",
     Description = "",
     Callback = function()   
@@ -188,16 +350,42 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
         loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletgojo/Haidepzai/refs/heads/main/Teddy-FREMIUM"))() 
     end
 })    tabs.Bloxfruit:AddButton({
-    Title = "CutTay Hub Auto Pull Lever",
-    Description = "Need Key",
+    Title = "Vxeze Hub",
+    Description = "",
     Callback = function()
-        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a1498369f289af2671cca90085f23fb8.lua"))()  
+        getgenv().Language = "English" ---vetnamese
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain2"))()
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Doramon Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/obfmoonsec/Masterhub/refs/heads/main/obf"))()
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "QuanTum Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Trustmenotcondom/QTONYX/refs/heads/main/QuantumOnyx.lua"))()
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Vxeze Hub",
+    Description = "",
+    Callback = function()
+        getgenv().Language = "English" -----vetnamese
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain2"))()
     end
 })    tabs.Bloxfruit:AddButton({
     Title = "Zenith Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()  
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Rubu Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/RubuRoblox/refs/heads/main/RubuBF"))()   
     end
 })    tabs.Bloxfruit:AddButton({
     Title = "Alchemy Hub",
@@ -242,14 +430,7 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
         getgenv().Team = "Pirates"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NGUYENVUDUY1/Source/main/HiruHub.lua"))()  
     end
-})    tabs.Bloxfruit:AddButton({
-    Title = "Hiru Hub",
-    Description = "Need Key",
-    Callback = function()
-        getgenv().Team = "Pirates"
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/NGUYENVUDUY1/Source/main/HiruHub.lua"))()  
-    end
-})    tabs.Bloxfruit:AddButton({
+})   tabs.Bloxfruit:AddButton({
     Title = "HoHo Hub",
     Description = "Need Key",
     Callback = function()
@@ -267,7 +448,53 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()    
     end
-})    tabs.Kaitunbf:AddButton({
+})    tabs.Bloxfruit:AddButton({
+    Title = "Xeter Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Loader/main/Xeter.lua"))()   
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Ganteng",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/516a5669fc39b4945cd0609a08264505.lua"))()   
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Cakka Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/UserDevEthical/Loadstring/main/CokkaHub.lua"))()   
+    end
+})
+tabs.Bloxfruit:AddParagraph({
+    Title="Hop Server",
+    Content=""
+})    tabs.Bloxfruit:AddButton({
+    Title = "CutTay Hub Auto Pull Lever",
+    Description = "Need Key",
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a1498369f289af2671cca90085f23fb8.lua"))()  
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Vxeze Hub Hop Dough King",
+    Description = "",
+    Callback = function()
+        getgenv().Team = "Marines"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/VxezeHubHopBoss/refs/heads/main/VxezeHubHopDough.txt"))()
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Vxeze Hub Hop Rip Indra",
+    Description = "",
+    Callback = function()
+        getgenv().Team = "Marines"
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/VxezeHubHopBoss/refs/heads/main/VxezeHubHopRip"))()
+    end
+})   tabs.Bloxfruit:AddParagraph({
+    Title="Kaitun",
+    Content=""
+})
+    tabs.Bloxfruit:AddButton({
     Title = "Kaitun Xero Hub",
     Description = "Need Key",
     Callback = function()
@@ -328,17 +555,64 @@ getgenv().Configs = {
 }
 repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Xero2409/XeroHub/refs/heads/main/kaitun.lua"))() end) until getgenv().Check_Execute  
     end
-})    tabs.Kaitunbf:AddButton({
+})    tabs.Bloxfruit:AddButton({
     Title = "Kaitun RoyX Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/RoyX%20Kaitun"))()    
     end
-})    tabs.Kaitunbf:AddButton({
+})    tabs.Bloxfruit:AddButton({
     Title = "Kaitun Simple Hub",
     Description = "",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/RoyX%20Kaitun"))()
+        getgenv().simple_settings = {
+            ["MASTERY"] = { -- Settings related to leveling up weapon or skill mastery
+                ["ACTIVE"] = true, -- Enable or disable mastery leveling (true = enabled, false = disabled)
+                ["METHOD"] = "Half", -- Method for gaining mastery, "Half"[350] or "Full"[600]
+            },
+        
+            ["RAID"] = {
+                ["MODE"] = "Legit", -- Legit / KillAura (Legit mode is Mob aura in raid)
+            },
+        
+            ["OBJECTIVE"] = { -- Goals for farming and unlocking features
+                ["GODHUMAN"] = true, -- Automatically unlock the "Godhuman" fighting style
+                ["RACE-CONFIGURE"] = {
+                    ["RACE"] = {"Human", "Skypiea", "Fishman", "Mink"}, -- List -- "Human", "Skypiea", "Fishman", "Mink"
+                    ["RACE-LOCK"] = true, -- Automatically change the character race if not in the list
+                    ["RACE-V3"] = true, -- Automatically upgrade character race to V3 if possible Human, Mink, (Fishman, Ghoul, Cyborg) soon
+                },
+                ["FRAGMENT"] = 100000, -- Limit number of fragments to collect
+        
+                -- SWORD
+                ["CANVANDER"] = true,
+                ["BUDDY-SWORD"] = true,
+                ["CURSED-DUAL-KATANA"] = true,
+                ["SHARK-ANCHOR"] = true,
+        
+                --GUN
+                ["ACIDUM-RIFLE"] = true,
+                ["VENOM-BOW"] = true,
+                ["SOUL-GUITAR"] = true,
+        
+                -- AURA
+                ["COLOR-HAKI"] = {"Pure Red","Winter Sky","Snow White"}, -- Aura color to craft
+            },
+        
+            ["FRUITPURCHASE"] = true, -- Automatically purchase fruits based on priority list
+            ["PRIORITYFRUIT"] = { -- List of preferred fruits to purchase or eat in order of priority
+                [1] = "Dragon-Dragon",
+                [2] = "Dough-Dough",
+                [3] = "Flame-Flame",
+                [4] = "Rumble-Rumble",
+                [5] = "Human-Human: Buddha",
+                [6] = "Dark-Dark",
+            },
+        
+            ["FPSCAP"] = 30, -- Limit the frame rate to optimize performance
+            ["LOWTEXTURE"] = true -- Reduce graphic quality for better performance
+        }
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/simple-hubs/contents/refs/heads/main/bloxfruit-kaitan-main.lua"))()
     end
 })    tabs.Bluelock:AddButton({
     Title = "Alchemy Hub",
@@ -437,6 +711,42 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
         loadstring(game:HttpGet("https://raw.githubusercontent.com/alan11ago/Hub/refs/heads/main/ImpHub.lua"))()
     end
 })    tabs.Fisch:AddButton({
+    Title = "Deng Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/DENGHUB2025/HUGHUB/main/WL", true))()
+    end
+})    tabs.Fisch:AddButton({
+    Title = "Londne",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/londnee/code/refs/heads/main/Fisch.lua"))()
+    end
+})    tabs.Fisch:AddButton({
+    Title = "Naoki Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://naokihub.vercel.app",true))()
+    end
+})    tabs.Fisch:AddButton({
+    Title = "Kiciahook",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kiciahook/kiciahook/refs/heads/main/loader.lua"))()
+    end
+})   tabs.Fisch:AddButton({
+    Title = "Solix Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/debunked69/Solixreworkkeysystem/refs/heads/main/solix%20new%20keyui.lua"))()
+    end
+})    tabs.Fisch:AddButton({
+    Title = "Raito Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/RaitoHub/refs/heads/main/Script"))()
+    end
+})    tabs.Fisch:AddButton({
     Title = "Ronix Hub",
     Description = "",
     Callback = function()
@@ -467,6 +777,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
     end
 })    tabs.Deedrails:AddButton({
+    Title = "Npc Lock",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/s542AG7U/raw"))()  
+    end
+})    tabs.Deedrails:AddButton({
     Title = "Increase Hitbox + Aim lock",
     Description = "",
     Callback = function()
@@ -489,6 +805,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "",
     Callback = function()
         loadstring(game:HttpGet('https://skullhub.xyz/loader.lua'))()
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "DHHz Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ducknovis/DHHz-hub/refs/heads/main/Dead-Rails.lua"))()  
     end
 })    tabs.Deedrails:AddButton({
     Title = "Deed Rails",
@@ -525,6 +847,54 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Emplic/deathrails/refs/heads/main/bond"))()
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "Vehicle Fly",
+    Description = "",
+    Callback = function()
+        Loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Almechy Hub",
+    Description = "Need Key",
+    Callback = function()
+        loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Elgato",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/meobeo8/elgato/a/Loader"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Arise Crossover",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/AriseCrossover"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Omg Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/y/refs/heads/main/hj"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Sky Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SKOIXLL/SKYLOLAND/refs/heads/main/Load.lua"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Gentle Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/GentleScriptHub/GentleHub/refs/heads/main/Games"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Speed Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
     end
 })
 
@@ -586,12 +956,14 @@ if effectContainer then
     end
 end
 
--- Thông báo khi tải xong
+
+
 Fluent:Notify({
-    Title = "Script : ",
-    Content = "Done",
-    Duration = 10
+    Title = "Script :",
+    Content = "Success",
+    Duration = 10,
 })
+
 
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
