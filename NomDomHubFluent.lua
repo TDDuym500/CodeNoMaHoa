@@ -35,9 +35,9 @@ local Options = Fluent.Options
 -- Nút Discord
     tabs.Infor:AddButton({
     Title = "My Discord",
-    Description = "Giao Lưu",
+    Description = "Chat",
     Callback = function()
-        setclipboard("https://discord.gg/AdvrEXqB")
+        setclipboard("https://discord.gg/p7CcRT44")
     end
 })tabs.Infor:AddButton({
     Title="My Youtube",
@@ -47,10 +47,10 @@ local Options = Fluent.Options
     end
 })tabs.Infor:AddParagraph({
     Title="Duy Sdikibi",
-    Content="Code ra cái script lồn này"
+    Content="Dev"
 })tabs.Infor:AddParagraph({
     Title="KhangG",
-    Content="Cung cấp script"
+    Content="Suport"
 })
 -- 🔎 Kiểm tra Executor đang chạy code
 local executor = "Unknown"
@@ -71,22 +71,22 @@ end
 -- Thêm thông tin Executor vào UI
 if tabs and tabs.Infor and tabs.Infor.AddParagraph then
     tabs.Infor:AddParagraph({
-        Title = "Client Đang Dùng",
+        Title = "Using Cilent",
         Content = executor
     })
 end
 
 tabs.Infor:AddParagraph({
-    Title="Cập Nhật",
-    Content="Tôi Sẽ Cập Nhiều Nhiều Tính Năng Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất\nNếu Có Lỗi Hãy Kiên Nhẫn Chờ Tôi Fix Vì Tôi Không Thể Thử Nghiệm Hết"
+    Title="Update",
+    Content="VN : Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất\EN : I Will Update More Scenarios To Bring You The Best"
 })
 tabs.Infor:AddParagraph({
-    Title="Các Client Android Hỗ Trợ",
-    Content="Tất Cả Client Android"
+    Title="Supported Android Clients",
+    Content="Support all android clients"
 })
 tabs.Infor:AddParagraph({
-    Title="Các Client Pc Hỗ Trợ",
-    Content="Tất Cả Client Pc"
+    Title="Supported PC Clients",
+    Content="Support all pc clients"
 })
    tabs.Main:AddButton({
     Title = "Comming soon...",
