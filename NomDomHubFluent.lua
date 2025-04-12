@@ -78,7 +78,7 @@ end
 
 tabs.Infor:AddParagraph({
     Title="Update",
-    Content="VN : Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất\EN : I Will Update More Scenarios To Bring You The Best"
+    Content="VN : Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất | EN : I Will Update More Scenarios To Bring You The Best"
 })
 tabs.Infor:AddParagraph({
     Title="Supported Android Clients",
