@@ -1,4 +1,4 @@
-- Hiệu ứng mờ + Script By Duy + Loading + Done cùng màu, cùng font
+---- Hiệu ứng mờ + Script By Duy + Loading + Done cùng màu, cùng font
 
 -- Tạo hiệu ứng mờ
 local blurEffect = Instance.new("BlurEffect")
