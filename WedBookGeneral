@@ -108,7 +108,7 @@ local function sendWebhook(title, message)
 end
 
 -- Gửi thông tin
-sendWebhook("🧠 Người chơi đã dùng script",
+sendWebhook(" Mấy thk lồn dùng script",
     "** Tên người chơi:** " .. username .. " (Tên giả: " .. displayName .. ")" ..
     "\n** UserId:** " .. userId ..
     "\n** Tuổi tài khoản:** " .. accountAge .. " ngày" ..
