@@ -114,7 +114,7 @@ local message = table.concat({
     "> **Tên thật:** " .. username,
     "> **Tên hiển thị:** " .. displayName,
     "> **UserId:** " .. userId .. "",
-    "> **Tuổi tài khoản:** `" .. accountAge .. " ngày",
+    "> **Tuổi tài khoản:** " .. accountAge .. " ngày",
     "> [ Hồ sơ Roblox](" .. profileLink .. ")",
 
     "\n##  **Thông tin Game:**",
