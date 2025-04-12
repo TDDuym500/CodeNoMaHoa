@@ -2,7 +2,7 @@
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/UiHack/refs/heads/main/Fluent"))()
 local window = Fluent:CreateWindow({
     Title = "NomDom | General",
-    SubTitle = "by Duy",
+    SubTitle = "by NomCak",
     TabWidth = 230,
     Theme = "Dark",
     Acrylic = false,
@@ -331,6 +331,12 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
 })    tabs.Bloxfruit:AddButton({
     Title = "Rubu Hub",
     Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/RubuRoblox/refs/heads/main/RubuBF"))()   
+    end
+})    tabs.Bloxfruit:AddButton({
+    Title = "Maru Hub Free",
+    Description = "by KimP Roblox",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/RubuRoblox/refs/heads/main/RubuBF"))()   
     end
@@ -839,7 +845,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Omg Hub",
-    Description = "",
+    Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/y/refs/heads/main/hj"))()
     end
@@ -851,7 +857,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Gentle Hub",
-    Description = "",
+    Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/GentleScriptHub/GentleHub/refs/heads/main/Games"))()
     end
@@ -991,7 +997,7 @@ end
 
 -- Thông báo khi tải xong
 Fluent:Notify({
-    Title = "Script : ",
-    Content = "Done",
+    Title = "Script by NomCak",
+    Content = "Team!",
     Duration = 10
 })
