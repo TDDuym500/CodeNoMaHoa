@@ -19,7 +19,7 @@ mainText.Parent = gui
 mainText.Size = UDim2.new(1, 0, 1, 0)
 mainText.Position = UDim2.new(0, 0, 0, 0)
 mainText.BackgroundTransparency = 1
-mainText.Text = "T sẽ không update đến 8/5"
+mainText.Text = "Chờ đợi là vàng"
 mainText.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainText.TextStrokeTransparency = 0.5
 mainText.Font = Enum.Font.GothamBlack
@@ -106,10 +106,10 @@ local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym
 local window = Fluent:CreateWindow({
     Title = "NomDom | General",
     SubTitle = "by Duy",
-    TabWidth = 160,
+    TabWidth = 230,
     Theme = "Dark",
     Acrylic = false,
-    Size = UDim2.fromOffset(600, 420),
+    Size = UDim2.fromOffset(700, 490),
     MinimizeKey = Enum.KeyCode.End
 })
 
@@ -125,6 +125,12 @@ local tabs = {
     Petgo = window:AddTab({ Title = "Pet Go" }),
     Deedrails = window:AddTab({ Title = "Deed Rails" }),
     Arisecrossover = window:AddTab({ Title = "Arise Crossover" }),
+    Volleyball = window:AddTab({ Title = "Volleyball Legends" }),
+    Basketball = window:AddTab({ Title = "Basketball" }),
+    Mm2 = window:AddTab({ Title = "Mm2" }),
+    Tsb = window:AddTab({ Title = "The Strongest Battlegrounds" }),
+    Rivals = window:AddTab({ Title = "Rivals" }),
+
 }
 
 local Options = Fluent.Options
@@ -143,11 +149,47 @@ local Options = Fluent.Options
         setclipboard(tostring("https://www.youtube.com/channel/NomDomDZ"))
     end
 })tabs.Infor:AddParagraph({
-    Title="Duy",
+    Title="Duy Sdikibi",
     Content="Code ra cái script lồn này"
 })tabs.Infor:AddParagraph({
     Title="KhangG",
     Content="Cung cấp script"
+})
+-- 🔎 Kiểm tra Executor đang chạy code
+local executor = "Unknown"
+
+if syn then
+    executor = "Synapse X"
+elseif KRNL_LOADED then
+    executor = "KRNL"
+elseif fluxus then
+    executor = "Fluxus"
+elseif getexecutorname then
+    local success, execName = pcall(getexecutorname)
+    if success and type(execName) == "string" then
+        executor = execName
+    end
+end
+
+-- Thêm thông tin Executor vào UI
+if tabs and tabs.Infor and tabs.Infor.AddParagraph then
+    tabs.Infor:AddParagraph({
+        Title = "Client Đang Dùng",
+        Content = executor
+    })
+end
+
+tabs.Infor:AddParagraph({
+    Title="Cập Nhật",
+    Content="Tôi Sẽ Cập Nhiều Nhiều Tính Năng Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất\nNếu Có Lỗi Hãy Kiên Nhẫn Chờ Tôi Fix Vì Tôi Không Thể Thử Nghiệm Hết"
+})
+tabs.Infor:AddParagraph({
+    Title="Các Client Android Hỗ Trợ",
+    Content="Tất Cả Client Android"
+})
+tabs.Infor:AddParagraph({
+    Title="Các Client Pc Hỗ Trợ",
+    Content="Tất Cả Client Pc"
 })
    tabs.Main:AddButton({
     Title = "Comming soon...",
@@ -155,7 +197,9 @@ local Options = Fluent.Options
     Callback = function()
         
     end
-})    tabs.Localplayer:AddButton({
+})
+
+tabs.Localplayer:AddButton({
     Title = "Wait Update...",
     Description = "",
     Callback = function()
@@ -710,6 +754,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/alan11ago/Hub/refs/heads/main/ImpHub.lua"))()
     end
+})    tabs.Bluelock:AddButton({
+    Title = "Ronix Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/c84ecefd7fa63a35d454d3ecefe3ee7e.lua"))()
+    end
 })    tabs.Fisch:AddButton({
     Title = "Deng Hub",
     Description = "",
@@ -825,6 +875,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
     end
 })    tabs.Deedrails:AddButton({
+    Title = "Null Fire",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
+    end
+})    tabs.Deedrails:AddButton({
     Title = "Solix Hub",
     Description = "Need Key",
     Callback = function()
@@ -835,6 +891,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/loader", true))()
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "Ronix Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/672a0ae340e8ce7e21a51e37c6bf0cc1.lua"))()
     end
 })    tabs.Deedrails:AddButton({
     Title = "Spider Hub",
@@ -895,6 +957,72 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+    end
+})    tabs.Volleyball:AddButton({
+    Title = "Sterling Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Zayn31214/name/refs/heads/main/SterlingNew"))() 
+    end
+})    tabs.Volleyball:AddButton({
+    Title = "Waiting for more script...",
+    Description = "",
+    Callback = function()
+        
+    end
+})    tabs.Basketball:AddButton({
+    Title = "Control Ball",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/RedJDark/CONTROL-SCRIPTT/refs/heads/main/CONTROL"))()
+    end
+})    tabs.Basketball:AddButton({
+    Title = "Waiting for more script...",
+    Description = "",
+    Callback = function()
+        
+    end
+})    tabs.Tsb:AddButton({
+    Title = "Beecon Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/BaconBossScript/BeeconHub/main/BeeconHub"))() 
+    end
+})    tabs.Tsb:AddButton({
+    Title = "Phantasm",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ATrainz/Phantasm/refs/heads/main/Phantasm.lua"))()
+    end
+})    tabs.Tsb:AddButton({
+    Title = "Speed Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+    end
+})    tabs.Mm2:AddButton({
+    Title = "Foggy Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/FOGOTY/mm2-piano-reborn/refs/heads/main/scr"))()
+    end
+})    tabs.Mm2:AddButton({
+    Title = "XHub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Au0yX/Community/main/XhubMM2"))() 
+    end
+})    tabs.Rivals:AddButton({
+    Title = "Ronix Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/e945f55997c4240abc865c0bcc2136c5.lua"))()
+    end
+})    tabs.Rivals:AddButton({
+    Title = "Soluna",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://soluna-script.vercel.app/main.lua",true))()
     end
 })
 
@@ -958,10 +1086,11 @@ end
 
 
 
+-- Thông báo khi tải xong
 Fluent:Notify({
-    Title = "Script :",
-    Content = "Success",
-    Duration = 10,
+    Title = "Script : ",
+    Content = "Done",
+    Duration = 10
 })
 
 
