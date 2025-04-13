@@ -1,8 +1,8 @@
--- Load thư viện Fluent
+-- Tải thư viện Fluent
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/UiHack/refs/heads/main/Fluent"))()
 local window = Fluent:CreateWindow({
     Title = "NomDom | General",
-    SubTitle = "by NomCak",
+    SubTitle = "by Duy",
     TabWidth = 230,
     Theme = "Dark",
     Acrylic = false,
@@ -10,11 +10,11 @@ local window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.End
 })
 
--- Tạo các Tab
+-- Thêm các Tab
 local tabs = {
     Infor = window:AddTab({ Title = "Infor" }),
     Main = window:AddTab({ Title = "Main" }),
-    Localplayer = window:AddTab({ Title = "Local Player" }),
+    Localplayer = window:AddTab({ Title = "Localplayer" }),
     Joinid = window:AddTab({ Title = "Join server" }),
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
     Bluelock = window:AddTab({ Title = "Blue Lock" }),
@@ -27,34 +27,36 @@ local tabs = {
     Mm2 = window:AddTab({ Title = "Mm2" }),
     Tsb = window:AddTab({ Title = "The Strongest Battlegrounds" }),
     Rivals = window:AddTab({ Title = "Rivals" }),
-
 }
 
 local Options = Fluent.Options
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local speaker = Players.LocalPlayer
 
--- Nút Discord
-    tabs.Infor:AddButton({
-    Title = "My Discord",
-    Description = "Chat",
+-- ⚙️ Phần Thông Tin
+tabs.Infor:AddButton({
+    Title = "Discord của tôi",
+    Description = "Chát",
     Callback = function()
         setclipboard("https://discord.gg/p7CcRT44")
     end
-})tabs.Infor:AddButton({
-    Title="My Youtube",
-    Description="Youtube",
-    Callback=function()
-        setclipboard(tostring("https://www.youtube.com/channel/NomDomDZ"))
-    end
-})tabs.Infor:AddParagraph({
-    Title="Duy Sdikibi",
-    Content="Dev"
-})tabs.Infor:AddParagraph({
-    Title="KhangG",
-    Content="Suport"
 })
--- 🔎 Kiểm tra Executor đang chạy code
-local executor = "Unknown"
 
+tabs.Infor:AddButton({
+    Title = "Youtube của tôi",
+    Description = "Youtube",
+    Callback = function()
+        setclipboard("https://www.youtube.com/channel/NomDomDZ")
+    end
+})
+
+tabs.Infor:AddParagraph({ Title = "Duy Sdikibi", Content = "Dev" })
+tabs.Infor:AddParagraph({ Title = "KhangG", Content = "Support" })
+
+-- Phát hiện Executor
+local executor = "Không xác định"
 if syn then
     executor = "Synapse X"
 elseif KRNL_LOADED then
@@ -68,41 +70,246 @@ elseif getexecutorname then
     end
 end
 
--- Thêm thông tin Executor vào UI
-if tabs and tabs.Infor and tabs.Infor.AddParagraph then
-    tabs.Infor:AddParagraph({
-        Title = "Using Cilent",
-        Content = executor
-    })
+tabs.Infor:AddParagraph({ Title = "Sử dụng Client", Content = executor })
+tabs.Infor:AddParagraph({
+    Title = "Cập Nhật",
+    Content = "VN: Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất | EN: I Will Update More Scenarios To Bring You The Best"
+})
+tabs.Infor:AddParagraph({ Title = "Các Client Android hỗ trợ", Content = "Hỗ trợ tất cả client Android" })
+tabs.Infor:AddParagraph({ Title = "Các Client PC hỗ trợ", Content = "Hỗ trợ tất cả client PC" })
+
+-- ⚙️ Localplayer - Phần WalkSpeed
+local Walkspeed = tabs.Localplayer:AddSection("WalkSpeed")
+local tpwalking = false
+local currentSpeed = 90
+local overrideSpeed = nil
+local heartbeatConnection = nil
+local originalWalkSpeed = speaker.Character and speaker.Character:WaitForChild("Humanoid", 5).WalkSpeed or 16
+
+local function startTeleportWalk(character)
+    if not character then return end
+    local hum = character:WaitForChild("Humanoid", 5)
+    if not hum then return end
+
+    local function updateSpeed()
+        if overrideSpeed then
+            currentSpeed = overrideSpeed
+        else
+            local health = hum.Health
+            local maxHealth = hum.MaxHealth
+            local hpPercent = (health / maxHealth) * 100
+
+            if hpPercent <= 30 then
+                currentSpeed = 190
+            elseif hpPercent >= 50 then
+                currentSpeed = 90
+            end
+        end
+    end
+
+    hum.HealthChanged:Connect(updateSpeed)
+    updateSpeed()
+
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+    end
+
+    heartbeatConnection = RunService.Heartbeat:Connect(function(dt)
+        if tpwalking and hum and hum.Parent then
+            local moveDir = hum.MoveDirection
+            if moveDir.Magnitude > 0 then
+                character:TranslateBy(moveDir * currentSpeed * dt)
+            end
+        end
+    end)
 end
 
-tabs.Infor:AddParagraph({
-    Title="Update",
-    Content="VN : Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất | EN : I Will Update More Scenarios To Bring You The Best"
-})
-tabs.Infor:AddParagraph({
-    Title="Supported Android Clients",
-    Content="Support all android clients"
-})
-tabs.Infor:AddParagraph({
-    Title="Supported PC Clients",
-    Content="Support all pc clients"
-})
-   tabs.Main:AddButton({
-    Title = "Comming soon...",
-    Description = "",
-    Callback = function()
-        
+speaker.CharacterAdded:Connect(function(char)
+    if tpwalking then
+        task.wait(1)
+        startTeleportWalk(char)
+    end
+end)
+
+if speaker.Character then
+    startTeleportWalk(speaker.Character)
+end
+
+Walkspeed:AddToggle("tpwalk_toggle", {
+    Title = "Walk speed",
+    Description = "On / Off",
+    Default = false,
+    Callback = function(state)
+        tpwalking = state
+        local char = speaker.Character
+        if char then
+            if tpwalking then
+                startTeleportWalk(char)
+                local hum = char:WaitForChild("Humanoid", 5)
+                if hum then
+                    hum.WalkSpeed = currentSpeed
+                end
+            else
+                local hum = char:WaitForChild("Humanoid", 5)
+                if hum then
+                    hum.WalkSpeed = originalWalkSpeed
+                end
+                if heartbeatConnection then
+                    heartbeatConnection:Disconnect()
+                    heartbeatConnection = nil
+                end
+            end
+        end
     end
 })
 
-tabs.Localplayer:AddButton({
-    Title = "Wait Update...",
-    Description = "",
-    Callback = function()
-        
+Walkspeed:AddInput("speed_input", {
+    Title = "Speed",
+    Placeholder = "Enter speed",
+    Numeric = true,
+    Finished = true,
+    Callback = function(value)
+        local speed = tonumber(value)
+        if speed then
+            overrideSpeed = speed
+            currentSpeed = speed
+        else
+            overrideSpeed = nil
+        end
     end
-})tabs.Joinid:AddInput("Input", {
+})
+
+-- ⚙️ Localplayer - Phần Jump
+local Jump = tabs.Localplayer:AddSection("Jump")
+
+local infiniteJumpEnabled = false
+local customJumpPowerEnabled = false
+local jumpPowerOverride = nil
+
+UserInputService.JumpRequest:Connect(function()
+    if infiniteJumpEnabled then
+        local char = Players.LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+    end
+end)
+
+Jump:AddToggle("infinite_jump", {
+    Title = "Infiniti Jump",
+    Description = "On / Off",
+    Default = false,
+    Callback = function(state)
+        infiniteJumpEnabled = state
+    end
+})
+
+Jump:AddToggle("custom_jump_toggle", {
+    Title = "High Jump",
+    Description = "On / Off",
+    Default = false,
+    Callback = function(state)
+        customJumpPowerEnabled = state
+        local char = Players.LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                if state and jumpPowerOverride then
+                    humanoid.JumpPower = jumpPowerOverride
+                else
+                    humanoid.JumpPower = 50
+                end
+            end
+        end
+    end
+})
+
+Jump:AddInput("jump_power", {
+    Title = "Jump Power",
+    Placeholder = "Enter jump height",
+    Numeric = true,
+    Finished = true,
+    Callback = function(value)
+        local power = tonumber(value)
+        jumpPowerOverride = power
+        local char = Players.LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid and customJumpPowerEnabled then
+                humanoid.JumpPower = power or 50
+            end
+        end
+    end
+})
+
+Players.LocalPlayer.CharacterAdded:Connect(function(char)
+    task.wait(1)
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        if customJumpPowerEnabled and jumpPowerOverride then
+            humanoid.JumpPower = jumpPowerOverride
+        else
+            humanoid.JumpPower = 50
+        end
+    end
+end)
+
+
+local Noclip = tabs.Localplayer:AddSection("No Clip")
+
+-- ⚙️ NoClip - Phần No Clip
+local originalCanCollide = {}
+local noClipEnabled = false
+
+local function toggleNoClip(state)
+    local char = speaker.Character
+    if not char then return end
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.PlatformStand = state
+    end
+
+    char.DescendantAdded:Connect(function(part)
+        if part:IsA("BasePart") then
+            originalCanCollide[part] = part.CanCollide
+            part.CanCollide = not state
+        end
+    end)
+
+    for _, part in pairs(char:GetChildren()) do
+        if part:IsA("BasePart") then
+            originalCanCollide[part] = part.CanCollide
+            part.CanCollide = not state
+        end
+    end
+end
+
+Noclip:AddToggle("noclip_toggle", {
+    Title = "No Clip",
+    Description = "On / Off",
+    Default = false,
+    Callback = function(state)
+        noClipEnabled = state
+        toggleNoClip(state)
+    end
+})
+
+
+
+
+
+
+
+
+
+
+
+
+tabs.Joinid:AddInput("Input", {
     Title = "Job ID",
     Default = "",
     Placeholder = "Paste Job ID Here",
@@ -250,22 +457,22 @@ Callback = function()
 end
 }) 
 
-tabs.Bloxfruit:AddParagraph({
-    Title="Main",
-    Content=""
-})
-    tabs.Bloxfruit:AddButton({
+local Mainbf = tabs.Bloxfruit:AddSection("Main")---- Add mục Main 
+
+Mainbf:AddButton({
     Title = "W azure",
     Description = "",
     Callback = function()   
         getgenv().Team = "Marines" --Marines Pirates
-getgenv().AutoLoad = true --Will Load Script On Server Hop
-getgenv().SlowLoadUi  = false
-getgenv().ForceUseSilentAimDashModifier = false --Force turn on silent aim , if error then executor problem
-getgenv().ForceUseWalkSpeedModifier = true --Force turn on Walk Speed Modifier , if error then executor problem
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104dabe8e19562e5cc2.lua"))()
+        getgenv().AutoLoad = true --Will Load Script On Server Hop
+        getgenv().SlowLoadUi = false
+        getgenv().ForceUseSilentAimDashModifier = false --Force turn on silent aim, if error then executor problem
+        getgenv().ForceUseWalkSpeedModifier = true --Force turn on Walk Speed Modifier, if error then executor problem
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc6104dabe8e19562e5cc2.lua"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})
+
+Mainbf:AddButton({
     Title = "Redz Hub",
     Description = "",
     Callback = function()  
@@ -275,7 +482,8 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
         }
         loadstring(game:HttpGet("https://raw.githubusercontent.com/newredz/BloxFruits/refs/heads/main/Source.luau"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})
+Mainbf:AddButton({
     Title = "Xero Hub",
     Description = "",
     Callback = function()
@@ -284,170 +492,162 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b2169cf53bc61
     getgenv().Auto_Execute = false
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Xero2409/XeroHub/refs/heads/main/main.lua"))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Teddy Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletgojo/Haidepzai/refs/heads/main/Teddy-FREMIUM"))() 
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "GreenZ Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaAnarchist/GreenZ-Hub/refs/heads/main/GreenZHub.lua"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Vxeze Hub",
     Description = "",
     Callback = function()
         getgenv().Language = "English" ---vetnamese
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain2"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Doramon Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/obfmoonsec/Masterhub/refs/heads/main/obf"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "QuanTum Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Trustmenotcondom/QTONYX/refs/heads/main/QuantumOnyx.lua"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Vxeze Hub",
     Description = "",
     Callback = function()
         getgenv().Language = "English" -----vetnamese
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain2"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Zenith Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Rubu Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/RubuRoblox/refs/heads/main/RubuBF"))()   
     end
-})    tabs.Bloxfruit:AddButton({
-    Title = "Maru Hub Free",
-    Description = "by KimP Roblox",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/RubuRoblox/refs/heads/main/RubuBF"))()   
-    end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Alchemy Hub",
     Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://scripts.alchemyhub.xyz"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Bapred Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/BapRed/main/BapRedHub"))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Astral Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Overgustx2/Main/refs/heads/main/BloxFruits_%E2%80%8B25.html"))()   
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Omg Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua"))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Volcano Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/wpisstestfprg/Volcano/refs/heads/main/VolcanoLocal.lua", true))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Kncrypt Hub",
     Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/3345-c-a-t-s-u-s/Kncrypt/refs/heads/main/sources/BloxFruit.lua"))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Hiru Hub",
     Description = "Need Key",
     Callback = function()
         getgenv().Team = "Pirates"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NGUYENVUDUY1/Source/main/HiruHub.lua"))()  
     end
-})   tabs.Bloxfruit:AddButton({
+})   Mainbf:AddButton({
     Title = "HoHo Hub",
     Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "BlueX Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()      
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Speed Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()    
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Xeter Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Loader/main/Xeter.lua"))()   
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Ganteng",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/516a5669fc39b4945cd0609a08264505.lua"))()   
     end
-})    tabs.Bloxfruit:AddButton({
+})    Mainbf:AddButton({
     Title = "Cakka Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/UserDevEthical/Loadstring/main/CokkaHub.lua"))()   
     end
 })
-tabs.Bloxfruit:AddParagraph({
-    Title="Hop Server",
-    Content=""
-})    tabs.Bloxfruit:AddButton({
+local Hopbf = tabs.Bloxfruit:AddSection("Hop Server")
+Hopbf:AddButton({
     Title = "CutTay Hub Auto Pull Lever",
     Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a1498369f289af2671cca90085f23fb8.lua"))()  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Hopbf:AddButton({
     Title = "Vxeze Hub Hop Dough King",
     Description = "",
     Callback = function()
         getgenv().Team = "Marines"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/VxezeHubHopBoss/refs/heads/main/VxezeHubHopDough.txt"))()
     end
-})    tabs.Bloxfruit:AddButton({
+})    Hopbf:AddButton({
     Title = "Vxeze Hub Hop Rip Indra",
     Description = "",
     Callback = function()
         getgenv().Team = "Marines"
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/VxezeHubHopBoss/refs/heads/main/VxezeHubHopRip"))()
     end
-})   tabs.Bloxfruit:AddParagraph({
-    Title="Kaitun",
-    Content=""
 })
-    tabs.Bloxfruit:AddButton({
+
+local Kaitunbf = tabs.Bloxfruit:AddSection("Kaitun")
+
+Kaitunbf:AddButton({
     Title = "Kaitun Xero Hub",
     Description = "Need Key",
     Callback = function()
@@ -508,13 +708,13 @@ getgenv().Configs = {
 }
 repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Xero2409/XeroHub/refs/heads/main/kaitun.lua"))() end) until getgenv().Check_Execute  
     end
-})    tabs.Bloxfruit:AddButton({
+})    Kaitunbf:AddButton({
     Title = "Kaitun RoyX Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/RoyX%20Kaitun"))()    
     end
-})    tabs.Bloxfruit:AddButton({
+})    Kaitunbf:AddButton({
     Title = "Kaitun Simple Hub",
     Description = "",
     Callback = function()
@@ -845,7 +1045,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Omg Hub",
-    Description = "Need Key",
+    Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/y/refs/heads/main/hj"))()
     end
@@ -857,7 +1057,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Gentle Hub",
-    Description = "Need Key",
+    Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/GentleScriptHub/GentleHub/refs/heads/main/Games"))()
     end
@@ -997,7 +1197,7 @@ end
 
 -- Thông báo khi tải xong
 Fluent:Notify({
-    Title = "Script by NomCak",
-    Content = "Team!",
+    Title = "Script : ",
+    Content = "Done",
     Duration = 10
 })
