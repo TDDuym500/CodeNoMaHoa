@@ -13,7 +13,7 @@ local window = Fluent:CreateWindow({
 -- Thêm các Tab
 local tabs = {
     Infor = window:AddTab({ Title = "Infor" }),
-    Main = window:AddTab({ Title = "Main" }),
+    Main = window:AddTab({ Title = "Anouncement" }),
     Localplayer = window:AddTab({ Title = "Localplayer" }),
     Joinid = window:AddTab({ Title = "Join server" }),
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
@@ -70,13 +70,23 @@ elseif getexecutorname then
     end
 end
 
-tabs.Infor:AddParagraph({ Title = "Sử dụng Client", Content = executor })
+tabs.Infor:AddParagraph({ Title = "Use Client", Content = executor })
 tabs.Infor:AddParagraph({
     Title = "Cập Nhật",
     Content = "VN: Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất | EN: I Will Update More Scenarios To Bring You The Best"
 })
-tabs.Infor:AddParagraph({ Title = "Các Client Android hỗ trợ", Content = "Hỗ trợ tất cả client Android" })
-tabs.Infor:AddParagraph({ Title = "Các Client PC hỗ trợ", Content = "Hỗ trợ tất cả client PC" })
+tabs.Infor:AddParagraph({ Title = "Supported Android Clients", Content = "Support all Android clients" })
+tabs.Infor:AddParagraph({ Title = "Supported PC Clients", Content = "Support all PC clients" })
+
+local Anouncement = tabs.Main:AddSection("Anouncement")
+
+Anouncement:AddParagraph({ Title = "Vn", Content = "Dừng Update script vì phải thi" })
+Anouncement:AddParagraph({ Title = "En", Content = "Stop updating script because i have exam" })
+
+local Status = tabs.Main:AddSection("Status")
+
+Status:AddParagraph({ Title = "Script : Working", Content = "" })
+Status:AddParagraph({ Title = "Update : Cannot", Content = "" })
 
 -- ⚙️ Localplayer - Phần WalkSpeed
 local Walkspeed = tabs.Localplayer:AddSection("WalkSpeed")
@@ -1033,7 +1043,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Elgato",
-    Description = "",
+    Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/meobeo8/elgato/a/Loader"))()
     end
@@ -1045,7 +1055,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Omg Hub",
-    Description = "",
+    Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/y/refs/heads/main/hj"))()
     end
