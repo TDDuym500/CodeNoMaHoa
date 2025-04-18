@@ -3,7 +3,7 @@ local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym
 local window = Fluent:CreateWindow({
     Title = "NomDom | General",
     SubTitle = "by Duy",
-    TabWidth = 230,
+    TabWidth = 290,
     Theme = "Dark",
     Acrylic = false,
     Size = UDim2.fromOffset(700, 490),
@@ -37,15 +37,15 @@ local speaker = Players.LocalPlayer
 
 -- ⚙️ Phần Thông Tin
 tabs.Infor:AddButton({
-    Title = "Discord của tôi",
-    Description = "Chát",
+    Title = "My Discord",
+    Description = "Chat",
     Callback = function()
         setclipboard("https://discord.gg/p7CcRT44")
     end
 })
 
 tabs.Infor:AddButton({
-    Title = "Youtube của tôi",
+    Title = "My Youtube",
     Description = "Youtube",
     Callback = function()
         setclipboard("https://www.youtube.com/channel/NomDomDZ")
@@ -88,42 +88,27 @@ local Status = tabs.Main:AddSection("Status")
 Status:AddParagraph({ Title = "Script : Working", Content = "" })
 Status:AddParagraph({ Title = "Update : Cannot", Content = "" })
 
--- ⚙️ Localplayer - Phần WalkSpeed
+-- 🧍 WalkSpeed & Jump
 local Walkspeed = tabs.Localplayer:AddSection("WalkSpeed")
 local tpwalking = false
 local currentSpeed = 90
 local overrideSpeed = nil
 local heartbeatConnection = nil
-local originalWalkSpeed = speaker.Character and speaker.Character:WaitForChild("Humanoid", 5).WalkSpeed or 16
+local originalWalkSpeed = 16
 
 local function startTeleportWalk(character)
     if not character then return end
     local hum = character:WaitForChild("Humanoid", 5)
     if not hum then return end
 
-    local function updateSpeed()
-        if overrideSpeed then
-            currentSpeed = overrideSpeed
-        else
-            local health = hum.Health
-            local maxHealth = hum.MaxHealth
-            local hpPercent = (health / maxHealth) * 100
-
-            if hpPercent <= 30 then
-                currentSpeed = 190
-            elseif hpPercent >= 50 then
-                currentSpeed = 90
-            end
+    hum.HealthChanged:Connect(function()
+        local hpPercent = (hum.Health / hum.MaxHealth) * 100
+        if not overrideSpeed then
+            currentSpeed = hpPercent <= 30 and 190 or 90
         end
-    end
+    end)
 
-    hum.HealthChanged:Connect(updateSpeed)
-    updateSpeed()
-
-    if heartbeatConnection then
-        heartbeatConnection:Disconnect()
-    end
-
+    if heartbeatConnection then heartbeatConnection:Disconnect() end
     heartbeatConnection = RunService.Heartbeat:Connect(function(dt)
         if tpwalking and hum and hum.Parent then
             local moveDir = hum.MoveDirection
@@ -134,7 +119,7 @@ local function startTeleportWalk(character)
     end)
 end
 
-speaker.CharacterAdded:Connect(function(char)
+Players.LocalPlayer.CharacterAdded:Connect(function(char)
     if tpwalking then
         task.wait(1)
         startTeleportWalk(char)
@@ -147,7 +132,6 @@ end
 
 Walkspeed:AddToggle("tpwalk_toggle", {
     Title = "Walk speed",
-    Description = "On / Off",
     Default = false,
     Callback = function(state)
         tpwalking = state
@@ -156,18 +140,11 @@ Walkspeed:AddToggle("tpwalk_toggle", {
             if tpwalking then
                 startTeleportWalk(char)
                 local hum = char:WaitForChild("Humanoid", 5)
-                if hum then
-                    hum.WalkSpeed = currentSpeed
-                end
+                if hum then hum.WalkSpeed = currentSpeed end
             else
                 local hum = char:WaitForChild("Humanoid", 5)
-                if hum then
-                    hum.WalkSpeed = originalWalkSpeed
-                end
-                if heartbeatConnection then
-                    heartbeatConnection:Disconnect()
-                    heartbeatConnection = nil
-                end
+                if hum then hum.WalkSpeed = originalWalkSpeed end
+                if heartbeatConnection then heartbeatConnection:Disconnect() end
             end
         end
     end
@@ -189,16 +166,15 @@ Walkspeed:AddInput("speed_input", {
     end
 })
 
--- ⚙️ Localplayer - Phần Jump
+-- 🦘 Jump Settings
 local Jump = tabs.Localplayer:AddSection("Jump")
-
 local infiniteJumpEnabled = false
 local customJumpPowerEnabled = false
 local jumpPowerOverride = nil
 
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled then
-        local char = Players.LocalPlayer.Character
+        local char = LocalPlayer.Character
         if char then
             local humanoid = char:FindFirstChildOfClass("Humanoid")
             if humanoid then
@@ -211,29 +187,18 @@ end)
 
 Jump:AddToggle("infinite_jump", {
     Title = "Infiniti Jump",
-    Description = "On / Off",
     Default = false,
-    Callback = function(state)
-        infiniteJumpEnabled = state
-    end
+    Callback = function(state) infiniteJumpEnabled = state end
 })
 
 Jump:AddToggle("custom_jump_toggle", {
     Title = "High Jump",
-    Description = "On / Off",
     Default = false,
     Callback = function(state)
         customJumpPowerEnabled = state
-        local char = Players.LocalPlayer.Character
-        if char then
-            local humanoid = char:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                if state and jumpPowerOverride then
-                    humanoid.JumpPower = jumpPowerOverride
-                else
-                    humanoid.JumpPower = 50
-                end
-            end
+        local humanoid = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.JumpPower = state and (jumpPowerOverride or 50) or 50
         end
     end
 })
@@ -244,69 +209,126 @@ Jump:AddInput("jump_power", {
     Numeric = true,
     Finished = true,
     Callback = function(value)
-        local power = tonumber(value)
-        jumpPowerOverride = power
-        local char = Players.LocalPlayer.Character
-        if char then
-            local humanoid = char:FindFirstChildOfClass("Humanoid")
-            if humanoid and customJumpPowerEnabled then
-                humanoid.JumpPower = power or 50
+        jumpPowerOverride = tonumber(value)
+        local humanoid = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid and customJumpPowerEnabled then
+            humanoid.JumpPower = jumpPowerOverride or 50
+        end
+    end
+})
+
+-- 🚷 NoClip
+local Noclip = tabs.Localplayer:AddSection("No Clip")
+
+Noclip:AddToggle("NoClip", {
+    Title = "NoClip",
+    Default = false,
+    Callback = function(state)
+        NoClip = state
+        if NoClip then
+            NoClipConnection = RunService.Stepped:Connect(function()
+                local char = LocalPlayer.Character
+                if char then
+                    for _, part in ipairs(char:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+            end)
+        else
+            if NoClipConnection then
+                NoClipConnection:Disconnect()
+                NoClipConnection = nil
+            end
+            local char = LocalPlayer.Character
+            if char then
+                for _, part in ipairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = true
+                    end
+                end
             end
         end
     end
 })
 
-Players.LocalPlayer.CharacterAdded:Connect(function(char)
-    task.wait(1)
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        if customJumpPowerEnabled and jumpPowerOverride then
-            humanoid.JumpPower = jumpPowerOverride
-        else
-            humanoid.JumpPower = 50
+
+local Misc = tabs.Localplayer:AddSection("Misc")
+
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+
+
+
+-- Biến kiểm soát trạng thái bật tắt
+local isFullBright = false
+
+-- Toggle Full Bright
+Misc:AddToggle("FullBrightToggle", {
+    Title = "Full Bright",
+    Default = false,
+    Callback = function(state)
+        isFullBright = state
+
+        -- Nếu tắt thì khôi phục lại Lighting mặc định
+        if not state then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 1000
+            Lighting.GlobalShadows = true
         end
+    end
+})
+
+-- Hàm chạy mỗi frame
+RunService.RenderStepped:Connect(function()
+    if isFullBright then
+        Lighting.Brightness = 10
+        Lighting.ClockTime = 12
+        Lighting.FogEnd = 1e10
+        Lighting.GlobalShadows = false
     end
 end)
 
 
-local Noclip = tabs.Localplayer:AddSection("No Clip")
 
--- ⚙️ NoClip - Phần No Clip
-local originalCanCollide = {}
-local noClipEnabled = false
+-- Biến để lưu trạng thái của toggle
+local isTeleportEnabled = false  
 
-local function toggleNoClip(state)
-    local char = speaker.Character
-    if not char then return end
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        humanoid.PlatformStand = state
-    end
-
-    char.DescendantAdded:Connect(function(part)
-        if part:IsA("BasePart") then
-            originalCanCollide[part] = part.CanCollide
-            part.CanCollide = not state
-        end
-    end)
-
-    for _, part in pairs(char:GetChildren()) do
-        if part:IsA("BasePart") then
-            originalCanCollide[part] = part.CanCollide
-            part.CanCollide = not state
-        end
-    end
-end
-
-Noclip:AddToggle("noclip_toggle", {
-    Title = "No Clip",
-    Description = "On / Off",
-    Default = false,
+-- Thêm toggle vào tab Misc
+Misc:AddToggle("TeleportToggle", {
+    Title = "Click to teleport",   -- Tiêu đề của Toggle
+    Default = false,  -- Trạng thái mặc định (tắt)
     Callback = function(state)
-        noClipEnabled = state
-        toggleNoClip(state)
+        isTeleportEnabled = state  -- Lưu trạng thái của toggle
+        if isTeleportEnabled then
+            print("Teleport Enabled")
+        else
+            print("Teleport Disabled")
+        end
     end
 })
+
+-- Lấy đối tượng LocalPlayer và Mouse
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+
+-- Đảm bảo rằng có GUI và nhân vật đã được tải
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Hàm xử lý khi click chuột trái
+mouse.Button1Down:Connect(function()
+    -- Kiểm tra xem teleport có được bật không
+    if isTeleportEnabled then
+        -- Lấy vị trí click chuột
+        local clickPosition = mouse.Hit.p
+        
+        -- Dịch chuyển nhân vật đến vị trí click (thêm chút cao hơn để tránh vướng mặt đất)
+        humanoidRootPart.CFrame = CFrame.new(clickPosition + Vector3.new(0, 2, 0))
+    end
+end)
 
 
 
@@ -466,6 +488,12 @@ Callback = function()
     Hop()
 end
 }) 
+
+
+
+
+
+
 
 local Mainbf = tabs.Bloxfruit:AddSection("Main")---- Add mục Main 
 
@@ -944,6 +972,30 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "NomDom Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/NomDomDeedRails.lua"))()  
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "Tbao Hub (Main)",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/thaibao/refs/heads/main/TbaoHubDeadRails"))()  
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "Tbao Hub (Tp Map)",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/game/refs/heads/main/TbaoHubDeadRailsTp"))()  
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "Tbao Hub (Fram Bond)",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/game/refs/heads/main/TbaoHubDeadRailsFarm"))()  
     end
 })    tabs.Deedrails:AddButton({
     Title = "Npc Lock",
