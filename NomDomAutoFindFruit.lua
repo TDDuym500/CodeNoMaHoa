@@ -3,11 +3,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
---Auto Gia Nhập Phe
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
 -- ✅ Cấu hình
 local Config = {
     SpeedTween = 325,
@@ -23,23 +18,15 @@ local Config = {
     NoClip = true,
 }
 
---Auto Gia Nhập Phe
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
 -- 🔹 Kiểm tra nếu có chức năng chuyển team trong game
 if ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("CommF_") then
-    -- 🔹 Gửi yêu cầu chuyển sang Hải Quân (Marines)
     ReplicatedStorage.Remotes.CommF_:InvokeServer("SetTeam", "Marines")
-
-    -- 🔹 Thông báo đã chuyển team
     print("✅ Đã tự động gia nhập Hải Quân!")
 else
     print("⚠ Không tìm thấy Remote chuyển team, thử lại sau!")
 end
 
-wait(2)
+wait(1)
 
 -- ✅ Fix Lag
 if Config.FixLag then
@@ -176,9 +163,6 @@ local function findFruit()
     return #fruits > 0 and (Config.RandomFruit and fruits[math.random(1, #fruits)] or fruits[1])
 end
 
-
--- 🔁 Hop server
-
 -- ✅ Server hop
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
@@ -188,9 +172,9 @@ local function hopServer()
     if isHopping then return end
     isHopping = true
     
-    -- Show "No Fruit Spawn" first
-    status.Text = "Status : Fruit Not Spawned"
-    wait(1) -- Wait 1 second to show the message
+    -- Hiển thị trạng thái
+    status.Text = "Status : No fruit"
+    wait(1)
     
     status.Text = "Status : Hopping Server..."
     
@@ -216,35 +200,25 @@ local function hopServer()
         status.Text = "Status : Hopping Server..."
         TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)])
     else
-        status.Text = "Status : Hop Server Error..."
-		task.wait(1)
-		status.Text = "Status : Hopping Server..."
-        task.wait(1)
+        status.Text = "Status : Hopping Server Eror"
+        task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
+		task.wait(2)
         hopServer()
-        task.wait(1)
-        hopServer()
-        task.wait(1)
-        hopServer()
-        task.wait(1)
-        hopServer()
-        task.wait(1)
-          end
     end
     
     isHopping = false
@@ -269,9 +243,9 @@ local Fruits = {
     ["Light Fruit"] = "Light-Light",
     ["Love Fruit"] = "Love-Love",
     ["Rubber Fruit"] = "Rubber-Rubber",
-    ["Creation Fruit"] = "Barrier-Barrier", -- tên mới của Barrier
-    ["Eagle Fruit"] = "Bird-Bird: Falcon", -- tên mới của Falcon
-    ["Magma Fruit"] = "Magma-Magma",	
+    ["Creation Fruit"] = "Barrier-Barrier",
+    ["Eagle Fruit"] = "Bird-Bird: Falcon",
+    ["Magma Fruit"] = "Magma-Magma",
     ["Portal Fruit"] = "Portal-Portal",
     ["Quake Fruit"] = "Quake-Quake",
     ["Human-Human: Buddha Fruit"] = "Human-Human: Buddha",
@@ -279,12 +253,12 @@ local Fruits = {
     ["Bird: Phoenix Fruit"] = "Bird-Bird: Phoenix",
     ["Rumble Fruit"] = "Rumble-Rumble",
     ["Paw Fruit"] = "Pain-Pain",
-    ["Gravity Fruit"] = "Gravity-Gravity", -- trái vừa được làm lại
+    ["Gravity Fruit"] = "Gravity-Gravity",
     ["Dough Fruit"] = "Dough-Dough",
     ["Shadow Fruit"] = "Shadow-Shadow",
     ["Venom Fruit"] = "Venom-Venom",
     ["Control Fruit"] = "Control-Control",
-    ["Spirit Fruit"] = "Spirit-Spirit", -- tên mới của Soul
+    ["Spirit Fruit"] = "Spirit-Spirit",
     ["Dragon Fruit"] = "Dragon-Dragon",
     ["Leopard Fruit"] = "Leopard-Leopard",
     ["Gas Fruit"] = "Gas-Gas"
@@ -357,20 +331,17 @@ gui.Name = "TimeCounter"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- TextLabel
 local label = Instance.new("TextLabel")
 label.Parent = gui
 label.Size = UDim2.new(0, 350, 0, 40)
-label.Position = UDim2.new(0.5, -175, 1, -60) -- Dưới giữa màn hình một chút
+label.Position = UDim2.new(0.5, -175, 1, -60)
 label.BackgroundTransparency = 1
 label.TextScaled = true
 label.TextColor3 = Color3.new(1, 1, 1)
 label.Font = Enum.Font.SourceSansBold
 label.Text = "Time : 00 Hour | 00 Minute | 00 Second"
 
--- Timer logic
 local seconds = 0
-
 task.spawn(function()
     while true do
         wait(1)
