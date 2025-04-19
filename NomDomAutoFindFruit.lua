@@ -3,6 +3,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+--Auto Gia Nhập Phe
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 -- ✅ Cấu hình
 local Config = {
     SpeedTween = 325,
@@ -11,16 +16,23 @@ local Config = {
     EspFruit = true,
     RandomFruit = true,
     AutoStoreFruit = true,
-    Random_Auto = true,
     CheckFruitInterval = 0.2,
     MaxStoreErrorsBeforeHop = 1,
     AutoTeleport = true,
     NoClip = true,
 }
 
+--Auto Gia Nhập Phe
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 -- 🔹 Kiểm tra nếu có chức năng chuyển team trong game
 if ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("CommF_") then
+    -- 🔹 Gửi yêu cầu chuyển sang Hải Quân (Marines)
     ReplicatedStorage.Remotes.CommF_:InvokeServer("SetTeam", "Marines")
+
+    -- 🔹 Thông báo đã chuyển team
     print("✅ Đã tự động gia nhập Hải Quân!")
 else
     print("⚠ Không tìm thấy Remote chuyển team, thử lại sau!")
@@ -172,15 +184,16 @@ local function hopServer()
     if isHopping then return end
     isHopping = true
     
-    -- Hiển thị trạng thái
-    status.Text = "Status : No fruit"
-    wait(1)
+
+
+    -- Show "No Fruit Spawn" first
+    status.Text = "Status : No Fruit Spawn"
+    wait(1) -- Wait 1 second to show the message
     
     status.Text = "Status : Hopping Server..."
-    
-    local PlaceId = game.PlaceId
+
     local servers = {}
-    local gamelink = "https://games.roblox.com/v1/games/"..PlaceId.."/servers/Public?sortOrder=Asc&limit=100"
+    local gamelink = "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"
 
     local function serversearch(link)
         local res = HttpService:JSONDecode(game:HttpGet(link))
@@ -197,32 +210,50 @@ local function hopServer()
     pcall(serversearch, gamelink)
     
     if #servers > 0 then
-        status.Text = "Status : Hopping Server..."
-        TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)])
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)])
     else
-        status.Text = "Status : Hopping Server Eror"
-        task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
-		task.wait(2)
-        hopServer()
+        task.delay(1, hopServer)
     end
-    
-    isHopping = false
 end
+
+-- Chức năng Random Fruit (Mua ngẫu nhiên trái cây)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            if _G.Random_Auto then
+                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin","Buy")
+            end 
+        end
+    end)
+end)
+
+
+-- Chức năng Auto Store Fruit
+spawn(function()
+    while task.wait(0.1) do
+        if _G.AutoStoreFruit then
+            pcall(function()
+                local player = game:GetService("Players").LocalPlayer
+                local character = player.Character
+                local backpack = player.Backpack
+                local remote = game:GetService("ReplicatedStorage").Remotes.CommF_
+                
+                for fruitName, fruitID in pairs(Fruits) do
+                    local fruit = character:FindFirstChild(fruitName) or backpack:FindFirstChild(fruitName)
+                    if fruit then
+                        remote:InvokeServer("StoreFruit", fruitID, fruit)
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+-- Cấu hình mặc định cho các tính năng (true = bật, false = tắt)
+_G.Config = {
+    AutoStoreFruit = true,  -- Mặc định bật chức năng Auto Store Fruit
+    Random_Auto = true,     -- Mặc định bật chức năng Random Auto Fruit
+}
 
 -- ✅ Lưu trái cây
 local Fruits = {
@@ -261,8 +292,12 @@ local Fruits = {
     ["Spirit Fruit"] = "Spirit-Spirit",
     ["Dragon Fruit"] = "Dragon-Dragon",
     ["Leopard Fruit"] = "Leopard-Leopard",
-    ["Gas Fruit"] = "Gas-Gas"
 }
+
+
+-- Cập nhật giá trị từ cấu hình vào các chức năng
+_G.AutoStoreFruit = _G.Config.AutoStoreFruit
+_G.Random_Auto = _G.Config.Random_Auto
 
 local function storeFruit()
     local backpack = LocalPlayer:FindFirstChild("Backpack")
@@ -331,17 +366,20 @@ gui.Name = "TimeCounter"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
+-- TextLabel
 local label = Instance.new("TextLabel")
 label.Parent = gui
 label.Size = UDim2.new(0, 350, 0, 40)
-label.Position = UDim2.new(0.5, -175, 1, -60)
+label.Position = UDim2.new(0.5, -175, 1, -60) -- Dưới giữa màn hình một chút
 label.BackgroundTransparency = 1
 label.TextScaled = true
 label.TextColor3 = Color3.new(1, 1, 1)
 label.Font = Enum.Font.SourceSansBold
 label.Text = "Time : 00 Hour | 00 Minute | 00 Second"
 
+-- Timer logic
 local seconds = 0
+
 task.spawn(function()
     while true do
         wait(1)
