@@ -14,12 +14,12 @@ local Config = {
     Fixlag = true,
     Screen = true,
     EspFruit = true,
-    RandomFruit = true,
-    AutoStoreFruit = true,
     CheckFruitInterval = 0.2,
-    MaxStoreErrorsBeforeHop = 1,
     AutoTeleport = true,
     NoClip = true,
+    AutoStoreFruit = true,  -- Mặc định bật chức năng Auto Store Fruit
+    AutoRandomFruit = true,
+    StoreFruitSpeed = 0,1,
 }
 
 --Auto Gia Nhập Phe
@@ -39,6 +39,8 @@ else
 end
 
 wait(1)
+
+
 
 -- ✅ Fix Lag
 if Config.FixLag then
@@ -67,24 +69,18 @@ end
 -- ✅ Hiệu ứng làm mờ
 local blurEffect = Instance.new("BlurEffect")
 blurEffect.Parent = game.Lighting
-blurEffect.Size = 30
+blurEffect.Size = 15
 blurEffect.Enabled = false
 
--- ✅ UI NomDom Hub
-local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
-ScreenGui.Name = "NomDomHubUI"
+-- ✅ Quản lý hiệu ứng mờ
+local function manageBlur()
+    while true do
+        blurEffect.Enabled = Config.Screen
+        task.wait(0.5)
+    end
+end
+task.spawn(manageBlur)
 
-local NomDomLabel = Instance.new("TextLabel")
-NomDomLabel.Name = "NomDomLabel"
-NomDomLabel.Parent = ScreenGui
-NomDomLabel.AnchorPoint = Vector2.new(0.5, 0)
-NomDomLabel.Position = UDim2.new(0.5, 0, 0.22, 0)
-NomDomLabel.Size = UDim2.new(0, 300, 0, 40)
-NomDomLabel.BackgroundTransparency = 1
-NomDomLabel.Text = "NomDom Hub"
-NomDomLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-NomDomLabel.TextSize = 24
-NomDomLabel.Font = Enum.Font.GothamBold
 
 -- ✅ UI trạng thái
 local statusGui = Instance.new("ScreenGui", game.CoreGui)
@@ -187,7 +183,7 @@ local function hopServer()
 
 
     -- Show "No Fruit Spawn" first
-    status.Text = "Status : No Fruit Spawn"
+    status.Text = "Status : No Fruit"
     wait(1) -- Wait 1 second to show the message
     
     status.Text = "Status : Hopping Server..."
@@ -216,11 +212,11 @@ local function hopServer()
     end
 end
 
--- Chức năng Random Fruit (Mua ngẫu nhiên trái cây)
+-- ✅ Chức năng Random Fruit (Mua ngẫu nhiên trái cây)
 spawn(function()
     pcall(function()
         while task.wait() do
-            if _G.Random_Auto then
+            if Config.AutoRandomFruit then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin","Buy")
             end 
         end
@@ -228,32 +224,32 @@ spawn(function()
 end)
 
 
--- Chức năng Auto Store Fruit
-spawn(function()
-    while task.wait(0.1) do
-        if _G.AutoStoreFruit then
-            pcall(function()
-                local player = game:GetService("Players").LocalPlayer
-                local character = player.Character
-                local backpack = player.Backpack
-                local remote = game:GetService("ReplicatedStorage").Remotes.CommF_
-                
-                for fruitName, fruitID in pairs(Fruits) do
-                    local fruit = character:FindFirstChild(fruitName) or backpack:FindFirstChild(fruitName)
-                    if fruit then
-                        remote:InvokeServer("StoreFruit", fruitID, fruit)
-                    end
-                end
-            end)
+-- ✅ Tự động lưu trái cây
+local function storeFruits()
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character
+    local backpack = player.Backpack
+    local remote = game:GetService("ReplicatedStorage").Remotes.CommF_
+
+    for fruitName, fruitID in pairs(Fruits) do
+        local fruit = character:FindFirstChild(fruitName) or backpack:FindFirstChild(fruitName)
+        if fruit then
+            remote:InvokeServer("StoreFruit", fruitID, fruit)
+            print("Stored:", fruitName)
         end
     end
-end)
+end
 
--- Cấu hình mặc định cho các tính năng (true = bật, false = tắt)
-_G.Config = {
-    AutoStoreFruit = true,  -- Mặc định bật chức năng Auto Store Fruit
-    Random_Auto = true,     -- Mặc định bật chức năng Random Auto Fruit
-}
+-- Tạo một hàm chính cho việc lưu trái cây liên tục
+spawn(function()
+    pcall(function()
+        while task.wait(Config.StoreFruitSpeed) do  -- Sử dụng tốc độ lưu trái cây từ cấu hình
+            if Config.AutoStoreFruit then
+                storeFruits()
+            end
+        end
+    end)
+end)
 
 -- ✅ Lưu trái cây
 local Fruits = {
@@ -292,36 +288,46 @@ local Fruits = {
     ["Spirit Fruit"] = "Spirit-Spirit",
     ["Dragon Fruit"] = "Dragon-Dragon",
     ["Leopard Fruit"] = "Leopard-Leopard",
+    ["T-Rex Fruit"] = "T-Rex-T-Rex",
+    ["Mammoth Fruit"] = "Mammoth-Mammoth",
+    ["Blizzard Fruit"] = "Blizzard-Blizzard",
+    ["Yeti Fruit"] = "Yeti-Yeti",
+    ["Kitsune Fruit"] = "Kitsune-Kitsune",
 }
 
-
--- Cập nhật giá trị từ cấu hình vào các chức năng
-_G.AutoStoreFruit = _G.Config.AutoStoreFruit
-_G.Random_Auto = _G.Config.Random_Auto
-
-local function storeFruit()
-    local backpack = LocalPlayer:FindFirstChild("Backpack")
-    if not backpack then return false end
-    
-    for _, tool in pairs(backpack:GetChildren()) do
-        if Fruits[tool.Name] then
-            local result = ReplicatedStorage.Remotes.CommF_:InvokeServer("StoreFruit", Fruits[tool.Name])
-            if result == "Success" then
-                return true
+-- ✅ Lưu trái cây với thông báo lỗi và chuyển server nếu quá nhiều lỗi
+local function storeFruitsWithErrors()
+    local backpack = game.Players.LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        for _, tool in pairs(backpack:GetChildren()) do
+            local fruitID = Fruits[tool.Name]
+            if fruitID then
+                local result = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StoreFruit", fruitID)
+                if result == "Success" then
+                    print("Stored:", tool.Name)
+                else
+                    storeErrorCount = (storeErrorCount or 0) + 1
+                    print("Store failed:", tool.Name, "-", result)
+                    if storeErrorCount >= Config.MaxStoreErrorsBeforeHop then
+                        hopServer()  -- Chuyển server nếu gặp lỗi quá nhiều lần
+                    end
+                end
             end
         end
     end
-    return false
 end
 
--- ✅ Quản lý hiệu ứng mờ
-local function manageBlur()
-    while true do
-        blurEffect.Enabled = Config.Screen and not findFruit()
-        task.wait(0.5)
-    end
+-- Kiểm tra và lưu trái cây với điều kiện AutoStoreFruit
+if Config.AutoStoreFruit then
+    task.spawn(function()
+        while task.wait(Config.StoreFruitSpeed) do  -- Sử dụng tốc độ lưu trái cây từ cấu hình
+            storeFruitsWithErrors()  -- Gọi hàm lưu trái cây với lỗi
+        end
+    end)
 end
-task.spawn(manageBlur)
+
+
+
 
 -- ✅ Luồng chính
 task.spawn(function()
@@ -351,14 +357,132 @@ task.spawn(function()
                 hopServer()
             else
                 status.Text = "Status : No Fruits Spawn"
-                task.wait(5)
+                task.wait(2)
             end
         end
         task.wait(Config.CheckFruitInterval)
     end
 end)
 
--- UI đếm thời gian chơi
+
+-- ✅ UI NomDom Hub
+local TweenService = game:GetService("TweenService")
+
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+ScreenGui.Name = "NomDomHubUI"
+
+local NomDomLabel = Instance.new("TextLabel")
+NomDomLabel.Name = "NomDomLabel"
+NomDomLabel.Parent = ScreenGui
+NomDomLabel.AnchorPoint = Vector2.new(0.5, 1)
+NomDomLabel.Position = UDim2.new(0.5, 0, 1, -15)
+NomDomLabel.Size = UDim2.new(0, 350, 0, 50) -- To hơn
+NomDomLabel.BackgroundTransparency = 1
+NomDomLabel.Text = "NomDom Hub"
+NomDomLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+NomDomLabel.TextSize = 30 -- Chữ to hơn
+NomDomLabel.Font = Enum.Font.GothamBold
+
+-- Cầu vồng màu
+local colors = {
+    Color3.fromRGB(255, 0, 0),
+    Color3.fromRGB(255, 165, 0),
+    Color3.fromRGB(255, 255, 0),
+    Color3.fromRGB(0, 255, 0),
+    Color3.fromRGB(0, 0, 255),
+    Color3.fromRGB(75, 0, 130),
+    Color3.fromRGB(238, 130, 238)
+}
+
+-- Tạo hiệu ứng tween màu chuyển mượt
+local function smoothRainbow()
+    local i = 1
+    while true do
+        local color = colors[i]
+        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+        local tween = TweenService:Create(NomDomLabel, tweenInfo, {TextColor3 = color})
+        tween:Play()
+        tween.Completed:Wait()
+        i = i % #colors + 1
+    end
+end
+
+spawn(smoothRainbow)
+
+
+
+
+
+-- ✅ FPS Display UI
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+
+-- Tạo ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FPSDisplay"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game.CoreGui
+
+-- Tạo TextLabel để hiện FPS
+local FpsLabel = Instance.new("TextLabel")
+FpsLabel.Name = "FpsLabel"
+FpsLabel.Parent = ScreenGui
+FpsLabel.AnchorPoint = Vector2.new(0, 0)
+FpsLabel.Position = UDim2.new(0, 10, 0, 10) -- Góc trái trên, cách 10px
+FpsLabel.Size = UDim2.new(0, 120, 0, 30)
+FpsLabel.BackgroundTransparency = 1
+FpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+FpsLabel.TextSize = 20
+FpsLabel.Font = Enum.Font.GothamSemibold
+FpsLabel.Text = "FPS: 0"
+
+-- Cập nhật FPS mỗi giây
+spawn(function()
+	local frameCount = 0
+	local lastTime = tick()
+	while true do
+		RunService.RenderStepped:Wait()
+		frameCount = frameCount + 1
+		local now = tick()
+		if now - lastTime >= 1 then
+			FpsLabel.Text = "FPS: " .. tostring(frameCount)
+			frameCount = 0
+			lastTime = now
+		end
+	end
+end)
+
+-- Hiệu ứng cầu vồng mềm mại cho FPS label
+local colors = {
+	Color3.fromRGB(255, 0, 0),
+	Color3.fromRGB(255, 165, 0),
+	Color3.fromRGB(255, 255, 0),
+	Color3.fromRGB(0, 255, 0),
+	Color3.fromRGB(0, 0, 255),
+	Color3.fromRGB(75, 0, 130),
+	Color3.fromRGB(238, 130, 238)
+}
+
+spawn(function()
+	local i = 1
+	while true do
+		local color = colors[i]
+		local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+		local tween = TweenService:Create(FpsLabel, tweenInfo, {TextColor3 = color})
+		tween:Play()
+		tween.Completed:Wait()
+		i = i + 1
+		if i > #colors then
+			i = 1
+		end
+	end
+end)
+
+
+
+
+
+-- UI đếm thời gian chơi (chỉ phần đồng hồ)
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -366,28 +490,32 @@ gui.Name = "TimeCounter"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- TextLabel
+-- Text hiển thị
 local label = Instance.new("TextLabel")
 label.Parent = gui
-label.Size = UDim2.new(0, 350, 0, 40)
-label.Position = UDim2.new(0.5, -175, 1, -60) -- Dưới giữa màn hình một chút
-label.BackgroundTransparency = 1
+label.Size = UDim2.new(0, 500, 0, 60)
+label.Position = UDim2.new(0.5, -250, 1, -100) -- Giữa dưới, cao hơn một chút
+label.BackgroundTransparency = 1 -- Không có nền
 label.TextScaled = true
 label.TextColor3 = Color3.new(1, 1, 1)
 label.Font = Enum.Font.SourceSansBold
+label.TextStrokeTransparency = 0.6
+label.TextStrokeColor3 = Color3.new(0, 0, 0) -- Viền đen
 label.Text = "Time : 00 Hour | 00 Minute | 00 Second"
+label.BorderSizePixel = 0
+label.ZIndex = 10
 
--- Timer logic
-local seconds = 0
+-- Đếm thời gian chính xác từng giây
+local startTime = os.time()
 
 task.spawn(function()
     while true do
-        wait(1)
-        seconds += 1
-        local minutes = math.floor(seconds / 60)
+        task.wait(1)
+        local elapsed = os.time() - startTime
+        local minutes = math.floor(elapsed / 60)
         local hours = math.floor(minutes / 60)
-        local displaySeconds = seconds % 60
-        local display = string.format("Time : %02d Hour | %02d Minute | %02d Second", hours, minutes % 60, displaySeconds)
+        local seconds = elapsed % 60
+        local display = string.format("Time : %02d Hour | %02d Minute | %02d Second", hours, minutes % 60, seconds)
         label.Text = display
     end
 end)
