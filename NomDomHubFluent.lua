@@ -167,42 +167,53 @@ Walkspeed:AddInput("speed_input", {
 })
 
 -- 🦘 Jump Settings
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local LocalPlayer = Players.LocalPlayer
 local Jump = tabs.Localplayer:AddSection("Jump")
+
 local infiniteJumpEnabled = false
 local customJumpPowerEnabled = false
 local jumpPowerOverride = nil
 
+-- Infinite Jump Handler
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled then
         local char = LocalPlayer.Character
         if char then
             local humanoid = char:FindFirstChildOfClass("Humanoid")
             if humanoid then
-                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
                 humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                humanoid.Jump = true
             end
         end
     end
 end)
 
+-- Infinite Jump Toggle
 Jump:AddToggle("infinite_jump", {
     Title = "Infiniti Jump",
     Default = false,
-    Callback = function(state) infiniteJumpEnabled = state end
+    Callback = function(state)
+        infiniteJumpEnabled = state
+    end
 })
 
+-- High Jump Toggle
 Jump:AddToggle("custom_jump_toggle", {
     Title = "High Jump",
     Default = false,
     Callback = function(state)
         customJumpPowerEnabled = state
-        local humanoid = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
         if humanoid then
             humanoid.JumpPower = state and (jumpPowerOverride or 50) or 50
         end
     end
 })
 
+-- Jump Power Input
 Jump:AddInput("jump_power", {
     Title = "Jump Power",
     Placeholder = "Enter jump height",
@@ -210,37 +221,56 @@ Jump:AddInput("jump_power", {
     Finished = true,
     Callback = function(value)
         jumpPowerOverride = tonumber(value)
-        local humanoid = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
         if humanoid and customJumpPowerEnabled then
             humanoid.JumpPower = jumpPowerOverride or 50
         end
     end
 })
 
+-- Optional: Auto apply custom JumpPower on respawn
+LocalPlayer.CharacterAdded:Connect(function(char)
+    char:WaitForChild("Humanoid")
+    if customJumpPowerEnabled and jumpPowerOverride then
+        char.Humanoid.JumpPower = jumpPowerOverride
+    end
+end)
+
+
 -- 🚷 NoClip
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
 local Noclip = tabs.Localplayer:AddSection("No Clip")
+local NoClip = false
+local NoClipConnection
 
 Noclip:AddToggle("NoClip", {
     Title = "NoClip",
     Default = false,
     Callback = function(state)
         NoClip = state
+
         if NoClip then
+            -- Bắt đầu NoClip
             NoClipConnection = RunService.Stepped:Connect(function()
                 local char = LocalPlayer.Character
                 if char then
                     for _, part in ipairs(char:GetDescendants()) do
-                        if part:IsA("BasePart") then
+                        if part:IsA("BasePart") and part.CanCollide == true then
                             part.CanCollide = false
                         end
                     end
                 end
             end)
         else
+            -- Tắt NoClip
             if NoClipConnection then
                 NoClipConnection:Disconnect()
                 NoClipConnection = nil
             end
+
             local char = LocalPlayer.Character
             if char then
                 for _, part in ipairs(char:GetDescendants()) do
@@ -252,6 +282,7 @@ Noclip:AddToggle("NoClip", {
         end
     end
 })
+
 
 
 local Misc = tabs.Localplayer:AddSection("Misc")
@@ -329,6 +360,61 @@ mouse.Button1Down:Connect(function()
         humanoidRootPart.CFrame = CFrame.new(clickPosition + Vector3.new(0, 2, 0))
     end
 end)
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+
+-- Hàm cập nhật zoom khi bật toggle
+local function updateZoom(state)
+    if state then
+        player.CameraMinZoomDistance = 0 -- ✅ thay vì 0.5 như trước
+        player.CameraMaxZoomDistance = math.huge
+    end
+end
+
+-- Đảm bảo thiết lập lại khi respawn
+player.CharacterAdded:Connect(function()
+    if player:GetAttribute("ZoomEnabled") then
+        updateZoom(true)
+    end
+end)
+
+-- Toggle trong UI
+Misc:AddToggle("camera_zoom_toggle", {
+    Title = "Camera Is Not Locked",
+    Default = true,
+    Callback = function(state)
+        player:SetAttribute("ZoomEnabled", state)
+        updateZoom(state)
+    end
+})
+
+-- Thiết lập ban đầu
+if player.Character then
+    updateZoom(true)
+end
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+
+-- Lưu giá trị gốc mặc định trước khi chỉnh
+local defaultMaxZoom = player.CameraMaxZoomDistance
+
+Misc:AddToggle("unlimited_zoom_toggle", {
+    Title = "Infinite Zoom",
+    Default = true,
+    Callback = function(state)
+        if state then
+            player.CameraMaxZoomDistance = math.huge
+        else
+            player.CameraMaxZoomDistance = defaultMaxZoom
+        end
+    end
+})
+
+
 
 
 
@@ -980,6 +1066,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/NomDomDeedRails.lua"))()  
     end
 })    tabs.Deedrails:AddButton({
+    Title = "Tp All Map By Jonas",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/JonasThePogi/DeadRails/refs/heads/main/newloadstring"))()  
+    end
+})    tabs.Deedrails:AddButton({
     Title = "Tbao Hub (Main)",
     Description = "",
     Callback = function()
@@ -996,6 +1088,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/game/refs/heads/main/TbaoHubDeadRailsFarm"))()  
+    end
+})    tabs.Deedrails:AddButton({
+    Title = "Tn Hub (Fram Bond)",
+    Description = "Need Key",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/thiennrb7/Script/refs/heads/main/autobond"))()  
     end
 })    tabs.Deedrails:AddButton({
     Title = "Npc Lock",
@@ -1088,6 +1186,18 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
         Loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
     end
 })    tabs.Arisecrossover:AddButton({
+    Title = "Arise Crossover By Perfectus",
+    Description = "Not sure if there is a key or not",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Arise-Crossover-Keyless-Script-33926"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Twvz",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ZhangJunZ84/twvz/refs/heads/main/arisecrossover.lua"))()
+    end
+})    tabs.Arisecrossover:AddButton({
     Title = "Almechy Hub",
     Description = "Need Key",
     Callback = function()
@@ -1098,6 +1208,12 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
     Description = "Need Key",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/meobeo8/elgato/a/Loader"))()
+    end
+})    tabs.Arisecrossover:AddButton({
+    Title = "Skull Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet('https://skullhub.xyz/loader.lua'))()
     end
 })    tabs.Arisecrossover:AddButton({
     Title = "Arise Crossover",
@@ -1259,7 +1375,7 @@ end
 
 -- Thông báo khi tải xong
 Fluent:Notify({
-    Title = "Script : ",
-    Content = "Done",
+    Title = "Script By NomCak Team: ",
+    Content = "Partner with us?",
     Duration = 10
 })
