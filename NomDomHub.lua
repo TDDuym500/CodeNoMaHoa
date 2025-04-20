@@ -4,6 +4,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa
 ---Loading Menu
 loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/NomDomHubFluent.lua"))()
 
+---FPS
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/FPS"))()
+
+
 ---Wedbook
 loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/WedBookDonGian"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/WedBookChiTiet"))()
