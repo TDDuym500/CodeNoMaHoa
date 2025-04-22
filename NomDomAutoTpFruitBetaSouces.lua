@@ -262,8 +262,11 @@ task.spawn(function()
     end
 end)
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 -- Gọi hàm notify để hiển thị thông báo
-notify("NomDom Hub", "Script By Duy Sdibiki", 5, ""rbxassetid://138569547227924")
-notify("NomDom Hub", "Welcome " .. LocalPlayer.Name use script, 5, "rbxassetid://138569547227924")
-notify("NomDom Hub", "Loading.........", 5, ""rbxassetid://138569547227924")
-notify("NomDom Hub", "Done", 5, ""rbxassetid://138569547227924")
+notify("NomDom Hub", "Script By Duy Sdibiki", 5, "rbxassetid://138569547227924")
+notify("NomDom Hub", "Welcome " .. LocalPlayer.Name .. " use script", 5, "rbxassetid://138569547227924")
+notify("NomDom Hub", "Loading.........", 5, "rbxassetid://138569547227924")
+notify("NomDom Hub", "Done", 5, "rbxassetid://138569547227924")
