@@ -31,7 +31,9 @@ local function notify(title, text, duration, icon)
     end)
 end
 
--- 🍎 Danh sách trái cây cần lưu
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 local Fruits = {
     ["Kilo Fruit"] = "Kilo-Kilo", ["Spin Fruit"] = "Spin-Spin", ["Rocket Fruit"] = "Rocket-Rocket",
     ["Chop Fruit"] = "Chop-Chop", ["Spring Fruit"] = "Spring-Spring", ["Bomb Fruit"] = "Bomb-Bomb",
@@ -46,18 +48,19 @@ local Fruits = {
     ["Dough Fruit"] = "Dough-Dough", ["Shadow Fruit"] = "Shadow-Shadow", ["Venom Fruit"] = "Venom-Venom",
     ["Control Fruit"] = "Control-Control", ["Spirit Fruit"] = "Spirit-Spirit", ["Dragon Fruit"] = "Dragon-Dragon",
     ["Leopard Fruit"] = "Leopard-Leopard", ["T-Rex Fruit"] = "T-Rex-T-Rex", ["Mammoth Fruit"] = "Mammoth-Mammoth",
-    ["Blizzard Fruit"] = "Blizzard-Blizzard", ["Yeti Fruit"] = "Yeti-Yeti", ["Kitsune Fruit"] = "Kitsune-Kitsune",
-    ["Blaze Fruit"] = "Blaze-Blaze"  -- Đảm bảo tên chính xác của Blaze
+    ["Blizzard Fruit"] = "Blizzard-Blizzard", ["Yeti Fruit"] = "Yeti-Yeti", ["Kitsune Fruit"] = "Kitsune-Kitsune"
 }
 
 -- 🧠 Hàm lưu trái cây
 local function storeFruits()
-    local player = game.Players.LocalPlayer
     local backpack = player:FindFirstChild("Backpack")
     local character = player.Character
     local remote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("CommF_")
 
-    if not remote then return end
+    if not remote then
+        warn("Không tìm thấy remote!")
+        return
+    end
 
     local function tryStore(tool)
         local fruitID = Fruits[tool.Name]
@@ -70,8 +73,6 @@ local function storeFruits()
             else
                 print("❌ Không thể lưu:", tool.Name)
             end
-        else
-            print("🚨 Không tìm thấy trong từ điển:", tool.Name)  -- Debug khi không tìm thấy tên trong từ điển
         end
     end
 
@@ -94,13 +95,14 @@ end
 
 -- 🧲 Hàm nhặt trái cây trong Workspace
 local function hopFruit()
-    local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if not root then return end
 
     for _, fruit in pairs(workspace:GetChildren()) do
         if fruit:IsA("Tool") and Fruits[fruit.Name] and fruit:FindFirstChild("Handle") then
+            -- Di chuyển đến trái cây (có thể điều chỉnh vị trí)
             root.CFrame = fruit.Handle.CFrame + Vector3.new(0, 3, 0)
-            task.wait(0.1)
+            task.wait(0.1)  -- Thời gian giữa các lần nhặt
         end
     end
 end
@@ -112,6 +114,7 @@ task.spawn(function()
         pcall(hopFruit)
     end
 end)
+
 
 -- ✅ ESP trái cây
 local TweenService = game:GetService("TweenService")
