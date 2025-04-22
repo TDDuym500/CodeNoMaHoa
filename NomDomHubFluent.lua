@@ -383,7 +383,7 @@ end)
 -- Toggle trong UI
 Misc:AddToggle("camera_zoom_toggle", {
     Title = "Camera Is Not Locked",
-    Default = true,
+    Default = false,
     Callback = function(state)
         player:SetAttribute("ZoomEnabled", state)
         updateZoom(state)
@@ -404,7 +404,7 @@ local defaultMaxZoom = player.CameraMaxZoomDistance
 
 Misc:AddToggle("unlimited_zoom_toggle", {
     Title = "Infinite Zoom",
-    Default = true,
+    Default = false,
     Callback = function(state)
         if state then
             player.CameraMaxZoomDistance = math.huge
@@ -682,7 +682,7 @@ Mainbf:AddButton({
     Title = "Astral Hub",
     Description = "",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Overgustx2/Main/refs/heads/main/BloxFruits_%E2%80%8B25.html"))()   
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Overgustx2/Main/refs/heads/main/BloxFruits_25.html"))()   
     end
 })    Mainbf:AddButton({
     Title = "Omg Hub",
