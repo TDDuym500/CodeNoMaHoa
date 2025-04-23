@@ -754,18 +754,16 @@ Hopbf:AddButton({
         loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a1498369f289af2671cca90085f23fb8.lua"))()  
     end
 })    Hopbf:AddButton({
-    Title = "Vxeze Hub Hop Dough King",
+    Title = "Min Gamming Hop Boss",
     Description = "",
     Callback = function()
-        getgenv().Team = "Marines"
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/VxezeHubHopBoss/refs/heads/main/VxezeHubHopDough.txt"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Min/refs/heads/main/MinHopBoss"))()
     end
 })    Hopbf:AddButton({
-    Title = "Vxeze Hub Hop Rip Indra",
+    Title = "Teddy Hub",
     Description = "",
     Callback = function()
-        getgenv().Team = "Marines"
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/VxezeHubHopBoss/refs/heads/main/VxezeHubHopRip"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/TEDDYHUB-FREEMIUM"))()
     end
 })
 
@@ -890,6 +888,37 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
             ["LOWTEXTURE"] = true -- Reduce graphic quality for better performance
         }
         loadstring(game:HttpGet("https://raw.githubusercontent.com/simple-hubs/contents/refs/heads/main/bloxfruit-kaitan-main.lua"))()
+    end
+})    Kaitunbf:AddButton({
+    Title = "Kaitun Quartyz ( Mukuro Hub )",
+    Description = "Need Key",
+    Callback = function()
+        getgenv().Mode = "OneClick"
+getgenv().Setting = {
+    ["Team"] = "Marines", -- Options "Pirates", "Marines"
+    ["FucusOnLevel"] = true,
+    ["Fruits"] = {  -- setting for fruits u want
+        ["Primary"] = { -- if current fruit is not in this list, eat/buy
+            "Dough-Dough",
+            "Dragon-Dragon",
+            "Buddha-Buddha",
+            -- u can configs add mores/remove and must end with , (comma symbol)
+        },
+        ["Normal"] = { -- it just a normal fruit list
+            "Flame-Flame",
+            "Light-Light",
+            "Magma-Magma",
+            -- u can configs add mores/remove and must end with , (comma symbol)
+        }
+        -- run this for get all fruit name `local t={};for _,v in pairs(game.ReplicatedStorage.Remotes.CommF_:InvokeServer("GetFruits"))do table.insert(t,v.Name)end;setclipboard(table.concat(t, "\n"))`
+    },
+    ["Lock Fruits"] = { -- don't use or eat fruits in this list
+        "Yeti-Yeti",
+    },
+    ["IdleCheck"] = 300, -- every (x) seconds if not moving rejoin
+};
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/QuartyzScript/main/Loader.lua"))()    
     end
 })    tabs.Bluelock:AddButton({
     Title = "Alchemy Hub",
