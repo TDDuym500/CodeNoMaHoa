@@ -1401,10 +1401,27 @@ if effectContainer then
 end
 
 
+-- Thông báo chào người chơi
+Fluent:Notify({
+    Title = "Welcome, " .. game.Players.LocalPlayer.Name,
+    Content = "Use script fun",
+    Duration = 5
+})
+
+wait(1)
 
 -- Thông báo khi tải xong
 Fluent:Notify({
-    Title = "Script By NomCak Team: ",
+    Title = "Script By NomCak Team",
     Content = "Partner with us?",
-    Duration = 10
+    Duration = 5
+})
+
+Wait(0.5)
+
+-- Thông báo Discord
+Fluent:Notify({
+    Title = "If you want then go to discord",
+    Content = "https://discord.gg/3PpjA9Ts",
+    Duration = 5
 })
