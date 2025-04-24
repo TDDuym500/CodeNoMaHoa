@@ -27,6 +27,7 @@ local tabs = {
     Mm2 = window:AddTab({ Title = "Mm2" }),
     Tsb = window:AddTab({ Title = "The Strongest Battlegrounds" }),
     Rivals = window:AddTab({ Title = "Rivals" }),
+    Misc = window:AddTab({ Title = "Misc" }),
 }
 
 local Options = Fluent.Options
@@ -1089,7 +1090,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/QuartyzScrip
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
     end
 })    tabs.Deedrails:AddButton({
-    Title = "NomDom Hub",
+    Title = "NomDom Hub (Beta)",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/NomDomDeedRails.lua"))()  
@@ -1341,6 +1342,57 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/QuartyzScrip
         loadstring(game:HttpGet("https://soluna-script.vercel.app/main.lua",true))()
     end
 })
+
+local Script = tabs.Misc:AddSection("Script")
+
+    Script:AddButton({
+    Title = "Fly",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/NomDomFly"))()
+    end
+})    Script:AddButton({
+    Title = "Test Unc",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/UncTest"))()
+    end
+})    Script:AddButton({
+    Title = "Fix Lag 50%",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/FixLag"))()
+    end
+})    Script:AddButton({
+    Title = "Fix Lag 100%",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/SuperFixLag"))()
+    end
+})
+
+local Player = tabs.Misc:AddSection("Player")
+
+Player:AddButton({
+    Title = "Reset Character",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+
+if humanoid then
+    humanoid.Health = 0
+end
+    end
+})    Player:AddButton({
+    Title = "Kick Player",
+    Description = "",
+    Callback = function()
+        game.Players.LocalPlayer:Kick("")
+    end
+})
+
 
 -- Giao diện Nút Mở UI (đẹp hơn, có particle, xoay, animation)
 local TweenService = game:GetService("TweenService")
