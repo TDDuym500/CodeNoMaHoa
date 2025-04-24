@@ -1393,6 +1393,84 @@ end
     end
 })
 
+local Screen = tabs.Misc:AddSection("Screen")
+
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+
+local Buoi = false
+local blur = Instance.new("BlurEffect")
+blur.Size = 0
+blur.Parent = Lighting
+
+Screen:AddToggle("BuoiToggle", {
+    Title = "Blurry Screen",
+    Default = false,
+    Callback = function(state)
+        Buoi = state
+    end
+})
+
+-- Liên tục áp dụng hiệu ứng
+spawn(function()
+    while task.wait() do
+        if Buoi then
+            blur.Size = 30
+        else
+            blur.Size = 0
+        end
+    end
+end)
+local Buoi = false
+
+Screen:AddToggle("BuoiToggle", {
+    Title = "White Screen", -- Tên hiển thị trong UI
+    Default = false,
+    Callback = function(state)
+        Buoi = state
+    end
+})
+
+-- Chạy ẩn để liên tục kiểm tra trạng thái
+spawn(function()
+    while task.wait() do
+        game:GetService("RunService"):Set3dRenderingEnabled(not Buoi)
+    end
+end)
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+local Buoi = false
+
+-- Tạo ScreenGui + Frame đen nếu chưa có
+local gui = Instance.new("ScreenGui")
+gui.Name = "BuoiOverlay"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = PlayerGui
+
+local blackOverlay = Instance.new("Frame")
+blackOverlay.Size = UDim2.new(1, 0, 1, 0)  -- Lấp đầy toàn bộ màn hình
+blackOverlay.BackgroundColor3 = Color3.new(0, 0, 0)  -- Màu đen
+blackOverlay.BackgroundTransparency = 0  -- Không trong suốt, đen hoàn toàn
+blackOverlay.Visible = false  -- Mặc định là không hiển thị
+blackOverlay.Parent = gui
+
+-- Toggle
+Screen:AddToggle("BuoiToggle", {
+    Title = "Black Screen",
+    Default = false,
+    Callback = function(state)
+        Buoi = state
+        blackOverlay.Visible = state  -- Hiển thị hoặc ẩn màn hình đen
+    end
+})
+
+
+
+
 
 -- Giao diện Nút Mở UI (đẹp hơn, có particle, xoay, animation)
 local TweenService = game:GetService("TweenService")
