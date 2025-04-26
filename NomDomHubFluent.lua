@@ -7,7 +7,7 @@ local player = game.Players.LocalPlayer
 -- Tạo bảng chứa tên người chơi đặc biệt
 local specialUsers = {
     "Boptrithuc",
-    "acctesthacktuviet"
+    "acctesthacktuviet",
     "noxeldp"
 }
 
