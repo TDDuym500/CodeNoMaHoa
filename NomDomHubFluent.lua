@@ -1,14 +1,36 @@
 -- Tải thư viện Fluent
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/UiHack/refs/heads/main/Fluent"))()
+
+local UserInputService = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+-- Tạo bảng chứa tên người chơi đặc biệt
+local specialUsers = {
+    "Boptrithuc",
+    "acctesthacktuviet"
+}
+
+-- Kiểm tra xem tên người chơi có nằm trong danh sách đặc biệt không
+local isSpecialUser = false
+for _, name in ipairs(specialUsers) do
+    if player.Name == name then
+        isSpecialUser = true
+        break
+    end
+end
+
+-- Tạo cửa sổ Fluent
 local window = Fluent:CreateWindow({
-    Title = "NomDom | General",
-    SubTitle = "by Duy",
-    TabWidth = 290,
+    Title = isSpecialUser and "NomDom Hub [Premium]" or "NomDom Hub [Freemium]",
+    SubTitle = "by NomCak Team",
+    TabWidth = (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled) and 160 or 190,  -- Mobile: 160, PC: 190
     Theme = "Dark",
     Acrylic = false,
-    Size = UDim2.fromOffset(700, 490),
+    Size = (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled) and UDim2.fromOffset(500, 320) or UDim2.fromOffset(700, 490),  -- Giữ như trước
     MinimizeKey = Enum.KeyCode.End
 })
+
+
 
 -- Thêm các Tab
 local tabs = {
@@ -16,6 +38,7 @@ local tabs = {
     Main = window:AddTab({ Title = "Anouncement" }),
     Localplayer = window:AddTab({ Title = "Localplayer" }),
     Joinid = window:AddTab({ Title = "Join server" }),
+    Setting = window:AddTab({ Title = "Setting" }),
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
     Bluelock = window:AddTab({ Title = "Blue Lock" }),
     Fisch = window:AddTab({ Title = "Fisching" }),
@@ -36,28 +59,35 @@ local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local speaker = Players.LocalPlayer
 
+local Community = tabs.Infor:AddSection("Community")
+
 -- ⚙️ Phần Thông Tin
-tabs.Infor:AddButton({
-    Title = "My Discord",
-    Description = "Chat",
+Community:AddButton({
+    Title = "NomDom Community",
+    Description = "Discord",
     Callback = function()
-        setclipboard("https://discord.gg/p7CcRT44")
+        setclipboard("https://discord.gg/3PpjA9Ts")
     end
 })
 
-tabs.Infor:AddButton({
-    Title = "My Youtube",
+Community:AddButton({
+    Title = "YT NomDom",
     Description = "Youtube",
     Callback = function()
         setclipboard("https://www.youtube.com/channel/NomDomDZ")
     end
 })
 
-tabs.Infor:AddParagraph({ Title = "Duy Sdikibi", Content = "Dev" })
-tabs.Infor:AddParagraph({ Title = "KhangG", Content = "Support" })
+local Developer = tabs.Infor:AddSection("Developer")
+
+-- Developer Section with Paragraphs
+Developer:AddParagraph({ Title = "Duy Sdikibi", Content = "Developer" })
+Developer:AddParagraph({ Title = "KhangG", Content = "Developer" })
+
+local Execute = tabs.Infor:AddSection("Execute")
 
 -- Phát hiện Executor
-local executor = "Không xác định"
+local executor = "IDK"
 if syn then
     executor = "Synapse X"
 elseif KRNL_LOADED then
@@ -71,23 +101,42 @@ elseif getexecutorname then
     end
 end
 
-tabs.Infor:AddParagraph({ Title = "Use Client", Content = executor })
-tabs.Infor:AddParagraph({
-    Title = "Cập Nhật",
-    Content = "VN: Tôi Sẽ Cập Nhiều Nhiều Script Hơn Để Mang Đến Cho Các Bạn Trải Nghiệm Tốt Nhất | EN: I Will Update More Scenarios To Bring You The Best"
+-- Add paragraph for the executor used
+Execute:AddParagraph({ Title = "Use Client", Content = executor })
+
+-- Conditional check for executor
+if executor == "Xeno" then
+    -- Show "Maybe error" paragraph when executor is Xeno
+    Execute:AddParagraph({ Title = "Maybe error", Content = "on Xeno" })
+else
+    -- Otherwise, show "Script Working" paragraph with dynamic content
+    local secondContent = "Script working on execute"  -- Default content for other clients
+    Execute:AddParagraph({ Title = "Script Working", Content = secondContent })
+end
+
+
+
+local Player = tabs.Localplayer:AddSection("Player")
+
+Player:AddButton({
+    Title = "Reset Character",
+    Description = "",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+
+if humanoid then
+    humanoid.Health = 0
+end
+    end
+})    Player:AddButton({
+    Title = "Kick Player",
+    Description = "",
+    Callback = function()
+        game.Players.LocalPlayer:Kick("")
+    end
 })
-tabs.Infor:AddParagraph({ Title = "Supported Android Clients", Content = "Support all Android clients" })
-tabs.Infor:AddParagraph({ Title = "Supported PC Clients", Content = "Support all PC clients" })
-
-local Anouncement = tabs.Main:AddSection("Anouncement")
-
-Anouncement:AddParagraph({ Title = "Vn", Content = "Dừng Update script vì phải thi" })
-Anouncement:AddParagraph({ Title = "En", Content = "Stop updating script because i have exam" })
-
-local Status = tabs.Main:AddSection("Status")
-
-Status:AddParagraph({ Title = "Script : Working", Content = "" })
-Status:AddParagraph({ Title = "Update : Cannot", Content = "" })
 
 -- 🧍 WalkSpeed & Jump
 local Walkspeed = tabs.Localplayer:AddSection("WalkSpeed")
@@ -575,11 +624,6 @@ Callback = function()
     Hop()
 end
 }) 
-
-
-
-
-
 
 
 local Mainbf = tabs.Bloxfruit:AddSection("Main")---- Add mục Main 
@@ -1371,29 +1415,37 @@ local Script = tabs.Misc:AddSection("Script")
     end
 })
 
-local Player = tabs.Misc:AddSection("Player")
 
-Player:AddButton({
-    Title = "Reset Character",
+    Misc:AddButton({
+    Title = "Fly",
     Description = "",
     Callback = function()
-        local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildWhichIsA("Humanoid")
-
-if humanoid then
-    humanoid.Health = 0
-end
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/NomDomFly"))()
     end
-})    Player:AddButton({
-    Title = "Kick Player",
+})    Misc:AddButton({
+    Title = "Test Unc",
     Description = "",
     Callback = function()
-        game.Players.LocalPlayer:Kick("")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/UncTest"))()
+    end
+})    Misc:AddButton({
+    Title = "Fix Lag 50%",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/FixLag"))()
+    end
+})    Misc:AddButton({
+    Title = "Fix Lag 100%",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/SuperFixLag"))()
     end
 })
 
-local Screen = tabs.Misc:AddSection("Screen")
+
+
+
+local Screen = tabs.Setting:AddSection("Screen")
 
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
@@ -1468,11 +1520,95 @@ Screen:AddToggle("BuoiToggle", {
     end
 })
 
+local Game = tabs.Setting:AddSection("Game")
+
+-- Lấy đối tượng LocalPlayer và TeleportService
+local LocalPlayer = game.Players.LocalPlayer
+local TeleportService = game:GetService("TeleportService")
+
+-- Biến trạng thái cho toggle
+local AutoRejoinEnabled = false  -- Mặc định là tắt
+
+-- Hàm tự động teleport khi bị kick hoặc mất kết nối
+local function autoRejoin()
+    -- Lắng nghe sự kiện teleport
+    LocalPlayer.OnTeleport:Connect(function(status)
+        if AutoRejoinEnabled then  -- Nếu tính năng tự động rejoin bật
+            if status == Enum.TeleportState.Failed then
+                -- Sau khi thất bại, teleport lại vào game
+                TeleportService:Teleport(game.PlaceId, LocalPlayer)
+            end
+        end
+    end)
+
+    -- Kết nối sự kiện OnKick để tự động teleport người chơi khi bị kick
+    LocalPlayer.OnKick:Connect(function(reason)
+        if AutoRejoinEnabled then  -- Nếu tính năng tự động rejoin bật
+            -- Sau khi bị kick, teleport lại vào game
+            TeleportService:Teleport(game.PlaceId, LocalPlayer)
+        end
+    end)
+end
+
+-- Thêm toggle vào UI
+Game:AddToggle("Enable Auto Rejoin", {
+    Title = "Auto Rejoin",  -- Tiêu đề của toggle
+    Default = false,  -- Mặc định là tắt
+    Callback = function(state)
+        AutoRejoinEnabled = state  -- Cập nhật trạng thái của toggle (true/false)
+    end
+})
+
+
+
+local Anti = tabs.Setting:AddSection("Anti")
+
+-- Thêm toggle vào UI
+Anti:AddToggle("Antiband", {
+    Title = "Anti Band",  -- Tiêu đề của toggle
+    Default = true,  -- Mặc định là bật
+    Callback = function(state)
+        -- Có thể thêm mã tùy chỉnh khi bật/tắt tính năng Anti Band ở đây
+    end
+})
+
+-- Anti AFK
+local isAntiAFKEnabled = false
+Anti:AddToggle("AntiAFK", {  -- Đổi tên để tránh trùng với các toggle khác
+    Title = "Anti AFK",  -- Tiêu đề của toggle
+    Default = false,  -- Mặc định là tắt
+    Callback = function(state)
+        isAntiAFKEnabled = state
+
+        if state then
+            -- Nếu toggle bật, bắt đầu mô phỏng click chuột
+            local VirtualUser = game:GetService("VirtualUser")
+
+            -- Mô phỏng click chuột mỗi phút
+            spawn(function()
+                while isAntiAFKEnabled do
+                    wait(60) -- Chờ 1 phút
+                    VirtualUser:CaptureController()
+
+                    -- Mô phỏng click chuột phải
+                    VirtualUser:ClickButton2(Vector2.new(0, 0))
+
+                    -- Mô phỏng click chuột trái nhanh
+                    VirtualUser:ClickButton1(Vector2.new(0, 0))
+                end
+            end)
+        end
+    end
+})
 
 
 
 
--- Giao diện Nút Mở UI (đẹp hơn, có particle, xoay, animation)
+
+
+
+
+
 local TweenService = game:GetService("TweenService")
 
 local gui = Instance.new("ScreenGui")
@@ -1505,30 +1641,35 @@ particle.Speed = NumberRange.new(5, 10)
 particle.SpreadAngle = Vector2.new(360, 360)
 particle.Color = ColorSequence.new(Color3.fromRGB(255, 85, 255), Color3.fromRGB(85, 255, 255))
 
+-- Animation hover (tăng kích thước khi di chuột vào nút)
+local hoverTween = TweenService:Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), { Size = UDim2.new(0, 55, 0, 55) })
+local unhoverTween = TweenService:Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), { Size = UDim2.new(0, 50, 0, 50) })
+
+-- Khi hover vào nút (hover effect)
+button.MouseEnter:Connect(function()
+    hoverTween:Play()
+end)
+
+-- Khi rời chuột ra khỏi nút (unhover effect)
+button.MouseLeave:Connect(function()
+    unhoverTween:Play()
+end)
+
 -- Khi bấm nút
 button.MouseButton1Down:Connect(function()
+    -- Particle effect khi bấm
     particle.Rate = 100
 
-    -- Reset sau 1s
+    -- Reset particle sau 1s
     task.delay(1, function()
         particle.Rate = 0
     end)
-
 
     -- Gửi phím End để bật/tắt UI
     game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.End, false, game)
 end)
 
--- Xoá hiệu ứng chết/respawn nếu có
-local effectContainer = game:GetService("ReplicatedStorage"):FindFirstChild("Effect") and game:GetService("ReplicatedStorage").Effect:FindFirstChild("Container")
-if effectContainer then
-    if effectContainer:FindFirstChild("Death") then
-        effectContainer.Death:Destroy()
-    end
-    if effectContainer:FindFirstChild("Respawn") then
-        effectContainer.Respawn:Destroy()
-    end
-end
+
 
 
 -- Thông báo chào người chơi
@@ -1540,18 +1681,10 @@ Fluent:Notify({
 
 wait(1)
 
--- Thông báo khi tải xong
+-- Thông báo chào người chơi
 Fluent:Notify({
-    Title = "Script By NomCak Team",
-    Content = "Partner with us?",
-    Duration = 5
-})
-
-Wait(0.5)
-
--- Thông báo Discord
-Fluent:Notify({
-    Title = "If you want then go to discord",
+    Title = "Link Discord : ",
     Content = "https://discord.gg/3PpjA9Ts",
     Duration = 5
 })
+
