@@ -8,6 +8,7 @@ local player = game.Players.LocalPlayer
 local specialUsers = {
     "Boptrithuc",
     "acctesthacktuviet"
+    "noxeldp"
 }
 
 -- Kiểm tra xem tên người chơi có nằm trong danh sách đặc biệt không
