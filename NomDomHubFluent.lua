@@ -1622,7 +1622,7 @@ button.Size = UDim2.new(0, 50, 0, 50)
 button.Position = UDim2.new(0.120833337 - 0.1, 0, 0.0952890813 + 0.01, 0)
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BorderSizePixel = 0
-button.Image = "http://www.roblox.com/asset/?id=138569547227924"
+button.Image = "http://www.roblox.com/asset/?id=88870467007338"
 button.Draggable = true
 button.Parent = gui
 
@@ -1689,3 +1689,49 @@ Fluent:Notify({
     Duration = 5
 })
 
+wait(1)
+
+local Players = game:GetService("Players")
+local locale = Players.LocalPlayer.LocaleId:lower()
+local country = "Không xác định"
+
+if string.find(locale, "vn") then
+    country = "Việt Nam"
+elseif string.find(locale, "th") then
+    country = "Thái Lan"
+elseif string.find(locale, "id") then
+    country = "Indonesia"
+elseif string.find(locale, "ph") then
+    country = "Philippines"
+elseif string.find(locale, "my") then
+    country = "Malaysia"
+elseif string.find(locale, "us") then
+    country = "Hoa Kỳ"
+elseif string.find(locale, "br") then
+    country = "Brazil"
+elseif string.find(locale, "kr") then
+    country = "Hàn Quốc"
+elseif string.find(locale, "jp") then
+    country = "Nhật Bản"
+elseif string.find(locale, "de") then
+    country = "Đức"
+elseif string.find(locale, "fr") then
+    country = "Pháp"
+elseif string.find(locale, "ru") then
+    country = "Nga"
+end
+
+-- Hiển thị thông báo tùy theo quốc gia
+if country == "Việt Nam" then
+    Fluent:Notify({
+        Title = "Chuẩn bị đến ngày 30/4",
+        Content = "30/4/1975 - 30/4/2025 kỷ niệm 50 năm ngày giải phóng miền Nam, thống nhất đất nước Việt Nam Dân chủ Cộng hòa.",
+        Duration = 15
+    })
+else
+    Fluent:Notify({
+        Title = "Prepare until April 30",
+        Content = "30/4/1975 - 30/4/2025 celebrates the 50th anniversary of the liberation of the South and reunification of the Democratic Republic of Vietnam.",
+        Duration = 15
+    })
+end
