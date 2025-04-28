@@ -688,23 +688,50 @@ Mainbf:AddButton({
         loadstring(game:HttpGet("https://raw.githubusercontent.com/obfmoonsec/Masterhub/refs/heads/main/obf"))()
     end
 })    Mainbf:AddButton({
+    Title = "Tsuo Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/Tsuoscripts"))() 
+    end
+})    Mainbf:AddButton({
+    Title = "Lion Hub",
+    Description = "",
+    Callback = function()
+        repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+getgenv().Team = "Pirates" -- Marines
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/e0c7fcf6c077fc23475cf4ce4db58e42.lua"))()
+    end
+})    Mainbf:AddButton({
     Title = "QuanTum Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Trustmenotcondom/QTONYX/refs/heads/main/QuantumOnyx.lua"))()
     end
 })    Mainbf:AddButton({
-    Title = "Vxeze Hub",
-    Description = "",
-    Callback = function()
-        getgenv().Language = "English" -----vetnamese
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain2"))()
-    end
-})    Mainbf:AddButton({
     Title = "Zenith Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/ZenithHub/refs/heads/main/Loader"))()  
+    end
+})    Mainbf:AddButton({
+    Title = "Xeter Hub v1",
+    Description = "",
+    Callback = function()
+        getgenv().Version = "V1"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Loader/main/Xeter.lua"))()  
+    end
+})   Mainbf:AddButton({
+    Title = "Xeter Hub v2",
+    Description = "",
+    Callback = function()
+        getgenv().Version = "V2"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/Loader/main/Xeter.lua"))()   
+    end
+})    Mainbf:AddButton({
+    Title = "ThundarZ Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/ThundarZ/Welcome/refs/heads/main/Main/Loader/AllGame.lua'))()   
     end
 })    Mainbf:AddButton({
     Title = "Rubu Hub",
@@ -816,7 +843,7 @@ Hopbf:AddButton({
 local Kaitunbf = tabs.Bloxfruit:AddSection("Kaitun")
 
 Kaitunbf:AddButton({
-    Title = "Kaitun Xero Hub",
+    Title = "Xero Hub",
     Description = "Need Key",
     Callback = function()
         -- Max level, godhuman, cdk, sgt
@@ -877,13 +904,13 @@ getgenv().Configs = {
 repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Xero2409/XeroHub/refs/heads/main/kaitun.lua"))() end) until getgenv().Check_Execute  
     end
 })    Kaitunbf:AddButton({
-    Title = "Kaitun RoyX Hub",
+    Title = "RoyX Hub",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/RoyX%20Kaitun"))()    
     end
 })    Kaitunbf:AddButton({
-    Title = "Kaitun Simple Hub",
+    Title = "Simple Hub",
     Description = "",
     Callback = function()
         getgenv().simple_settings = {
@@ -936,7 +963,7 @@ repeat task.wait() pcall(function() loadstring(game:HttpGet("https://raw.githubu
         loadstring(game:HttpGet("https://raw.githubusercontent.com/simple-hubs/contents/refs/heads/main/bloxfruit-kaitan-main.lua"))()
     end
 })    Kaitunbf:AddButton({
-    Title = "Kaitun Quartyz ( Mukuro Hub )",
+    Title = "Quartyz ( Mukuro Hub )",
     Description = "Need Key",
     Callback = function()
         getgenv().Mode = "OneClick"
@@ -966,7 +993,63 @@ getgenv().Setting = {
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/xQuartyx/QuartyzScript/main/Loader.lua"))()    
     end
-})    tabs.Bluelock:AddButton({
+})
+
+local Autobounty = tabs.Bloxfruit:AddSection("Auto Bounty [Copy script and cofig]")
+
+
+Autobounty:AddButton({
+    Title = "Lion Hub",
+    Description = "",
+    Callback = function()
+        setclipboard("https://anotepad.com/notes/hmg9h77x")
+        Fluent:Notify({
+            Title = "Copied",
+            Content = "",
+            Duration = 5
+        })
+    end
+})    Autobounty:AddButton({
+    Title = "Vxeze Hub",
+    Description = "",
+    Callback = function()
+        setclipboard("https://anotepad.com/notes/8etsc47j")
+        Fluent:Notify({
+            Title = "Copied",
+            Content = "",
+            Duration = 5
+        })
+        
+    end
+})
+
+local Autofruit = tabs.Bloxfruit:AddSection("Find Fruit [Copy script and cofig]")
+
+Autofruit:AddButton({
+    Title = "BlueX Hub",
+    Description = "",
+    Callback = function()
+        setclipboard("https://anotepad.com/notes/n5khegyx")
+        Fluent:Notify({
+            Title = "Copied",
+            Content = "",
+            Duration = 5
+        })
+    end
+})   Autofruit:AddButton({
+    Title = "Turbo Lite",
+    Description = "",
+    Callback = function()
+        setclipboard("https://anotepad.com/notes/fxmq5ced")
+        Fluent:Notify({
+            Title = "Copied",
+            Content = "",
+            Duration = 5
+        })
+    end
+})
+
+tabs.Bluelock:AddButton({
     Title = "Alchemy Hub",
     Description = "Need Key",
     Callback = function()
@@ -1417,31 +1500,6 @@ local Script = tabs.Misc:AddSection("Script")
 })
 
 
-    Misc:AddButton({
-    Title = "Fly",
-    Description = "",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/NomDomFly"))()
-    end
-})    Misc:AddButton({
-    Title = "Test Unc",
-    Description = "",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/UncTest"))()
-    end
-})    Misc:AddButton({
-    Title = "Fix Lag 50%",
-    Description = "",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/FixLag"))()
-    end
-})    Misc:AddButton({
-    Title = "Fix Lag 100%",
-    Description = "",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/SuperFixLag"))()
-    end
-})
 
 
 
@@ -1689,6 +1747,15 @@ Fluent:Notify({
     Duration = 5
 })
 
+wait(0.5)
+
+-- Thông báo chào người chơi
+Fluent:Notify({
+    Title = "Join Discord to see announcements",
+    Content = "https://discord.gg/3PpjA9Ts",
+    Duration = 5
+})
+
 wait(1)
 
 local Players = game:GetService("Players")
@@ -1726,12 +1793,12 @@ if country == "Việt Nam" then
     Fluent:Notify({
         Title = "Chuẩn bị đến ngày 30/4",
         Content = "30/4/1975 - 30/4/2025 kỷ niệm 50 năm ngày giải phóng miền Nam, thống nhất đất nước Việt Nam Dân chủ Cộng hòa.",
-        Duration = 15
+        Duration = 10
     })
 else
     Fluent:Notify({
         Title = "Prepare until April 30",
         Content = "30/4/1975 - 30/4/2025 celebrates the 50th anniversary of the liberation of the South and reunification of the Democratic Republic of Vietnam.",
-        Duration = 15
+        Duration = 10
     })
 end
