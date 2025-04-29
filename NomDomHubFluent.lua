@@ -38,11 +38,11 @@ local tabs = {
     Infor = window:AddTab({ Title = "Infor" }),
     Main = window:AddTab({ Title = "Anouncement" }),
     Localplayer = window:AddTab({ Title = "Localplayer" }),
-    Joinid = window:AddTab({ Title = "Join server" }),
+    Joinid = window:AddTab({ Title = "Join Server And Game" }),
     Setting = window:AddTab({ Title = "Setting" }),
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
     Bluelock = window:AddTab({ Title = "Blue Lock" }),
-    Fisch = window:AddTab({ Title = "Fisching" }),
+    Fisch = window:AddTab({ Title = "Fisch" }),
     Petgo = window:AddTab({ Title = "Pet Go" }),
     Deedrails = window:AddTab({ Title = "Deed Rails" }),
     Arisecrossover = window:AddTab({ Title = "Arise Crossover" }),
@@ -471,14 +471,14 @@ Misc:AddToggle("unlimited_zoom_toggle", {
 
 
 
+local Joinid = tabs.Joinid:AddSection("Join ID")
 
 
 
 
 
 
-
-tabs.Joinid:AddInput("Input", {
+Joinid:AddInput("Input", {
     Title = "Job ID",
     Default = "",
     Placeholder = "Paste Job ID Here",
@@ -488,14 +488,14 @@ tabs.Joinid:AddInput("Input", {
         _G.Job = Value
     end
 })
-tabs.Joinid:AddButton({
+Joinid:AddButton({
     Title="Join",
     Description="",
     Callback=function()
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId,_G.Job, game.Players.LocalPlayer)
     end
 })
-tabs.Joinid:AddButton({
+Joinid:AddButton({
     Title="Copy Job ID",
     Description="",
     Callback=function()
@@ -515,7 +515,7 @@ end
 end)
 
 
-tabs.Joinid:AddButton({
+Joinid:AddButton({
 Title = "Rejoin Server",
 Description = "",
 Callback = function()
@@ -523,7 +523,65 @@ Callback = function()
 end
 })
 
-tabs.Joinid:AddButton({
+-- Tạo section
+local JoinGameSection = tabs.Joinid:AddSection("Join Game")
+
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+
+-- Danh sách game
+local gameList = {
+    ["Blox Fruits"] = 2753915549,
+    ["Blue Lock"] = 18668065416,
+    ["Fish"] = 16732694052,
+    ["Pet Go"] = 18901165922,
+    ["Deed Rails"] = 116495829188952,
+    ["Arise Crossover"] = 87039211657390,
+    ["Volleyball Legends"] = 73956553001240,
+    ["Basketball"] = 130739873848552,
+    ["Mm2"] = 142823291,
+    ["The Strongest Battlegrounds"] = 10449761463,
+    ["Rivals"] = 17625359962,
+}
+
+-- Biến lưu game đã chọn
+local selectedGame = nil
+
+-- Dropdown chọn game
+JoinGameSection:AddDropdown("Chọn Game", {
+    Title = "Choose a game",
+    Values = (function()
+        local names = {}
+        for name in pairs(gameList) do
+            table.insert(names, name)
+        end
+        table.sort(names)
+        return names
+    end)(),
+    Callback = function(value)
+        selectedGame = gameList[value]
+    end
+})
+
+-- Nút Join Game
+JoinGameSection:AddButton({
+    Title = "Join game",
+    Description = "",
+    Callback = function()
+        if selectedGame then
+            TeleportService:Teleport(selectedGame, Players.LocalPlayer)
+        end
+    end
+})
+
+
+
+
+
+
+local Hop = tabs.Joinid:AddSection("Hop")
+
+Hop:AddButton({
 Title = "Hop Low Server",
 Description = "",
 Callback = function()
@@ -574,7 +632,7 @@ Callback = function()
 end
 })
 
-tabs.Joinid:AddButton({
+Hop:AddButton({
 Title = "Hop Server",
 Description = "",
 Callback = function()
@@ -618,13 +676,6 @@ end
 })
 
 
-tabs.Joinid:AddButton({
-Title = "Id Sever",
-Description = "",
-Callback = function()
-    Hop()
-end
-}) 
 
 
 local Mainbf = tabs.Bloxfruit:AddSection("Main")---- Add mục Main 
@@ -1742,63 +1793,22 @@ wait(1)
 
 -- Thông báo chào người chơi
 Fluent:Notify({
-    Title = "Link Discord : ",
-    Content = "https://discord.gg/3PpjA9Ts",
-    Duration = 5
-})
-
-wait(0.5)
-
--- Thông báo chào người chơi
-Fluent:Notify({
-    Title = "Join Discord to see announcements",
-    Content = "https://discord.gg/3PpjA9Ts",
+    Title = "Chúc 30/4 vui vẻ",
+    Content = "",
     Duration = 5
 })
 
 wait(1)
 
-local Players = game:GetService("Players")
-local locale = Players.LocalPlayer.LocaleId:lower()
-local country = "Không xác định"
-
-if string.find(locale, "vn") then
-    country = "Việt Nam"
-elseif string.find(locale, "th") then
-    country = "Thái Lan"
-elseif string.find(locale, "id") then
-    country = "Indonesia"
-elseif string.find(locale, "ph") then
-    country = "Philippines"
-elseif string.find(locale, "my") then
-    country = "Malaysia"
-elseif string.find(locale, "us") then
-    country = "Hoa Kỳ"
-elseif string.find(locale, "br") then
-    country = "Brazil"
-elseif string.find(locale, "kr") then
-    country = "Hàn Quốc"
-elseif string.find(locale, "jp") then
-    country = "Nhật Bản"
-elseif string.find(locale, "de") then
-    country = "Đức"
-elseif string.find(locale, "fr") then
-    country = "Pháp"
-elseif string.find(locale, "ru") then
-    country = "Nga"
-end
-
--- Hiển thị thông báo tùy theo quốc gia
-if country == "Việt Nam" then
-    Fluent:Notify({
-        Title = "Chuẩn bị đến ngày 30/4",
-        Content = "30/4/1975 - 30/4/2025 kỷ niệm 50 năm ngày giải phóng miền Nam, thống nhất đất nước Việt Nam Dân chủ Cộng hòa.",
-        Duration = 10
-    })
-else
-    Fluent:Notify({
-        Title = "Prepare until April 30",
-        Content = "30/4/1975 - 30/4/2025 celebrates the 50th anniversary of the liberation of the South and reunification of the Democratic Republic of Vietnam.",
-        Duration = 10
-    })
-end
+-- Thông báo lặp lại mỗi 10 phút
+task.spawn(function()
+    while true do
+        Fluent:Notify({
+            Title = "NomDom Community",
+            Content = "https://discord.gg/3PpjA9Ts",
+            Duration = 5,
+            Icon = "rbxassetid://88870467007338" -- nếu Fluent hỗ trợ Icon
+        })
+        task.wait(300)
+    end
+end)
