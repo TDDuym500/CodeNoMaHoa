@@ -1731,7 +1731,7 @@ button.Size = UDim2.new(0, 50, 0, 50)
 button.Position = UDim2.new(0.120833337 - 0.1, 0, 0.0952890813 + 0.01, 0)
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BorderSizePixel = 0
-button.Image = "http://www.roblox.com/asset/?id=88870467007338"
+button.Image = "http://www.roblox.com/asset/?id=136833273758889"
 button.Draggable = true
 button.Parent = gui
 
