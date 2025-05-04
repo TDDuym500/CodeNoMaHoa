@@ -22,12 +22,12 @@ end
 
 -- Tạo cửa sổ Fluent
 local window = Fluent:CreateWindow({
-    Title = isSpecialUser and "NomDom Hub [Premium]" or "NomDom Hub [Freemium]",
+    Title = isSpecialUser and "NomDom Hub [Developer]" or "NomDom Hub [User]",
     SubTitle = "by NomCak Team",
     TabWidth = (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled) and 160 or 190,  -- Mobile: 160, PC: 190
     Theme = "Dark",
     Acrylic = false,
-    Size = (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled) and UDim2.fromOffset(500, 320) or UDim2.fromOffset(700, 490),  -- Giữ như trước
+    Size = (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled) and UDim2.fromOffset(600, 430) or UDim2.fromOffset(700, 490),  -- Giữ như trước
     MinimizeKey = Enum.KeyCode.End
 })
 
@@ -36,7 +36,7 @@ local window = Fluent:CreateWindow({
 -- Thêm các Tab
 local tabs = {
     Infor = window:AddTab({ Title = "Infor" }),
-    Main = window:AddTab({ Title = "Anouncement" }),
+    Main = window:AddTab({ Title = "Fuction" }),
     Localplayer = window:AddTab({ Title = "Localplayer" }),
     Joinid = window:AddTab({ Title = "Join Server And Game" }),
     Setting = window:AddTab({ Title = "Setting" }),
@@ -67,7 +67,7 @@ Community:AddButton({
     Title = "NomDom Community",
     Description = "Discord",
     Callback = function()
-        setclipboard("https://discord.gg/3PpjA9Ts")
+        setclipboard("https://discord.gg/KyhHAh7s")
     end
 })
 
@@ -114,6 +114,75 @@ else
     local secondContent = "Script working on execute"  -- Default content for other clients
     Execute:AddParagraph({ Title = "Script Working", Content = secondContent })
 end
+
+local Fps = tabs.Main:AddSection("Lock Fps")
+
+local selectedFPS = 60
+local isFPSLooping = false
+local fpsLoopThread = nil
+
+Fps:AddInput("FPSInput", {
+    Title = "Enter Fps to Lock",
+    Default = "",
+    Placeholder = "Fps",
+    Numeric = true,
+    Finished = true,
+    Callback = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then
+            selectedFPS = num
+            -- Không có thông báo Fluent:Notify
+        else
+            -- Không có thông báo Fluent:Notify
+        end
+    end
+})
+
+Fps:AddToggle("LockFPSToggle", {
+    Title = "Lock Fps",
+    Default = false,
+    Callback = function(state)
+        if state then
+            if typeof(setfpscap) == "function" then
+                setfpscap(selectedFPS)
+                isFPSLooping = false -- Đảm bảo vòng lặp không chạy nếu setfpscap có
+                if fpsLoopThread and task.cancel then task.cancel(fpsLoopThread) end
+                fpsLoopThread = nil
+            else
+                isFPSLooping = true
+                local interval = 1 / selectedFPS
+
+                fpsLoopThread = task.spawn(function()
+                    local lastTick = tick()
+                    while isFPSLooping do
+                        local now = tick()
+                        local elapsed = now - lastTick
+                        local wait_time = interval - elapsed
+
+                        if wait_time > 0 then
+                            task.wait(wait_time)
+                        end
+
+                        lastTick = tick()
+
+                        -- Thêm một yield nhỏ để tránh lỗi và cho phép dừng thread
+                        if not task.wait(0.001) then
+                            break -- Thread bị hủy
+                        end
+                    end
+                end)
+            end
+        else
+            if typeof(setfpscap) == "function" then
+                setfpscap(999)
+            end
+
+            isFPSLooping = false -- Dừng vòng lặp
+            if fpsLoopThread and task.cancel then task.cancel(fpsLoopThread) end
+            fpsLoopThread = nil
+        end
+    end
+})
 
 
 
@@ -737,6 +806,42 @@ Mainbf:AddButton({
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/obfmoonsec/Masterhub/refs/heads/main/obf"))()
+    end
+})    Mainbf:AddButton({
+    Title = "Maru Hub Fake",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/MaruHub"))() 
+    end
+})    Mainbf:AddButton({
+    Title = "Banana Hub Fake",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kimprobloxdz/Banana-Free/refs/heads/main/Protected_5609200582002947.lua.txt"))() 
+    end
+})    Mainbf:AddButton({
+    Title = "J97 Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kimprobloxdz/Jack-J97/refs/heads/main/Jack-J97.txt"))() 
+    end
+})    Mainbf:AddButton({
+    Title = "KimP Hub V1",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/KimPRoblox"))() 
+    end
+})    Mainbf:AddButton({
+    Title = "KimP Hub V2",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/KimPRobloxV2"))() 
+    end
+})    Mainbf:AddButton({
+    Title = "KimP Hub V3",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaCrack/KimP/refs/heads/main/KimPRobloxV3"))() 
     end
 })    Mainbf:AddButton({
     Title = "Tsuo Hub",
@@ -1522,27 +1627,37 @@ tabs.Bluelock:AddButton({
     end
 })
 
-local Script = tabs.Misc:AddSection("Script")
+local Supportscript = tabs.Misc:AddSection("Support Script")
 
-    Script:AddButton({
+Supportscript:AddButton({
     Title = "Fly",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/NomDomFly"))()
     end
-})    Script:AddButton({
+})    Supportscript:AddButton({
     Title = "Test Unc",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/UncTest"))()
     end
-})    Script:AddButton({
+})
+
+local Fixlag = tabs.Misc:AddSection("Fix Lag")
+
+Fixlag:AddButton({
+    Title = "Turbo Lite",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/TurboLite/Script/main/FixLag.lua"))()
+    end
+})    Fixlag:AddButton({
     Title = "Fix Lag 50%",
     Description = "",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/FixLag"))()
     end
-})    Script:AddButton({
+})    Fixlag:AddButton({
     Title = "Fix Lag 100%",
     Description = "",
     Callback = function()
@@ -1731,7 +1846,7 @@ button.Size = UDim2.new(0, 50, 0, 50)
 button.Position = UDim2.new(0.120833337 - 0.1, 0, 0.0952890813 + 0.01, 0)
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BorderSizePixel = 0
-button.Image = "http://www.roblox.com/asset/?id=136833273758889"
+button.Image = "http://www.roblox.com/asset/?id=88870467007338"
 button.Draggable = true
 button.Parent = gui
 
