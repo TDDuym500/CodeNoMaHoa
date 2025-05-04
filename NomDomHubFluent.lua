@@ -33,13 +33,13 @@ local window = Fluent:CreateWindow({
 
 
 
--- Thêm các Tab
 local tabs = {
-    Infor = window:AddTab({ Title = "Infor" }),
-    Main = window:AddTab({ Title = "Fuction" }),
-    Localplayer = window:AddTab({ Title = "Localplayer" }),
-    Joinid = window:AddTab({ Title = "Join Server And Game" }),
-    Setting = window:AddTab({ Title = "Setting" }),
+    Infor = window:AddTab({ Title = "Information", Icon = "info" }), -- ID của icon info
+    Main = window:AddTab({ Title = "Fuction", Icon = "grid" }), -- ID của icon tool
+    Localplayer = window:AddTab({ Title = "Localplayer", Icon = "user" }), -- ID của icon user
+    Joinid = window:AddTab({ Title = "Join Server, Game", Icon = "gamepad" }),
+    Game = window:AddTab({ Title = "Game, User Information", Icon = "clipboard" }),
+    Setting = window:AddTab({ Title = "Setting", Icon = "settings" }), -- ID của icon setting
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
     Bluelock = window:AddTab({ Title = "Blue Lock" }),
     Fisch = window:AddTab({ Title = "Fisch" }),
@@ -53,6 +53,10 @@ local tabs = {
     Rivals = window:AddTab({ Title = "Rivals" }),
     Misc = window:AddTab({ Title = "Misc" }),
 }
+
+
+
+
 
 local Options = Fluent.Options
 local RunService = game:GetService("RunService")
@@ -85,35 +89,6 @@ local Developer = tabs.Infor:AddSection("Developer")
 Developer:AddParagraph({ Title = "Duy Sdikibi", Content = "Developer" })
 Developer:AddParagraph({ Title = "KhangG", Content = "Developer" })
 
-local Execute = tabs.Infor:AddSection("Execute")
-
--- Phát hiện Executor
-local executor = "IDK"
-if syn then
-    executor = "Synapse X"
-elseif KRNL_LOADED then
-    executor = "KRNL"
-elseif fluxus then
-    executor = "Fluxus"
-elseif getexecutorname then
-    local success, execName = pcall(getexecutorname)
-    if success and type(execName) == "string" then
-        executor = execName
-    end
-end
-
--- Add paragraph for the executor used
-Execute:AddParagraph({ Title = "Use Client", Content = executor })
-
--- Conditional check for executor
-if executor == "Xeno" then
-    -- Show "Maybe error" paragraph when executor is Xeno
-    Execute:AddParagraph({ Title = "Maybe error", Content = "on Xeno" })
-else
-    -- Otherwise, show "Script Working" paragraph with dynamic content
-    local secondContent = "Script working on execute"  -- Default content for other clients
-    Execute:AddParagraph({ Title = "Script Working", Content = secondContent })
-end
 
 local Fps = tabs.Main:AddSection("Lock Fps")
 
@@ -743,6 +718,133 @@ Callback = function()
     end
 end
 })
+
+
+
+
+
+
+-- 🌐 Dịch vụ cần thiết
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- === 1. Player Information ===
+local sectionPlayer = tabs.Game:AddSection("Player Information")
+
+sectionPlayer:AddParagraph({
+    Title = "Username",
+    Content = LocalPlayer.Name or "N/A"
+})
+
+sectionPlayer:AddParagraph({
+    Title = "Display Name",
+    Content = LocalPlayer.DisplayName or "N/A"
+})
+
+-- 🌍 Xác định quốc gia
+local locale = (LocalPlayer.LocaleId or "unknown"):lower()
+local countryMap = {
+    vn = "Vietnam",
+    th = "Thailand",
+    id = "Indonesia",
+    ph = "Philippines",
+    my = "Malaysia",
+    us = "United States",
+    br = "Brazil",
+    kr = "South Korea",
+    jp = "Japan",
+    de = "Germany",
+    fr = "France",
+    ru = "Russia"
+}
+
+local country = "Unknown"
+for code, name in pairs(countryMap) do
+    if locale:find(code) then
+        country = name
+        break
+    end
+end
+
+sectionPlayer:AddParagraph({
+    Title = "Country",
+    Content = country
+})
+
+-- === 2. Executor ===
+local sectionExecute = tabs.Game:AddSection("Executor")
+
+local executor = "Unknown"
+if syn then
+    executor = "Synapse X"
+elseif KRNL_LOADED then
+    executor = "KRNL"
+elseif fluxus then
+    executor = "Fluxus"
+elseif getexecutorname then
+    local success, execName = pcall(getexecutorname)
+    if success and type(execName) == "string" then
+        executor = execName
+    end
+end
+
+sectionExecute:AddParagraph({
+    Title = "Use Client",
+    Content = executor
+})
+
+local execStatus = (executor == "Xeno" or executor:lower():find("solara")) and "May Error" or "Working"
+sectionExecute:AddParagraph({
+    Title = "Status",
+    Content = execStatus
+})
+
+-- === 3. Device Information ===
+local sectionDevice = tabs.Game:AddSection("Device Information")
+
+local deviceType = UserInputService.TouchEnabled and "Mobile"
+    or (UserInputService.KeyboardEnabled and not UserInputService.GamepadEnabled and "PC")
+    or "Console"
+
+sectionDevice:AddParagraph({
+    Title = "Device Type",
+    Content = deviceType
+})
+
+-- === 4. Game Information ===
+local sectionGame = tabs.Game:AddSection("Game Information")
+
+-- Đảm bảo game đã load trước khi gọi GetProductInfo
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local gameName = "Unknown"
+pcall(function()
+    local info = MarketplaceService:GetProductInfo(game.PlaceId)
+    if info and info.Name then
+        gameName = info.Name
+    end
+end)
+
+sectionGame:AddParagraph({
+    Title = "Game Name",
+    Content = gameName
+})
+
+sectionGame:AddParagraph({
+    Title = "Game ID (PlaceId)",
+    Content = tostring(game.PlaceId)
+})
+
+sectionGame:AddParagraph({
+    Title = "Server ID",
+    Content = game.JobId or "N/A"
+})
+
 
 
 
@@ -1747,6 +1849,49 @@ Screen:AddToggle("BuoiToggle", {
 
 local Game = tabs.Setting:AddSection("Game")
 
+-- Biến URL script chính
+local ScriptURL = "https://raw.githubusercontent.com/TDDuym500/NomDom/refs/heads/main/NomDomHub.lua"
+local AutoLoadEnabled = false
+
+-- Thêm Toggle vào UI
+Game:AddToggle("Enable Auto Load Script", {
+    Title = "Auto Load Script",
+    Default = false,
+    Callback = function(state)
+        AutoLoadEnabled = state
+    end
+})
+
+-- Đảm bảo script tiếp tục chạy khi teleport server/game
+local function loadScript()
+    pcall(function()
+        local response = game:HttpGet(ScriptURL)
+        if response then
+            loadstring(response)()
+        else
+            warn("Không thể tải script từ URL.")
+        end
+    end)
+end
+
+-- Chạy khi đổi server/game
+local queue = queue_on_teleport or (syn and syn.queue_on_teleport)
+if queue then
+    queue(("loadstring(game:HttpGet('%s'))()"):format(ScriptURL))
+end
+
+-- Đảm bảo script được tải khi có sự kiện teleport
+game:GetService("Players").PlayerAdded:Connect(function(player)
+    if AutoLoadEnabled then
+        loadScript()
+    end
+end)
+
+
+
+
+
+
 -- Lấy đối tượng LocalPlayer và TeleportService
 local LocalPlayer = game.Players.LocalPlayer
 local TeleportService = game:GetService("TeleportService")
@@ -1847,6 +1992,7 @@ button.Position = UDim2.new(0.120833337 - 0.1, 0, 0.0952890813 + 0.01, 0)
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BorderSizePixel = 0
 button.Image = "http://www.roblox.com/asset/?id=88870467007338"
+
 button.Draggable = true
 button.Parent = gui
 
@@ -1920,7 +2066,7 @@ task.spawn(function()
     while true do
         Fluent:Notify({
             Title = "NomDom Community",
-            Content = "https://discord.gg/3PpjA9Ts",
+            Content = "https://discord.gg/KyhHAh7s",
             Duration = 5,
             Icon = "rbxassetid://88870467007338" -- nếu Fluent hỗ trợ Icon
         })
