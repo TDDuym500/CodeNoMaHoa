@@ -1,17 +1,20 @@
----- Hiệu ứng mờ + Script By Duy + Loading + Done cùng màu, cùng font
-
--- Tạo hiệu ứng mờ
+-- Hiệu ứng mờ
 local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 30
 blurEffect.Enabled = false
 blurEffect.Parent = game.Lighting
 
--- Tạo GUI
+-- GUI chính
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "ScriptByDuyGui"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
+
+-- Font & Màu dùng chung
+local sharedFont = Enum.Font.Gotham
+local sharedColor = Color3.fromRGB(200, 200, 200)
+local sharedStrokeTransparency = 0.7
 
 -- "Script By Duy"
 local mainText = Instance.new("TextLabel")
@@ -19,10 +22,10 @@ mainText.Parent = gui
 mainText.Size = UDim2.new(1, 0, 1, 0)
 mainText.Position = UDim2.new(0, 0, 0, 0)
 mainText.BackgroundTransparency = 1
-mainText.Text = "Version 9.6.0"
-mainText.TextColor3 = Color3.fromRGB(255, 255, 255)
-mainText.TextStrokeTransparency = 0.5
-mainText.Font = Enum.Font.GothamBlack
+mainText.Text = "Version 9.7.0"
+mainText.TextColor3 = sharedColor
+mainText.TextStrokeTransparency = sharedStrokeTransparency
+mainText.Font = sharedFont
 mainText.TextScaled = true
 mainText.TextTransparency = 1
 
@@ -33,70 +36,71 @@ loadingText.Size = UDim2.new(1, 0, 0.1, 0)
 loadingText.Position = UDim2.new(0, 0, 0.65, 0)
 loadingText.BackgroundTransparency = 1
 loadingText.Text = "Loading Script... 0%"
-loadingText.TextColor3 = Color3.fromRGB(200, 200, 200)
-loadingText.TextStrokeTransparency = 0.7
-loadingText.Font = Enum.Font.Gotham
+loadingText.TextColor3 = sharedColor
+loadingText.TextStrokeTransparency = sharedStrokeTransparency
+loadingText.Font = sharedFont
 loadingText.TextScaled = true
 loadingText.TextTransparency = 1
 
--- "Done!" (cùng màu & font với loading)
+-- "Done!"
 local doneText = Instance.new("TextLabel")
 doneText.Parent = gui
 doneText.Size = loadingText.Size
 doneText.Position = loadingText.Position
 doneText.BackgroundTransparency = 1
-doneText.Text = "Done"
-doneText.TextColor3 = Color3.fromRGB(200, 200, 200)
-doneText.TextStrokeTransparency = 0.7
-doneText.Font = Enum.Font.Gotham
+doneText.Text = "Done!"
+doneText.TextColor3 = sharedColor
+doneText.TextStrokeTransparency = sharedStrokeTransparency
+doneText.Font = sharedFont
 doneText.TextScaled = true
 doneText.TextTransparency = 1
 
--- Bật blur
+-- Bật hiệu ứng mờ
 blurEffect.Enabled = true
 
--- Fade in "Script By Duy" và "Loading Script..."
-for i = 1, 0, -0.02 do
+-- Fade in "Script By Duy" + "Loading"
+for i = 1, 0, -0.05 do
 	mainText.TextTransparency = i
 	loadingText.TextTransparency = i
-	task.wait(0.03)
-end
-
--- Loading từ 0% → 100%
-for i = 0, 100 do
-	loadingText.Text = "Loading Script... " .. i .. "%"
 	task.wait(0.02)
 end
 
--- Ẩn Loading
+-- Loading % chạy nhanh hơn
+for i = 0, 100, 2 do
+	loadingText.Text = "Loading Script... " .. i .. "%"
+	task.wait(0.01)
+end
+
+-- Ẩn loading
 for i = 0, 1, 0.05 do
 	loadingText.TextTransparency = i
-	task.wait(0.03)
+	task.wait(0.02)
 end
 
--- Hiện Done!
+-- Hiện "Done"
+doneText.TextTransparency = 1  -- Ensure "Done" is visible immediately
 for i = 1, 0, -0.05 do
 	doneText.TextTransparency = i
-	task.wait(0.03)
+	task.wait(0.02)
 end
 
--- Giữ lại chút cho ngầu
+-- Giữ lại 1.5 giây cho đẹp
 task.wait(1.5)
 
 -- Fade out tất cả
 for i = 0, 1, 0.05 do
 	mainText.TextTransparency = i
 	doneText.TextTransparency = i
-	task.wait(0.03)
+	task.wait(0.02)
 end
 
--- Tắt blur
+-- Tắt blur mượt hơn
 for blur = 30, 0, -1 do
 	blurEffect.Size = blur
-	task.wait(0.01)
+	task.wait(0.008)
 end
 
 -- Xoá GUI
-task.wait(0.5)
+task.wait(0.3)
 gui:Destroy()
 blurEffect:Destroy()
