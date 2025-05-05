@@ -1,4 +1,4 @@
------------------Version 8.0.0-----------------
+-----------------Version 10.5.0-----------------
 
 
 -- Hiệu ứng load 
@@ -9,6 +9,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa
 
 ---Wedbook
 loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/WedBookDonGian"))()
+
+-----Wedbook show player
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/Wedbookshowsplayer.lua"))()
 
 
 
