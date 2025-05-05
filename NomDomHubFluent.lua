@@ -722,6 +722,134 @@ end
 
 
 
+-------[  Hiển thị thông tin   ]---
+
+
+
+
+-- 🌐 Dịch vụ cần thiết
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- === 1. Player Information ===
+local sectionPlayer = tabs.Game:AddSection("Player Information")
+
+sectionPlayer:AddParagraph({
+    Title = "Username",
+    Content = LocalPlayer.Name or "N/A"
+})
+
+sectionPlayer:AddParagraph({
+    Title = "Display Name",
+    Content = LocalPlayer.DisplayName or "N/A"
+})
+
+-- 🌍 Xác định quốc gia
+local locale = (LocalPlayer.LocaleId or "unknown"):lower()
+local countryMap = {
+    vn = "Vietnam",
+    th = "Thailand",
+    id = "Indonesia",
+    ph = "Philippines",
+    my = "Malaysia",
+    us = "United States",
+    br = "Brazil",
+    kr = "South Korea",
+    jp = "Japan",
+    de = "Germany",
+    fr = "France",
+    ru = "Russia"
+}
+
+local country = "Unknown"
+for code, name in pairs(countryMap) do
+    if locale:find(code) then
+        country = name
+        break
+    end
+end
+
+sectionPlayer:AddParagraph({
+    Title = "Country",
+    Content = country
+})
+
+-- === 2. Executor ===
+local sectionExecute = tabs.Game:AddSection("Executor")
+
+local executor = "Unknown"
+if syn then
+    executor = "Synapse X"
+elseif KRNL_LOADED then
+    executor = "KRNL"
+elseif fluxus then
+    executor = "Fluxus"
+elseif getexecutorname then
+    local success, execName = pcall(getexecutorname)
+    if success and type(execName) == "string" then
+        executor = execName
+    end
+end
+
+sectionExecute:AddParagraph({
+    Title = "Use Client",
+    Content = executor
+})
+
+local execStatus = (executor == "Xeno" or executor:lower():find("solara")) and "May Error" or "Working"
+sectionExecute:AddParagraph({
+    Title = "Status",
+    Content = execStatus
+})
+
+-- === 3. Device Information ===
+local sectionDevice = tabs.Game:AddSection("Device Information")
+
+local deviceType = UserInputService.TouchEnabled and "Mobile"
+    or (UserInputService.KeyboardEnabled and not UserInputService.GamepadEnabled and "PC")
+    or "Console"
+
+sectionDevice:AddParagraph({
+    Title = "Device Type",
+    Content = deviceType
+})
+
+-- === 4. Game Information ===
+local sectionGame = tabs.Game:AddSection("Game Information")
+
+-- Đảm bảo game đã load trước khi gọi GetProductInfo
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local gameName = "Unknown"
+pcall(function()
+    local info = MarketplaceService:GetProductInfo(game.PlaceId)
+    if info and info.Name then
+        gameName = info.Name
+    end
+end)
+
+sectionGame:AddParagraph({
+    Title = "Game Name",
+    Content = gameName
+})
+
+sectionGame:AddParagraph({
+    Title = "Game ID (PlaceId)",
+    Content = tostring(game.PlaceId)
+})
+
+sectionGame:AddParagraph({
+    Title = "Server ID",
+    Content = game.JobId or "N/A"
+})
+
+
+
 
 local Mainbf = tabs.Bloxfruit:AddSection("Main")---- Add mục Main 
 
