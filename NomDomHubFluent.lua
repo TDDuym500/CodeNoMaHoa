@@ -41,11 +41,12 @@ local tabs = {
     Game = window:AddTab({ Title = "Game, User Information", Icon = "clipboard" }),
     Setting = window:AddTab({ Title = "Setting", Icon = "settings" }), -- ID của icon setting
     Bloxfruit = window:AddTab({ Title = "Blox Fruit" }),
+    Arisecrossover = window:AddTab({ Title = "Arise Crossover" }),
+    Deedrails = window:AddTab({ Title = "Deed Rails" }),
+    Growagarden = window:AddTab({ Title = "Grow A Garden" }),
     Bluelock = window:AddTab({ Title = "Blue Lock" }),
     Fisch = window:AddTab({ Title = "Fisch" }),
     Petgo = window:AddTab({ Title = "Pet Go" }),
-    Deedrails = window:AddTab({ Title = "Deed Rails" }),
-    Arisecrossover = window:AddTab({ Title = "Arise Crossover" }),
     Volleyball = window:AddTab({ Title = "Volleyball Legends" }),
     Basketball = window:AddTab({ Title = "Basketball" }),
     Mm2 = window:AddTab({ Title = "Mm2" }),
@@ -722,133 +723,6 @@ end
 
 
 
-
-
--- 🌐 Dịch vụ cần thiết
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local MarketplaceService = game:GetService("MarketplaceService")
-
-local LocalPlayer = Players.LocalPlayer
-
--- === 1. Player Information ===
-local sectionPlayer = tabs.Game:AddSection("Player Information")
-
-sectionPlayer:AddParagraph({
-    Title = "Username",
-    Content = LocalPlayer.Name or "N/A"
-})
-
-sectionPlayer:AddParagraph({
-    Title = "Display Name",
-    Content = LocalPlayer.DisplayName or "N/A"
-})
-
--- 🌍 Xác định quốc gia
-local locale = (LocalPlayer.LocaleId or "unknown"):lower()
-local countryMap = {
-    vn = "Vietnam",
-    th = "Thailand",
-    id = "Indonesia",
-    ph = "Philippines",
-    my = "Malaysia",
-    us = "United States",
-    br = "Brazil",
-    kr = "South Korea",
-    jp = "Japan",
-    de = "Germany",
-    fr = "France",
-    ru = "Russia"
-}
-
-local country = "Unknown"
-for code, name in pairs(countryMap) do
-    if locale:find(code) then
-        country = name
-        break
-    end
-end
-
-sectionPlayer:AddParagraph({
-    Title = "Country",
-    Content = country
-})
-
--- === 2. Executor ===
-local sectionExecute = tabs.Game:AddSection("Executor")
-
-local executor = "Unknown"
-if syn then
-    executor = "Synapse X"
-elseif KRNL_LOADED then
-    executor = "KRNL"
-elseif fluxus then
-    executor = "Fluxus"
-elseif getexecutorname then
-    local success, execName = pcall(getexecutorname)
-    if success and type(execName) == "string" then
-        executor = execName
-    end
-end
-
-sectionExecute:AddParagraph({
-    Title = "Use Client",
-    Content = executor
-})
-
-local execStatus = (executor == "Xeno" or executor:lower():find("solara")) and "May Error" or "Working"
-sectionExecute:AddParagraph({
-    Title = "Status",
-    Content = execStatus
-})
-
--- === 3. Device Information ===
-local sectionDevice = tabs.Game:AddSection("Device Information")
-
-local deviceType = UserInputService.TouchEnabled and "Mobile"
-    or (UserInputService.KeyboardEnabled and not UserInputService.GamepadEnabled and "PC")
-    or "Console"
-
-sectionDevice:AddParagraph({
-    Title = "Device Type",
-    Content = deviceType
-})
-
--- === 4. Game Information ===
-local sectionGame = tabs.Game:AddSection("Game Information")
-
--- Đảm bảo game đã load trước khi gọi GetProductInfo
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
-
-local gameName = "Unknown"
-pcall(function()
-    local info = MarketplaceService:GetProductInfo(game.PlaceId)
-    if info and info.Name then
-        gameName = info.Name
-    end
-end)
-
-sectionGame:AddParagraph({
-    Title = "Game Name",
-    Content = gameName
-})
-
-sectionGame:AddParagraph({
-    Title = "Game ID (PlaceId)",
-    Content = tostring(game.PlaceId)
-})
-
-sectionGame:AddParagraph({
-    Title = "Server ID",
-    Content = game.JobId or "N/A"
-})
-
-
-
-
-
 local Mainbf = tabs.Bloxfruit:AddSection("Main")---- Add mục Main 
 
 Mainbf:AddButton({
@@ -1307,6 +1181,74 @@ Autofruit:AddButton({
     end
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+-------[            Grow a Garden            ]--------
+
+
+
+tabs.Growagarden:AddButton({
+    Title = "TBao Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/game/refs/heads/main/TbaoHubGrowGarden"))()
+    end
+})    tabs.Growagarden:AddButton({
+    Title = "Ameicaa",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ameicaa1/Grow-a-Garden/main/Grow_%E2%80%8BA_%E2%80%8BGarden.lua"))()
+    end
+})    tabs.Growagarden:AddButton({
+    Title = "Vxeze Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dex-Bear/Vxezehub/refs/heads/main/VxezeHubMain"))()
+    end
+})    tabs.Growagarden:AddButton({
+    Title = "Tora IsMe",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowaGarden"))()
+    end
+})    tabs.Growagarden:AddButton({
+    Title = "Speed Hub",
+    Description = "",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+    end
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 tabs.Bluelock:AddButton({
     Title = "Alchemy Hub",
     Description = "Need Key",
@@ -1679,12 +1621,6 @@ tabs.Bluelock:AddButton({
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/RedJDark/CONTROL-SCRIPTT/refs/heads/main/CONTROL"))()
     end
-})    tabs.Basketball:AddButton({
-    Title = "Waiting for more script...",
-    Description = "",
-    Callback = function()
-        
-    end
 })    tabs.Tsb:AddButton({
     Title = "Beecon Hub",
     Description = "",
@@ -1859,34 +1795,25 @@ Game:AddToggle("Enable Auto Load Script", {
     Default = false,
     Callback = function(state)
         AutoLoadEnabled = state
+        if AutoLoadEnabled then
+            -- Nếu bật toggle thì tải và chạy script
+            pcall(function()
+                local response = game:HttpGet(ScriptURL)
+                if response then
+                    loadstring(response)()
+                else
+                    warn("Không thể tải script từ URL.")
+                end
+            end)
+
+            -- Đảm bảo script tiếp tục chạy khi teleport server/game
+            local queue = queue_on_teleport or (syn and syn.queue_on_teleport)
+            if queue then
+                queue(("loadstring(game:HttpGet('%s'))()"):format(ScriptURL))
+            end
+        end
     end
 })
-
--- Đảm bảo script tiếp tục chạy khi teleport server/game
-local function loadScript()
-    pcall(function()
-        local response = game:HttpGet(ScriptURL)
-        if response then
-            loadstring(response)()
-        else
-            warn("Không thể tải script từ URL.")
-        end
-    end)
-end
-
--- Chạy khi đổi server/game
-local queue = queue_on_teleport or (syn and syn.queue_on_teleport)
-if queue then
-    queue(("loadstring(game:HttpGet('%s'))()"):format(ScriptURL))
-end
-
--- Đảm bảo script được tải khi có sự kiện teleport
-game:GetService("Players").PlayerAdded:Connect(function(player)
-    if AutoLoadEnabled then
-        loadScript()
-    end
-end)
-
 
 
 
@@ -2066,7 +1993,7 @@ task.spawn(function()
     while true do
         Fluent:Notify({
             Title = "NomDom Community",
-            Content = "https://discord.gg/KyhHAh7s",
+            Content = "https://discord.gg/3PpjA9Ts",
             Duration = 5,
             Icon = "rbxassetid://88870467007338" -- nếu Fluent hỗ trợ Icon
         })
