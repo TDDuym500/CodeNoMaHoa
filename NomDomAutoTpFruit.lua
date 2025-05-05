@@ -1,6 +1,2 @@
------Script
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/CodeNoMaHoa/refs/heads/main/NomDomAutoTpFruitBetaSouces.lua"))()
-
------Wedbook
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Wedbook/refs/heads/main/NomDomAutoTpFruitBeta.lua"))()
+------Địt mẹ thằng chó Tuấn Anh IOS skid code của tao 
+------Skid mẹ mày đi này 
