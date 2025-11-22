@@ -8,7 +8,7 @@ local Window = Fluent:CreateWindow({
     Title = "Lag Cat Hub",
     SubTitle = "by yeugaivotu",
     Search = true,
-    Icon = "rbxassetid://97631285634782",
+    Icon = "rbxassetid://87713799117477",
     TabWidth = 160,
     Size = UDim2.fromOffset(480, 360),
     Acrylic = true,
@@ -378,7 +378,7 @@ Button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Button.BackgroundTransparency = 0.3
 Button.BorderSizePixel = 0
 Button.ClipsDescendants = true
-Button.Image = "rbxassetid://97631285634782" -- Thay icon nếu muốn
+Button.Image = "rbxassetid://87713799117477" -- Thay icon nếu muốn
 Button.ScaleType = Enum.ScaleType.Fit
 Button.Active = true
 Button.ZIndex = 1000
@@ -487,7 +487,7 @@ local Options = Fluent.Options
         Content = "Thank you for using the script!"
     })
 
-    Tabs.Dev:AddSection("↳ Links")
+    Tabs.Dev:AddSection("Links")
 
     Tabs.Dev:AddButton({
         Title = "Discord",
@@ -608,7 +608,6 @@ do
                 local remote = findSkillRemoteFromButton(child)
                 if remote then
                     SkillRemotes[child.Name] = remote
-                    warn("[Skill] Found RemoteEvent for:", child.Name, remote:GetFullName())
                 end
             end
         end
@@ -841,7 +840,6 @@ local function fixOneGenerator(gen)
     local goalPos = (genCFrame * CFrame.new(0, 0, -7)).Position
 
     if isKillerNearGenerator(goalPos, 50) then
-        print("⚠️ Bỏ qua generator vì killer nguy hiểm gần!")
         return
     end
 
@@ -949,7 +947,7 @@ end)
 
 
 
-    Tabs.Farm:AddSection("↳ Generator")
+    Tabs.Farm:AddSection("Generator")
 
 do
 local solveGeneratorCooldown = false
@@ -990,11 +988,9 @@ Tabs.Farm:AddButton({
     Title = "Finish Generator",
     Callback = function()
         if solveGeneratorCooldown then 
-            print("⏳ Please wait before trying again!") 
             return
         end
         if AutoFinishGen then
-            print("❌ Please disable Auto Finish Generator first!")
             return
         end
 
@@ -1018,7 +1014,6 @@ Tabs.Farm:AddToggle("AutoFinishGen", {
 
     if state then
         if solveGeneratorCooldown then
-            print("⚠️ Please wait cooldown before enabling Auto Finish!") 
             Fluent.Options.AutoFinishGen:SetValue(false)
             return
         end
@@ -1051,9 +1046,7 @@ Tabs.Farm:AddInput("GenDelayInput", {
         if num then
             -- Clamp giá trị từ 1.5 đến 10
             genDelay = math.clamp(num, 1.5, 10)
-            print("⏱ Delay set to:", genDelay)
         else
-            print("⚠️ Nhập số hợp lệ!")
         end
     end
 })
@@ -1302,7 +1295,7 @@ end
 
 
 
-    Tabs.Farm:AddSection("↳ Items")
+    Tabs.Farm:AddSection("Items")
 
 local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
@@ -1362,7 +1355,7 @@ Tabs.Main:AddParagraph({
 
 
 
-    Tabs.Main:AddSection("↳ Eliot")
+    Tabs.Main:AddSection("Eliot")
 
 do
 -- 🧩 GUI Toggle + Input
@@ -1658,7 +1651,7 @@ do
 end
 
 
-    Tabs.Main:AddSection("↳ Shedletsky")
+    Tabs.Main:AddSection("Shedletsky")
 
 
 do
@@ -1700,7 +1693,6 @@ do
                 for _, v in pairs(getupvalues(f)) do
                     if typeof(v) == "Instance" and v:IsA("RemoteEvent") then
                         slashRemote = v
-                        warn("[AutoSlash] Found Slash Remote:", v:GetFullName())
                         return slashRemote
                     end
                 end
@@ -1892,7 +1884,6 @@ do
                 for _, v in pairs(upvals) do
                     if typeof(v) == "Instance" and v:IsA("RemoteEvent") then
                         healRemote = v
-                        warn("[AutoHeal] Found Heal Remote:", v:GetFullName())
                         return healRemote
                     end
                 end
@@ -2050,7 +2041,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳ Chance")
+    Tabs.Main:AddSection("Chance")
 
 
 
@@ -2443,7 +2434,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳ Two Time")
+    Tabs.Main:AddSection("Two Time")
 
 
 --// Auto Backstab Unified (AI Aimbot + Player Aimbot, tự động quét Killers Folder)
@@ -2475,7 +2466,6 @@ do
         Default = "AI Aimbot",
     }):OnChanged(function(value)
         Mode = value
-        print("🎯 Backstab Mode:", value)
     end)
 
     local enabled = false
@@ -2484,7 +2474,6 @@ do
         Default = false
     }):OnChanged(function(state)
         enabled = state
-        print("🔪 Auto Backstab:", state and "ON" or "OFF")
     end)
 
     Tabs.Main:AddInput("BackstabRadiusInput", {
@@ -2496,9 +2485,7 @@ do
             local num = tonumber(value)
             if num then
                 checkRadius = math.clamp(num, 1, 50)
-                print("📏 Check Radius set to:", checkRadius)
             else
-                print("⚠️ Nhập số hợp lệ!")
             end
         end
     })
@@ -2517,7 +2504,6 @@ do
                 for _, v in pairs(getupvalues(f)) do
                     if typeof(v) == "Instance" and v:IsA("RemoteEvent") then
                         daggerRemote = v
-                        warn("[Backstab] Found Dagger Remote:", v:GetFullName())
                         return daggerRemote
                     end
                 end
@@ -2704,13 +2690,12 @@ do
 
     lp.CharacterAdded:Connect(function()
         task.wait(1)
-        print("🔄 Character respawned/changed, Auto Backstab vẫn hoạt động (nếu model = 'TwoTime').")
     end)
 end
 
 
 
-    Tabs.Main:AddSection("↳ 007n7")
+    Tabs.Main:AddSection("007n7")
 
 
 do
@@ -2899,7 +2884,7 @@ do
 end
 
 
-    Tabs.Main:AddSection("↳ Veeronica")
+    Tabs.Main:AddSection("Veeronica")
 
 Tabs.Main:AddToggle("AutoTrick", {
     Title = "Auto Trick V2",
@@ -2965,15 +2950,12 @@ Tabs.Main:AddToggle("AutoTrick", {
                 task.cancel(_G.AutoTrick_Loop)
                 _G.AutoTrick_Loop = nil
             end
-            print("[AutoTrick] Disabled")
         end
 
         if Value then
-            print("[AutoTrick] Enabled")
 
             local behaviorFolder = getBehaviorFolder()
             if not behaviorFolder then
-                warn("[AutoTrick] Behavior folder not found.")
                 return
             end
 
@@ -3017,7 +2999,7 @@ Tabs.Main:AddToggle("AutoTrick", {
 })
 
 
-    Tabs.Main:AddSection("↳ Dusekkar")
+    Tabs.Main:AddSection("Dusekkar")
 
 
 --// Dusk Aim Assist (Fluent Dropdown trên Toggle) - Locked Target Version
@@ -3192,7 +3174,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳ Guest1337")
+    Tabs.Main:AddSection("Guest1337")
 
 
 
@@ -3304,8 +3286,6 @@ do
                 for _, v in pairs(upvals) do
                     if typeof(v) == "Instance" and v:IsA("RemoteEvent") then
                         blockRemote = v
-                        warn("[AutoBlock] Found Block Remote:", v:GetFullName())
-                        return blockRemote
                     end
                 end
             end
@@ -3829,7 +3809,7 @@ do
         :OnChanged(function(val) customPunchEnabled = val end)
 end
 
-    Tabs.Main:AddSection("↳ c00lkidd")
+    Tabs.Main:AddSection("c00lkidd")
 
 
 
@@ -4085,7 +4065,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳ Noli")
+    Tabs.Main:AddSection("Noli")
 
 do
     local RunService = game:GetService("RunService")
@@ -4249,7 +4229,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳ 1x1x1x1")
+    Tabs.Main:AddSection("1x1x1x1")
 
 do
 -- 🧩 GUI Toggle + Dropdown
@@ -4452,7 +4432,7 @@ end
 
 -- Tabs.Event
 
-    Tabs.Event:AddSection("↳ Halloween")
+    Tabs.Event:AddSection("Halloween")
 
 
 do
@@ -4880,7 +4860,7 @@ task.spawn(function()
 end)
 
 
-    Tabs.Custom:AddSection("↳ Animation")
+    Tabs.Custom:AddSection("Animation")
 
 --// Fake Killers Anim System (hardened)
 do
@@ -5071,7 +5051,6 @@ do
     local function loadAnimObjects(killer, skin)
         local killerTable = KillersData[killer]
         if not killerTable then
-            warn("loadAnimObjects: killer không tồn tại:", tostring(killer))
             return
         end
         local set = killerTable[skin or "Default"] or killerTable["Default"]
@@ -5251,7 +5230,7 @@ end
 
 
 
-    Tabs.Custom:AddSection("↳ Skill")
+    Tabs.Custom:AddSection("Skill")
 
 
 do
@@ -5718,7 +5697,7 @@ local function setLastSurvivorSong(songName)
 end
 
 -- 🎛️ GUI Section
-Tabs.Custom:AddSection("↳ Last Man Standing")
+Tabs.Custom:AddSection("Last Man Standing")
 
 Tabs.Custom:AddToggle("LMSReplacerSong", {
     Title = "LMS Replacer Song",
@@ -5805,7 +5784,7 @@ end)
 
 
 
-Tabs.Custom:AddSection("↳ Victim")
+Tabs.Custom:AddSection("Victim")
 
 -- HackerVibe_Toggle.lua
 -- Hiệu ứng hacker thật 3D, có nút bật/tắt (Fake H4CK3R)
@@ -6209,7 +6188,7 @@ end)
 
 
 
-    Tabs.Player:AddSection("↳ Cheats")
+    Tabs.Player:AddSection("Cheats")
 
 local ActiveNoStun = false
 local noStunLoop
@@ -6318,7 +6297,6 @@ if StaminaModule then
         end)  
     end)  
 else  
-    warn("[InfStamina] Sprinting module not found, toggle disabled.")  
 end
 
 
@@ -6335,19 +6313,17 @@ Tabs.Player:AddToggle("InfiniteZoom", {
             -- Bật zoom vô hạn
             player.CameraMaxZoomDistance = math.huge
             player.CameraMinZoomDistance = 0.5
-            print("[ZoomCam] Infinite Zoom Enabled ✅")
         else
             -- Tắt zoom vô hạn, trở lại bình thường
             player.CameraMaxZoomDistance = 128
             player.CameraMinZoomDistance = 0.5
-            print("[ZoomCam] Infinite Zoom Disabled ❌")
         end
     end
 })
 
 
 
-    Tabs.Player:AddSection("↳ Troller")
+    Tabs.Player:AddSection("Troller")
 
 
 
@@ -6691,7 +6667,6 @@ Tabs.Player:AddToggle("FakeDieV2", {
                 if percent >= 0.9 then
                     track:AdjustSpeed(0) -- pause ở 90%
                     stopped = true
-                    print("FakeDie: Animation paused at 90%")
                 end
             end
         end)
@@ -6722,7 +6697,7 @@ end
 
 
 
-    Tabs.Player:AddSection("↳ Hitbox")
+    Tabs.Player:AddSection("Hitbox")
 
 
 repeat task.wait() until game:IsLoaded()
@@ -7035,7 +7010,7 @@ end)
 
 
 
-    Tabs.Player:AddSection("↳ Walk Speed")
+    Tabs.Player:AddSection("Walk Speed")
 
 
 local Players = game:GetService("Players")
@@ -7103,7 +7078,7 @@ end)
 
 
 
-    Tabs.Player:AddSection("↳ Teleport Speed")
+    Tabs.Player:AddSection("Teleport Speed")
 
 
 -- === Teleport Speed Setup ===
@@ -7191,11 +7166,8 @@ Tabs.Visual:AddToggle("ESPCloneToggle", {
 end)
 
 
------------------------------------------------------
--- 🔵 2. PLAYER ESP
------------------------------------------------------
 
-    Tabs.Visual:AddSection("↳ Player")
+    Tabs.Visual:AddSection("Player")
 
 _G.ESPManager:RegisterType("Player", Color3.fromRGB(0, 255, 255), function(obj)
     local plr = Players:GetPlayerFromCharacter(obj)
@@ -7210,9 +7182,6 @@ Tabs.Visual:AddToggle("ESPPlayerToggle", {
 end)
 
 
------------------------------------------------------
--- ⚪ 3. SURVIVORS ESP (có HP)
------------------------------------------------------
 local survivorsFolder = workspace:WaitForChild("Players"):WaitForChild("Survivors")
 _G.ESPManager:RegisterType("Survivor", Color3.fromRGB(255, 255, 255), function(obj)
     return obj:IsA("Model") and obj.Parent == survivorsFolder and obj:FindFirstChildOfClass("Humanoid")
@@ -7226,13 +7195,45 @@ Tabs.Visual:AddToggle("ESPModelWhiteToggle", {
 end)
 
 
------------------------------------------------------
--- 🔴 4. KILLERS ESP (có HP)
------------------------------------------------------
+
 local killersFolder = workspace:WaitForChild("Players"):WaitForChild("Killers")
+
 _G.ESPManager:RegisterType("Killer", Color3.fromRGB(255, 0, 0), function(obj)
-    return obj:IsA("Model") and obj.Parent == killersFolder and obj:FindFirstChildOfClass("Humanoid")
+    if not (obj:IsA("Model") and obj.Parent == killersFolder) then
+        return false
+    end
+
+    -- Phải có Humanoid
+    if not obj:FindFirstChildOfClass("Humanoid") then
+        return false
+    end
+
+    local name = obj.Name
+
+    -- Chỉ ESP Noli thật (tên đúng 100% = "Noli")
+    if name == "Noli" then
+        return true
+    end
+
+    -- ESP các killer khác
+    local Killers = {
+        ["Slasher"] = true,
+        ["1x1x1x1"] = true,
+        ["c00lkidd"] = true,
+        ["JohnDoe"] = true,
+        ["Guest 666"] = true,
+        ["Sixer"] = true
+    }
+
+    -- Không cho tên chứa "noli" mà không phải Noli thật
+    local lower = string.lower(name)
+    if lower:find("noli") and name ~= "Noli" then
+        return false
+    end
+
+    return Killers[name] == true
 end, true)
+
 
 Tabs.Visual:AddToggle("ESPModelRedToggle", {
     Title = "ESP Killers",
@@ -7246,7 +7247,7 @@ end)
 -- ⚙️ 5. GENERATOR ESP
 -----------------------------------------------------
 
-    Tabs.Visual:AddSection("↳ Other")
+    Tabs.Visual:AddSection("Other")
 
 _G.ESPManager:RegisterType("Generator", Color3.fromRGB(255,255,255), function(obj)
     if not (obj and obj:IsA("Model") and obj.Name == "Generator") then
@@ -7320,7 +7321,7 @@ _G.ESPManager:RegisterType("Subspace", Color3.fromRGB(160, 32, 240), function(ob
     return obj:IsA("Model") and obj.Name == "SubspaceTripmine"
 end, false)
 
-Tabs.Visual:AddSection("↳ Buildman")
+Tabs.Visual:AddSection("Buildman")
 
 Tabs.Visual:AddToggle("DispenserESP_Toggle", {
     Title = "ESP Dispenser",
@@ -7336,7 +7337,7 @@ Tabs.Visual:AddToggle("SentryESP_Toggle", {
     _G.ESPManager:SetEnabled("Sentry", state)
 end)
 
-Tabs.Visual:AddSection("↳ Tapt/Trap")
+Tabs.Visual:AddSection("Tapt/Trap")
 
 Tabs.Visual:AddToggle("TripwireESP_Toggle", {
     Title = "ESP Trip Wire",
@@ -7504,7 +7505,6 @@ local function removeAll()
         local popup = temp:FindFirstChild("1x1x1x1Popup")
         if popup then
             popup:Destroy()
-            warn("[Remover] 1x1x1x1Popup removed")
         end
     end
 end
@@ -7528,7 +7528,7 @@ Tabs.Misc:AddToggle("RemoveAllBadStuff", {
 
 
 
-    Tabs.Misc:AddSection("↳ Server")
+    Tabs.Misc:AddSection("Server")
 
 
 ------------------------------------------------------------
@@ -7543,7 +7543,6 @@ local LocalPlayer = Players.LocalPlayer
 local function ServerHop()
     local placeId = game.PlaceId
     local jobId = game.JobId
-    print("[ServerHop] Đang rời server hiện tại...")
 
     -- pcall để tránh lỗi Teleport crash
     local success, err = pcall(function()
@@ -7558,10 +7557,8 @@ local function ServerHop()
                 Duration = 3
             })
         else
-            print("[ServerHop] Đang chuyển server...")
         end
     else
-        warn("[ServerHop] Lỗi khi Teleport:", err)
         if Fluent and Fluent.Notify then
             Fluent:Notify({
                 Title = "Lỗi Teleport",
@@ -7687,7 +7684,7 @@ Tabs.Misc:AddButton({
 
 
 
-    Tabs.Misc:AddSection("↳ Bypass")
+    Tabs.Misc:AddSection("Bypass")
 
 local antiAFKCons = {}
 
@@ -7705,7 +7702,6 @@ if getconnections then
                 antiAFKCons[c] = true
                 c:Disable()
             end
-            print("[AntiAFK] Đã bật, bạn sẽ không bị kick AFK.")
         else
             -- Enable lại
             for c,_ in pairs(antiAFKCons) do
@@ -7714,11 +7710,9 @@ if getconnections then
                 end
             end
             antiAFKCons = {}
-            print("[AntiAFK] Đã tắt, Roblox sẽ xử lý AFK bình thường.")
         end
     end)
 else
-    warn("[AntiAFK] Executor không hỗ trợ getconnections, toggle bị vô hiệu.")
 end
 
 
@@ -7869,7 +7863,6 @@ do
             end
         end)
 
-        print("[Anti-Ban Safe] 🛡️ ENABLED!")
     end
 
     -- Stop protection
@@ -7878,7 +7871,6 @@ do
         protectionThread = nil
         restoreHooks()
         setFlagsOn() -- phục hồi flag về bình thường
-        print("[Anti-Ban Safe] ⚠️ DISABLED!")
     end
 
     -- Toggle
@@ -8079,7 +8071,6 @@ local function teleportAwayFromDanger()
             task.wait(stepDelay)
         end
 
-        print("⚠️ Né nguy hiểm bằng nhiều bước nhỏ (giữ hướng nhìn)!")
     end
 end
 
@@ -8093,10 +8084,8 @@ Tabs.Misc:AddToggle("SafeGenTeleport", {
         SafeGenThread = task.spawn(function()
             local delayTime = SCAN_DELAY
             if AllowedPlayers[LP.Name] then
-                print("🚀 V2 Mode enabled for:", LP.Name)
                 delayTime = 0.000000000001
             else
-                print("🐢 V1 Mode enabled for:", LP.Name)
             end
             while SafeGenRunning do
                 local character = LP.Character
@@ -8115,7 +8104,6 @@ Tabs.Misc:AddToggle("SafeGenTeleport", {
     else
         SafeGenRunning = false
         SafeGenThread = nil
-        print("[SafeGenTeleport] Đã tắt.")
     end
 end)
 
@@ -8129,7 +8117,6 @@ Tabs.Misc:AddInput("DetectRadiusInput", {
     if num then
         num = math.clamp(num, 1, 100)
         DetectRadius = num
-        print("🔧 DetectRadius set to:", DetectRadius)
     end
 end)
 
@@ -8137,7 +8124,7 @@ end
 
 
 
-    Tabs.Misc:AddSection("↳ Game Play")
+    Tabs.Misc:AddSection("Game Play")
 
 
 
@@ -8291,7 +8278,7 @@ end
 
 
 
-    Tabs.Misc:AddSection("↳ Fix Lag")
+    Tabs.Misc:AddSection("Fix Lag")
 
 -- SCRIPT GIẢM ĐỒ HỌA TỰ ĐỘNG MỖI 10 GIÂY (CÓ TOGGLE + RESTORE)
 -- Dán vào LocalScript (StarterPlayerScripts hoặc executor)
@@ -8375,7 +8362,6 @@ local AutoReduceToggle = Tabs.Misc:AddToggle("AutoReduce", {
     Default = false,
     Callback = function(state)
         if state then
-            print("🔄 Auto Reduce ON")
 
             -- Lưu lighting gốc
             saveLighting()
@@ -8410,7 +8396,6 @@ local AutoReduceToggle = Tabs.Misc:AddToggle("AutoReduce", {
             end)
 
         else
-            print("⏹ Auto Reduce OFF")
             if connection then
                 connection:Disconnect()
                 connection = nil
@@ -8419,7 +8404,6 @@ local AutoReduceToggle = Tabs.Misc:AddToggle("AutoReduce", {
             -- Khôi phục đồ họa gốc
             restoreLighting()
             restoreParts()
-            print("✅ Đã khôi phục đồ họa gốc")
         end
     end
 })
@@ -8438,7 +8422,6 @@ Tabs.Misc:AddToggle("AntiFPSSpike", {
     _G.AntiFPSSpike = Value
 
     if Value then
-        warn("[Anti-FPS Spike] ✅ Hệ thống cưỡng chế FPS = 60 đã bật.")
 
         task.spawn(function()
             local FORCE_FPS = 60          -- Luôn giữ 60 FPS
@@ -8470,7 +8453,6 @@ Tabs.Misc:AddToggle("AntiFPSSpike", {
 
                 -- Phát hiện FPS tăng bất thường
                 if fps > SPIKE_THRESHOLD then
-                    warn(string.format("[⚠️ Anti-FPS Spike]: FPS tăng bất thường (%d) → ổn định lại!", math.floor(fps)))
                     forceCap()
                     task.wait(0.5)
                 end
@@ -8479,16 +8461,13 @@ Tabs.Misc:AddToggle("AntiFPSSpike", {
                 if typeof(getfpscap) == "function" then
                     local currentCap = getfpscap()
                     if currentCap ~= FORCE_FPS then
-                        warn("[Anti-FPS Spike]: Phát hiện thay đổi FPS cap ngoài ý muốn → ép lại 60FPS.")
                         forceCap()
                     end
                 end
             end
 
-            warn("[Anti-FPS Spike] ⛔ Hệ thống cưỡng chế FPS đã tắt.")
         end)
     else
-        warn("[Anti-FPS Spike] ❌ Đã tắt.")
     end
 end)
 
@@ -8554,7 +8533,7 @@ end)
 
 
 
-    Tabs.Misc:AddSection("↳ Show")
+    Tabs.Misc:AddSection("Show")
 
 
 
