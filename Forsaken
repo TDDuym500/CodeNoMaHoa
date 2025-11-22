@@ -1,167 +1,26 @@
-local UserInputService = game:GetService("UserInputService")
-local CoreGui = game:GetService("CoreGui")
-local TweenService = game:GetService("TweenService")
-
-local ExistingUI = CoreGui:FindFirstChild("Lag Cat Hub")
-if ExistingUI then ExistingUI:Destroy() end
-
-local DragUI = Instance.new("ScreenGui")
-DragUI.Name = "Lag Cat Hub"
-DragUI.ResetOnSpawn = false
-DragUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-DragUI.Parent = CoreGui
-
-local Button = Instance.new("ImageButton")
-Button.Parent = DragUI
-Button.Size = UDim2.new(0, 50, 0, 50)
-Button.Position = UDim2.new(0.120833337 - 0.1, 0, 0.0952890813 + 0.01, 0)
-Button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Button.BorderSizePixel = 0
-Button.Image = "rbxassetid://72597850320651"
-Button.ScaleType = Enum.ScaleType.Fit
-Button.Active = true
-Button.ZIndex = 999999
-
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = Button
-
-local particle = Instance.new("ParticleEmitter")
-particle.Parent = Button
-particle.LightEmission = 1
-particle.Size = NumberSequence.new({
-    NumberSequenceKeypoint.new(0, 0.18),
-    NumberSequenceKeypoint.new(1, 0)
-})
-particle.Lifetime = NumberRange.new(0.4, 0.8)
-particle.Rate = 0
-particle.Speed = NumberRange.new(5, 10)
-particle.SpreadAngle = Vector2.new(360, 360)
-particle.Texture = "rbxassetid://241876021" 
-particle.Rotation = NumberRange.new(0, 360)
-particle.RotSpeed = NumberRange.new(50, 120)
-particle.Color = ColorSequence.new(
-    Color3.fromRGB(255, 85, 255),
-    Color3.fromRGB(85, 255, 255)
-)
-
-local hoverTween = TweenService:Create(
-    Button,
-    TweenInfo.new(0.25, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out),
-    { Size = UDim2.new(0, 55, 0, 55) }
-)
-
-local unhoverTween = TweenService:Create(
-    Button,
-    TweenInfo.new(0.25, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out),
-    { Size = UDim2.new(0, 50, 0, 50) }
-)
-
-Button.MouseEnter:Connect(function()
-    hoverTween:Play()
-end)
-
-Button.MouseLeave:Connect(function()
-    unhoverTween:Play()
-end)
 
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/npmc_/refs/heads/main/FluentEdited.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
-local Players = game:GetService("Players")
-local UIS = UserInputService
-local isMobile = (UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled)
-
+-- Tạo cửa sổ Fluent chính
 local Window = Fluent:CreateWindow({
     Title = "Lag Cat Hub",
     SubTitle = "by yeugaivotu",
     Search = true,
-    Icon = "rbxassetid://72597850320651",
-    TabWidth = isMobile and 160 or 190,
-    Size = (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled) and UDim2.fromOffset(600, 430) or UDim2.fromOffset(700, 490),
+    Icon = "rbxassetid://97631285634782",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(480, 360),
     Acrylic = true,
     Theme = "Dark",
-    MinimizeKey = nil,
+    MinimizeKey = Enum.KeyCode.RightAlt,
+
     UserInfo = false,
     UserInfoTop = false,
-    UserInfoTitle = Players.LocalPlayer.DisplayName,
-    UserInfoSubtitle = "Memaybeo",
+    UserInfoTitle = game:GetService("Players").LocalPlayer.DisplayName,
+    UserInfoSubtitle = "Memaymup",
     UserInfoSubtitleColor = Color3.fromRGB(71, 123, 255)
 })
-
-local function ToggleUI()
-    if Window.Minimized then
-        Window:Minimize(false)
-    else
-        Window:Minimize(true)
-    end
-end
-
-Button.MouseButton1Down:Connect(function()
-    particle.Rate = 180
-    task.delay(0.35, function()
-        particle.Rate = 0
-    end)
-
-    TweenService:Create(Button, TweenInfo.new(0.12, Enum.EasingStyle.Quad), {
-        Rotation = 25,
-        BackgroundTransparency = 0.5
-    }):Play()
-
-    task.wait(0.12)
-
-    TweenService:Create(Button, TweenInfo.new(0.12, Enum.EasingStyle.Quad), {
-        Rotation = 0,
-        BackgroundTransparency = 0.3
-    }):Play()
-
-    ToggleUI()
-end)
-
-local dragging = false
-local dragStart, startPos
-local isDragging = false
-local dragThreshold = 10
-
-local function StartDrag(input)
-    dragging = true
-    dragStart = input.Position
-    startPos = Button.Position
-    isDragging = false
-
-    input.Changed:Connect(function()
-        if input.UserInputState == Enum.UserInputState.End then dragging = false end
-    end)
-end
-
-local function OnDrag(input)
-    if dragging then
-        if (input.Position - dragStart).Magnitude > dragThreshold then isDragging = true end
-
-        Button.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + (input.Position.X - dragStart.X),
-            startPos.Y.Scale,
-            startPos.Y.Offset + (input.Position.Y - dragStart.Y)
-        )
-    end
-end
-
-Button.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or 
-       input.UserInputType == Enum.UserInputType.Touch then
-        StartDrag(input)
-    end
-end)
-
-Button.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or 
-       input.UserInputType == Enum.UserInputType.Touch then
-        OnDrag(input)
-    end
-end)
-
 
 -- Tabs
 local Tabs = {
@@ -490,6 +349,133 @@ end
 _G.ESPManager = ESPManager
 
 
+-- Phần Tạo Nút Gui
+
+-- 🟢 DRAGGABLE UI BUTTON WITH ENHANCED CLICK AND HOVER ANIMATIONS
+local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+
+-- Xóa nếu có UI minimize cũ
+local ExistingUI = CoreGui:FindFirstChild("HutaoHubMinimizeUI")
+if ExistingUI then
+    ExistingUI:Destroy()
+end
+
+-- Create Floating UI
+local DragUI = Instance.new("ScreenGui")
+DragUI.Name = "HutaoHubMinimizeUI"
+DragUI.ResetOnSpawn = false
+DragUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+DragUI.Parent = CoreGui
+
+-- Create Circular Button
+local Button = Instance.new("ImageButton")
+Button.Parent = DragUI
+Button.Size = UDim2.new(0, 50, 0, 50)
+Button.Position = UDim2.new(0, 10, 1, -85)
+Button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Button.BackgroundTransparency = 0.3
+Button.BorderSizePixel = 0
+Button.ClipsDescendants = true
+Button.Image = "rbxassetid://97631285634782" -- Thay icon nếu muốn
+Button.ScaleType = Enum.ScaleType.Fit
+Button.Active = true
+Button.ZIndex = 1000
+
+-- Make UI Circular
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(1, 0)
+UICorner.Parent = Button
+
+-- Tween Info for Animations
+local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+-- 🟢 Toggle Fluent UI trực tiếp
+local function ToggleUI()
+    if Window.Minimized then
+        Window:Minimize(false) -- mở lại
+    else
+        Window:Minimize(true) -- thu nhỏ
+    end
+end
+
+-- Click Animation & UI Toggle
+local isDragging = false
+local dragThreshold = 10
+
+Button.MouseButton1Click:Connect(function()
+    if isDragging then return end
+
+    -- Click animation
+    TweenService:Create(Button, tweenInfo, {
+        BackgroundTransparency = 0.5,
+        Size = UDim2.new(0, 45, 0, 45),
+        Rotation = 5
+    }):Play()
+    task.wait(0.1)
+    TweenService:Create(Button, tweenInfo, {
+        BackgroundTransparency = 0.3,
+        Size = UDim2.new(0, 50, 0, 50),
+        Rotation = 0
+    }):Play()
+
+    ToggleUI()
+end)
+
+-- Hover Animation
+Button.MouseEnter:Connect(function()
+    TweenService:Create(Button, tweenInfo, {Size = UDim2.new(0, 55, 0, 55)}):Play()
+end)
+
+Button.MouseLeave:Connect(function()
+    TweenService:Create(Button, tweenInfo, {Size = UDim2.new(0, 50, 0, 50)}):Play()
+end)
+
+-- Dragging Logic for PC & Mobile
+local dragging, dragStart, startPos
+
+local function StartDrag(input)
+    isDragging = false
+    dragging = true
+    dragStart = input.Position
+    startPos = Button.Position
+
+    input.Changed:Connect(function()
+        if input.UserInputState == Enum.UserInputState.End then
+            dragging = false
+        end
+    end)
+end
+
+local function OnDrag(input)
+    if dragging then
+        local delta = (input.Position - dragStart).Magnitude
+        if delta > dragThreshold then
+            isDragging = true
+        end
+        Button.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + (input.Position.X - dragStart.X),
+            startPos.Y.Scale,
+            startPos.Y.Offset + (input.Position.Y - dragStart.Y)
+        )
+    end
+end
+
+-- Dragging Support
+Button.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        StartDrag(input)
+    end
+end)
+
+Button.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        OnDrag(input)
+    end
+end)  
+
 
 -- Tab.Dev
 
@@ -501,13 +487,13 @@ local Options = Fluent.Options
         Content = "Thank you for using the script!"
     })
 
-    Tabs.Dev:AddSection("Links")
+    Tabs.Dev:AddSection("↳ Links")
 
     Tabs.Dev:AddButton({
         Title = "Discord",
         Description = "Copy the link to join the discord!",
         Callback = function()
-            setclipboard("https://discord.gg/KTG45Zv58j")
+            setclipboard("https://discord.gg/WEGT92yv")
             Fluent:Notify({
                 Title = "Notification",
                 Content = "Successfully copied to the clipboard",
@@ -518,6 +504,35 @@ local Options = Fluent.Options
     })
 
 
+
+    Tabs.Dev:AddButton({
+        Title = "Youtube",
+        Description = "Copy link to Subscribe to Youtube channel!",
+        Callback = function()
+            setclipboard("https://www.youtube.com/@SLKgamingSSR")
+            Fluent:Notify({
+                Title = "Notification",
+                Content = "Successfully copied to the clipboard!",
+                SubContent = "", -- Optional
+                Duration = 3 
+            })
+        end
+    })
+
+
+    Tabs.Dev:AddButton({
+        Title = "Facebook",
+        Description = "Copy link to join facebook group!",
+        Callback = function()
+            setclipboard("https://www.facebook.com/groups/1180845463307087/?ref=share&mibextid=NSMWBT")
+            Fluent:Notify({
+                Title = "Notification",
+                Content = "Successfully copied to the clipboard!",
+                SubContent = "", -- Optional
+                Duration = 3 
+            })
+        end
+    })
 
 -- Tabs.Farm
 
@@ -826,6 +841,7 @@ local function fixOneGenerator(gen)
     local goalPos = (genCFrame * CFrame.new(0, 0, -7)).Position
 
     if isKillerNearGenerator(goalPos, 50) then
+        print("⚠️ Bỏ qua generator vì killer nguy hiểm gần!")
         return
     end
 
@@ -933,7 +949,7 @@ end)
 
 
 
-    Tabs.Farm:AddSection("Generator")
+    Tabs.Farm:AddSection("↳ Generator")
 
 do
 local solveGeneratorCooldown = false
@@ -974,9 +990,11 @@ Tabs.Farm:AddButton({
     Title = "Finish Generator",
     Callback = function()
         if solveGeneratorCooldown then 
+            print("⏳ Please wait before trying again!") 
             return
         end
         if AutoFinishGen then
+            print("❌ Please disable Auto Finish Generator first!")
             return
         end
 
@@ -1000,6 +1018,7 @@ Tabs.Farm:AddToggle("AutoFinishGen", {
 
     if state then
         if solveGeneratorCooldown then
+            print("⚠️ Please wait cooldown before enabling Auto Finish!") 
             Fluent.Options.AutoFinishGen:SetValue(false)
             return
         end
@@ -1032,7 +1051,9 @@ Tabs.Farm:AddInput("GenDelayInput", {
         if num then
             -- Clamp giá trị từ 1.5 đến 10
             genDelay = math.clamp(num, 1.5, 10)
+            print("⏱ Delay set to:", genDelay)
         else
+            print("⚠️ Nhập số hợp lệ!")
         end
     end
 })
@@ -1281,7 +1302,7 @@ end
 
 
 
-    Tabs.Farm:AddSection("Items")
+    Tabs.Farm:AddSection("↳ Items")
 
 local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
@@ -1341,7 +1362,7 @@ Tabs.Main:AddParagraph({
 
 
 
-    Tabs.Main:AddSection("Eliot")
+    Tabs.Main:AddSection("↳ Eliot")
 
 do
 -- 🧩 GUI Toggle + Input
@@ -1637,7 +1658,7 @@ do
 end
 
 
-    Tabs.Main:AddSection("Shedletsky")
+    Tabs.Main:AddSection("↳ Shedletsky")
 
 
 do
@@ -2029,7 +2050,7 @@ end
 
 
 
-    Tabs.Main:AddSection("Chance")
+    Tabs.Main:AddSection("↳ Chance")
 
 
 
@@ -2422,7 +2443,7 @@ end
 
 
 
-    Tabs.Main:AddSection("Two Time")
+    Tabs.Main:AddSection("↳ Two Time")
 
 
 --// Auto Backstab Unified (AI Aimbot + Player Aimbot, tự động quét Killers Folder)
@@ -2454,6 +2475,7 @@ do
         Default = "AI Aimbot",
     }):OnChanged(function(value)
         Mode = value
+        print("🎯 Backstab Mode:", value)
     end)
 
     local enabled = false
@@ -2462,6 +2484,7 @@ do
         Default = false
     }):OnChanged(function(state)
         enabled = state
+        print("🔪 Auto Backstab:", state and "ON" or "OFF")
     end)
 
     Tabs.Main:AddInput("BackstabRadiusInput", {
@@ -2473,7 +2496,9 @@ do
             local num = tonumber(value)
             if num then
                 checkRadius = math.clamp(num, 1, 50)
+                print("📏 Check Radius set to:", checkRadius)
             else
+                print("⚠️ Nhập số hợp lệ!")
             end
         end
     })
@@ -2679,12 +2704,13 @@ do
 
     lp.CharacterAdded:Connect(function()
         task.wait(1)
+        print("🔄 Character respawned/changed, Auto Backstab vẫn hoạt động (nếu model = 'TwoTime').")
     end)
 end
 
 
 
-    Tabs.Main:AddSection("007n7")
+    Tabs.Main:AddSection("↳ 007n7")
 
 
 do
@@ -2873,7 +2899,7 @@ do
 end
 
 
-    Tabs.Main:AddSection("Veeronica")
+    Tabs.Main:AddSection("↳ Veeronica")
 
 Tabs.Main:AddToggle("AutoTrick", {
     Title = "Auto Trick V2",
@@ -2939,9 +2965,11 @@ Tabs.Main:AddToggle("AutoTrick", {
                 task.cancel(_G.AutoTrick_Loop)
                 _G.AutoTrick_Loop = nil
             end
+            print("[AutoTrick] Disabled")
         end
 
         if Value then
+            print("[AutoTrick] Enabled")
 
             local behaviorFolder = getBehaviorFolder()
             if not behaviorFolder then
@@ -2989,7 +3017,7 @@ Tabs.Main:AddToggle("AutoTrick", {
 })
 
 
-    Tabs.Main:AddSection("↳Dusekkar")
+    Tabs.Main:AddSection("↳ Dusekkar")
 
 
 --// Dusk Aim Assist (Fluent Dropdown trên Toggle) - Locked Target Version
@@ -3164,7 +3192,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳Guest1337")
+    Tabs.Main:AddSection("↳ Guest1337")
 
 
 
@@ -3801,7 +3829,7 @@ do
         :OnChanged(function(val) customPunchEnabled = val end)
 end
 
-    Tabs.Main:AddSection("c00lkidd")
+    Tabs.Main:AddSection("↳ c00lkidd")
 
 
 
@@ -4057,7 +4085,7 @@ end
 
 
 
-    Tabs.Main:AddSection("Noli")
+    Tabs.Main:AddSection("↳ Noli")
 
 do
     local RunService = game:GetService("RunService")
@@ -4221,7 +4249,7 @@ end
 
 
 
-    Tabs.Main:AddSection("↳1x1x1x1")
+    Tabs.Main:AddSection("↳ 1x1x1x1")
 
 do
 -- 🧩 GUI Toggle + Dropdown
@@ -4424,7 +4452,7 @@ end
 
 -- Tabs.Event
 
-    Tabs.Event:AddSection("Halloween")
+    Tabs.Event:AddSection("↳ Halloween")
 
 
 do
@@ -4852,7 +4880,7 @@ task.spawn(function()
 end)
 
 
-    Tabs.Custom:AddSection("Animation")
+    Tabs.Custom:AddSection("↳ Animation")
 
 --// Fake Killers Anim System (hardened)
 do
@@ -5223,7 +5251,7 @@ end
 
 
 
-    Tabs.Custom:AddSection("Skill")
+    Tabs.Custom:AddSection("↳ Skill")
 
 
 do
@@ -5596,7 +5624,7 @@ getgenv().RunService = game:GetService("RunService")
 
 -- 📁 Ensure folders exist
 local folderPath = "LagCatHub/Assets"
-if not isfolder("LagCatHubHub") then makefolder("LagcatHub") end
+if not isfolder("LagCatHub") then makefolder("LagCatHub") end
 if not isfolder(folderPath) then makefolder(folderPath) end
 
 -- 🎵 Track list (FULL)
@@ -5690,7 +5718,7 @@ local function setLastSurvivorSong(songName)
 end
 
 -- 🎛️ GUI Section
-Tabs.Custom:AddSection("Last Man Standing")
+Tabs.Custom:AddSection("↳ Last Man Standing")
 
 Tabs.Custom:AddToggle("LMSReplacerSong", {
     Title = "LMS Replacer Song",
@@ -5777,7 +5805,7 @@ end)
 
 
 
-Tabs.Custom:AddSection("↳Victim")
+Tabs.Custom:AddSection("↳ Victim")
 
 -- HackerVibe_Toggle.lua
 -- Hiệu ứng hacker thật 3D, có nút bật/tắt (Fake H4CK3R)
@@ -6181,7 +6209,7 @@ end)
 
 
 
-    Tabs.Player:AddSection("Cheats")
+    Tabs.Player:AddSection("↳ Cheats")
 
 local ActiveNoStun = false
 local noStunLoop
@@ -6290,6 +6318,7 @@ if StaminaModule then
         end)  
     end)  
 else  
+    warn("[InfStamina] Sprinting module not found, toggle disabled.")  
 end
 
 
@@ -6306,17 +6335,19 @@ Tabs.Player:AddToggle("InfiniteZoom", {
             -- Bật zoom vô hạn
             player.CameraMaxZoomDistance = math.huge
             player.CameraMinZoomDistance = 0.5
+            print("[ZoomCam] Infinite Zoom Enabled ✅")
         else
             -- Tắt zoom vô hạn, trở lại bình thường
             player.CameraMaxZoomDistance = 128
             player.CameraMinZoomDistance = 0.5
+            print("[ZoomCam] Infinite Zoom Disabled ❌")
         end
     end
 })
 
 
 
-    Tabs.Player:AddSection("Troller")
+    Tabs.Player:AddSection("↳ Troller")
 
 
 
@@ -6660,6 +6691,7 @@ Tabs.Player:AddToggle("FakeDieV2", {
                 if percent >= 0.9 then
                     track:AdjustSpeed(0) -- pause ở 90%
                     stopped = true
+                    print("FakeDie: Animation paused at 90%")
                 end
             end
         end)
@@ -6690,7 +6722,7 @@ end
 
 
 
-    Tabs.Player:AddSection("Hitbox")
+    Tabs.Player:AddSection("↳ Hitbox")
 
 
 repeat task.wait() until game:IsLoaded()
@@ -7003,7 +7035,7 @@ end)
 
 
 
-    Tabs.Player:AddSection("Walk Speed")
+    Tabs.Player:AddSection("↳ Walk Speed")
 
 
 local Players = game:GetService("Players")
@@ -7071,7 +7103,7 @@ end)
 
 
 
-    Tabs.Player:AddSection("Teleport Speed")
+    Tabs.Player:AddSection("↳ Teleport Speed")
 
 
 -- === Teleport Speed Setup ===
@@ -7163,7 +7195,7 @@ end)
 -- 🔵 2. PLAYER ESP
 -----------------------------------------------------
 
-    Tabs.Visual:AddSection("Player")
+    Tabs.Visual:AddSection("↳ Player")
 
 _G.ESPManager:RegisterType("Player", Color3.fromRGB(0, 255, 255), function(obj)
     local plr = Players:GetPlayerFromCharacter(obj)
@@ -7214,7 +7246,7 @@ end)
 -- ⚙️ 5. GENERATOR ESP
 -----------------------------------------------------
 
-    Tabs.Visual:AddSection("Other")
+    Tabs.Visual:AddSection("↳ Other")
 
 _G.ESPManager:RegisterType("Generator", Color3.fromRGB(255,255,255), function(obj)
     if not (obj and obj:IsA("Model") and obj.Name == "Generator") then
@@ -7288,7 +7320,7 @@ _G.ESPManager:RegisterType("Subspace", Color3.fromRGB(160, 32, 240), function(ob
     return obj:IsA("Model") and obj.Name == "SubspaceTripmine"
 end, false)
 
-Tabs.Visual:AddSection("Buildman")
+Tabs.Visual:AddSection("↳ Buildman")
 
 Tabs.Visual:AddToggle("DispenserESP_Toggle", {
     Title = "ESP Dispenser",
@@ -7304,7 +7336,7 @@ Tabs.Visual:AddToggle("SentryESP_Toggle", {
     _G.ESPManager:SetEnabled("Sentry", state)
 end)
 
-Tabs.Visual:AddSection("Tapt/Trap")
+Tabs.Visual:AddSection("↳ Tapt/Trap")
 
 Tabs.Visual:AddToggle("TripwireESP_Toggle", {
     Title = "ESP Trip Wire",
@@ -7496,7 +7528,7 @@ Tabs.Misc:AddToggle("RemoveAllBadStuff", {
 
 
 
-    Tabs.Misc:AddSection("Server")
+    Tabs.Misc:AddSection("↳ Server")
 
 
 ------------------------------------------------------------
@@ -7511,6 +7543,7 @@ local LocalPlayer = Players.LocalPlayer
 local function ServerHop()
     local placeId = game.PlaceId
     local jobId = game.JobId
+    print("[ServerHop] Đang rời server hiện tại...")
 
     -- pcall để tránh lỗi Teleport crash
     local success, err = pcall(function()
@@ -7525,6 +7558,7 @@ local function ServerHop()
                 Duration = 3
             })
         else
+            print("[ServerHop] Đang chuyển server...")
         end
     else
         warn("[ServerHop] Lỗi khi Teleport:", err)
@@ -7653,7 +7687,7 @@ Tabs.Misc:AddButton({
 
 
 
-    Tabs.Misc:AddSection("Bypass")
+    Tabs.Misc:AddSection("↳ Bypass")
 
 local antiAFKCons = {}
 
@@ -7671,6 +7705,7 @@ if getconnections then
                 antiAFKCons[c] = true
                 c:Disable()
             end
+            print("[AntiAFK] Đã bật, bạn sẽ không bị kick AFK.")
         else
             -- Enable lại
             for c,_ in pairs(antiAFKCons) do
@@ -7679,9 +7714,11 @@ if getconnections then
                 end
             end
             antiAFKCons = {}
+            print("[AntiAFK] Đã tắt, Roblox sẽ xử lý AFK bình thường.")
         end
     end)
 else
+    warn("[AntiAFK] Executor không hỗ trợ getconnections, toggle bị vô hiệu.")
 end
 
 
@@ -7832,6 +7869,7 @@ do
             end
         end)
 
+        print("[Anti-Ban Safe] 🛡️ ENABLED!")
     end
 
     -- Stop protection
@@ -7840,6 +7878,7 @@ do
         protectionThread = nil
         restoreHooks()
         setFlagsOn() -- phục hồi flag về bình thường
+        print("[Anti-Ban Safe] ⚠️ DISABLED!")
     end
 
     -- Toggle
@@ -8040,7 +8079,8 @@ local function teleportAwayFromDanger()
             task.wait(stepDelay)
         end
 
-        end
+        print("⚠️ Né nguy hiểm bằng nhiều bước nhỏ (giữ hướng nhìn)!")
+    end
 end
 
 -- === GUI Control ===
@@ -8053,8 +8093,10 @@ Tabs.Misc:AddToggle("SafeGenTeleport", {
         SafeGenThread = task.spawn(function()
             local delayTime = SCAN_DELAY
             if AllowedPlayers[LP.Name] then
+                print("🚀 V2 Mode enabled for:", LP.Name)
                 delayTime = 0.000000000001
             else
+                print("🐢 V1 Mode enabled for:", LP.Name)
             end
             while SafeGenRunning do
                 local character = LP.Character
@@ -8073,6 +8115,7 @@ Tabs.Misc:AddToggle("SafeGenTeleport", {
     else
         SafeGenRunning = false
         SafeGenThread = nil
+        print("[SafeGenTeleport] Đã tắt.")
     end
 end)
 
@@ -8086,6 +8129,7 @@ Tabs.Misc:AddInput("DetectRadiusInput", {
     if num then
         num = math.clamp(num, 1, 100)
         DetectRadius = num
+        print("🔧 DetectRadius set to:", DetectRadius)
     end
 end)
 
@@ -8093,7 +8137,7 @@ end
 
 
 
-    Tabs.Misc:AddSection("↳Game Play")
+    Tabs.Misc:AddSection("↳ Game Play")
 
 
 
@@ -8247,7 +8291,7 @@ end
 
 
 
-    Tabs.Misc:AddSection("Fix Lag")
+    Tabs.Misc:AddSection("↳ Fix Lag")
 
 -- SCRIPT GIẢM ĐỒ HỌA TỰ ĐỘNG MỖI 10 GIÂY (CÓ TOGGLE + RESTORE)
 -- Dán vào LocalScript (StarterPlayerScripts hoặc executor)
@@ -8331,6 +8375,7 @@ local AutoReduceToggle = Tabs.Misc:AddToggle("AutoReduce", {
     Default = false,
     Callback = function(state)
         if state then
+            print("🔄 Auto Reduce ON")
 
             -- Lưu lighting gốc
             saveLighting()
@@ -8365,6 +8410,7 @@ local AutoReduceToggle = Tabs.Misc:AddToggle("AutoReduce", {
             end)
 
         else
+            print("⏹ Auto Reduce OFF")
             if connection then
                 connection:Disconnect()
                 connection = nil
@@ -8373,6 +8419,7 @@ local AutoReduceToggle = Tabs.Misc:AddToggle("AutoReduce", {
             -- Khôi phục đồ họa gốc
             restoreLighting()
             restoreParts()
+            print("✅ Đã khôi phục đồ họa gốc")
         end
     end
 })
@@ -8507,7 +8554,7 @@ end)
 
 
 
-    Tabs.Misc:AddSection("↳Show")
+    Tabs.Misc:AddSection("↳ Show")
 
 
 
@@ -8648,22 +8695,22 @@ AexecToggle:OnChanged(function(Value)
         task.spawn(function()
             pcall(function()
                 if queue_on_teleport then
-                    local LagCatHubHubScript1 = [[
+                    local HutaoHubScript1 = [[
 task.wait(3)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/npmc_/refs/heads/main/LagCatForsaken.lua"))()
 ]]
-                    queue_on_teleport(LagCatHubScript1)
+                    queue_on_teleport(HutaoHubScript1)
                 end
             end)
         end)
         Fluent:Notify({
-            Title = "Lag Cat Hub",
+            Title = "Lag Cat HUB",
             Content = "Auto execute is enabled!",
             Duration = 5
         })
     else
         Fluent:Notify({
-            Title = "Lag Cat Hub",
+            Title = "Lag Cat HUB",
             Content = "Auto execute is disabled!",
             Duration = 5
         })
@@ -8683,8 +8730,8 @@ SaveManager:SetIgnoreIndexes({})
 -- use case for doing it this way:
 -- a script hub could have themes in a global folder
 -- and game configs in a separate folder per game
-InterfaceManager:SetFolder("Lag Cat HUB")
-SaveManager:SetFolder("Lag Cat HUB/Forsaken")
+InterfaceManager:SetFolder("LagCat HUB")
+SaveManager:SetFolder("LagCat HUB/Forsaken")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
@@ -8692,8 +8739,7 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 -- Select First Tab By Default
 Window:SelectTab(1)
 
-Fluent:Notify({ Title = "Lag Cat HUB", Content = "forsaken script loaded successfully!", Duration = 5 })
+Fluent:Notify({ Title = "LagCat HUB", Content = "forsaken script loaded successfully!", Duration = 5 })
 SaveManager:LoadAutoloadConfig()
-
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/lol/refs/heads/main/webhook"))()
